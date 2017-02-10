@@ -8,7 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Menu extends BasicGameState {
 
-    private final Integer id;
+    private Integer id;
 
     public Menu(Integer id){
         this.id = id;
