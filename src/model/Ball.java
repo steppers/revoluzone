@@ -27,12 +27,21 @@ public class Ball {
     private Direction dir;
 
     public Ball(int x, int y) {
+        xi = x;
+        yi = y;
         xf = x;
         yf = y;
     }
 
     public Vector2f getPos() {
         return new Vector2f(xf, yf);
+    }
+
+    public void setPos(int x, int y) {
+        xi = x;
+        yi = y;
+        xf = x;
+        yf = y;
     }
 
     public void update(float delta) {
