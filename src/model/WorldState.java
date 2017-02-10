@@ -8,6 +8,8 @@ public class WorldState {
     public static final int GRID_SIZE = 10;
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
 
+    private Ball ball;
+
     public WorldState() {
         for(int y = 1; y < GRID_SIZE-1; y++) {
             for(int x = 1; x < GRID_SIZE-1; x++) {
@@ -23,6 +25,10 @@ public class WorldState {
 
     public Tile[][] getGrid() {
         return grid;
+    }
+
+    public Ball getBall() {
+        return ball;
     }
 
 }

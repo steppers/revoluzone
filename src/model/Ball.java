@@ -1,5 +1,7 @@
 package model;
 
+import org.lwjgl.util.vector.Vector2f;
+
 /**
  * Created by steppers on 2/10/17.
  */
@@ -27,6 +29,10 @@ public class Ball {
     public Ball(int x, int y) {
         xf = x;
         yf = y;
+    }
+
+    public Vector2f getPos() {
+        return new Vector2f(xf, yf);
     }
 
     public void update(float delta) {
