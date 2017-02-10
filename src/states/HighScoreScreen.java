@@ -1,13 +1,11 @@
 package states;
 
 import Listeners.ScoreListener;
-import model.WorldState;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
-import java.awt.Font;
 import java.util.Hashtable;
 
 /**
