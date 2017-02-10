@@ -7,8 +7,10 @@ import states.HighScoreScreen;
 import states.Menu;
 import states.World;
 
-public class StateManager extends StateBasedGame {
+import java.lang.invoke.WrongMethodTypeException;
+import java.util.ArrayList;
 
+public class StateManager extends StateBasedGame {
     public static enum StateId {
         MENU,
         WORLD,
@@ -23,7 +25,7 @@ public class StateManager extends StateBasedGame {
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new Menu(StateId.MENU.ordinal()));
         this.addState(new World(StateId.WORLD.ordinal()));
-        this.addState(new HighScoreScreen(StateId.HIGHSCORE.ordinal()));
+        this.addState(HighScoreScreen.getInstance(StateId.HIGHSCORE.ordinal()));
         this.enterState(StateId.HIGHSCORE.ordinal());
     }
 }

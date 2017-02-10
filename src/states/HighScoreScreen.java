@@ -1,6 +1,7 @@
 package states;
 
 import Listeners.ScoreListener;
+import model.WorldState;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -17,8 +18,19 @@ public class HighScoreScreen extends BasicGameState implements ScoreListener{
     private Integer id;
     Hashtable<Integer, Integer> highScores;
     StringBuilder highScoreBuilder;
+    static HighScoreScreen instance;
 
-    public HighScoreScreen(Integer id){
+    public static HighScoreScreen getInstance(Integer id){
+        if(instance != null) {
+            return instance;
+        }else{
+            instance = new HighScoreScreen(id);
+            World.setListener(instance);
+            return instance;
+        }
+    }
+
+    private HighScoreScreen(Integer id){
         highScores = new Hashtable<>();
         this.id = id;
         highScoreBuilder = new StringBuilder();
