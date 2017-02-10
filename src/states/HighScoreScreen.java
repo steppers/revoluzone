@@ -9,17 +9,16 @@ import org.newdawn.slick.state.StateBasedGame;
 /**
  * Created by an6g15 on 10/02/2017.
  */
-public class World extends BasicGameState {
+public class HighScoreScreen extends BasicGameState{
 
     private Integer id;
 
-    public World(Integer id){
+    public HighScoreScreen(Integer id){
         this.id = id;
     }
-
     @Override
     public int getID() {
-        return this.id;
+        return 0;
     }
 
     @Override
@@ -29,7 +28,7 @@ public class World extends BasicGameState {
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-
+        graphics.drawString("High Score Screen !", gameContainer.getScreenWidth() / 2, 50);
     }
 
     @Override
