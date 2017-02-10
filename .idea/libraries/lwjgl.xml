@@ -10,6 +10,7 @@
     <NATIVE>
       <root url="file://$PROJECT_DIR$/lib/natives" />
       <root url="file://$PROJECT_DIR$/lib/natives/windows" />
+      <root url="file://$PROJECT_DIR$/lib/natives/linux" />
     </NATIVE>
     <SOURCES />
   </library>
