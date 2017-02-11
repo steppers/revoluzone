@@ -22,15 +22,22 @@ public class World extends BasicGameState {
         SETTINGS,
         CREDITS,
         PLAY,
-        TRANSITION
+        TRANSITION_IN,
+        TRANSITION_OUT
     }
 
     private Integer stateId;
     private Integer levelId;
     private Integer highScore;
 
-    private States current;
+    private States currentState;
+    private States nextState;
     private Input currentInput;
+
+    private float scale = 0.5f;
+    private float transitionRate = 1f;
+    private float transitionScaleTarget = 1f;
+    private float textOpacity = 1f;
 
     private WorldModel state = new WorldModel();
 
@@ -47,7 +54,7 @@ public class World extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         state.recalcBall();
-        current = States.MENU;
+        currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
     }
 
@@ -55,83 +62,82 @@ public class World extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         ascertainCurrentState();
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
-        switch (current){
-            case MENU:
-                renderWorld(gc, graphics, state, 0.5f);
-                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
-                graphics.drawString("Level Select", ( gc.getWidth() / 2) - 150, 150);
-                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
-                graphics.drawString("Settings", ( gc.getWidth() / 2) - 120, 150);
-                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
-                graphics.drawString("Quit", ( gc.getWidth() / 2) - 60, 150);
-                break;
-            case LEVEL_SELECT:
+        renderWorld(gc, graphics, state, scale);
 
-//                break;
+        graphics.setColor(new Color(1,1,1,textOpacity));
+        switch (currentState){
+            case MENU:
+                renderMenuText(gc, graphics);
+                break;
+            case TRANSITION_IN:
+            case TRANSITION_OUT:
+                renderMenuText(gc, graphics);
+                break;
             default:
-                renderWorld(gc, graphics, state, 1);
                 break;
         }
-
-
     }
 
     @Override
     public void update(GameContainer gc, StateBasedGame stateBasedGame, int i) throws SlickException {
         float delta = (float) i / 1000;
-        if(!state.isRotating()) {
-            if(!state.getBall().isMoving()) {
-                Tile[][] grid = state.getGrid();
-                if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
-                    for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-                        for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
-                            grid[x][y].setActive(!grid[x][y].isActive());
+
+        switch (currentState){
+            case TRANSITION_IN:
+                scale += transitionRate * delta;
+                textOpacity -= transitionRate * delta;
+                if(scale >= transitionScaleTarget) {
+                    currentState = nextState;
+                    textOpacity = 1;
+                    scale = transitionScaleTarget;
+                }
+                break;
+            case TRANSITION_OUT:
+                scale -= transitionRate * delta;
+                textOpacity += transitionRate * delta;
+                if(scale < transitionScaleTarget) {
+                    currentState = nextState;
+                    textOpacity = 1;
+                    scale = transitionScaleTarget;
+                }
+                break;
+            default:
+                if(!state.isRotating()) {
+                    if(!state.getBall().isMoving()) {
+                        Tile[][] grid = state.getGrid();
+                        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
+                            for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
+                                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                                    grid[x][y].setActive(!grid[x][y].isActive());
+                                }
+                            }
+                            state.recalcBall();
+                        } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+                            state.rotate(90);
+                        } else {
+                            if (gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+                                state.rotate(-90);
+                            }
                         }
-                    }
-                    state.recalcBall();
-                } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
-                    state.rotate(90);
-                } else {
-                    if (gc.getInput().isKeyDown(Input.KEY_LEFT)) {
-                        state.rotate(-90);
+                    } else {
+                        state.getBall().update(delta);
                     }
                 }
-            } else {
-                state.getBall().update(delta);
-            }
-        }
-        state.update(delta);
-
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
-            System.exit(0);
+                state.update(delta);
+                break;
         }
     }
 
-//    private Tile getTileFromMousePos(GameContainer gc) {
-//        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
-//
-//        Tile[][] grid = state.getGrid();
-//        float offset = - (WorldModel.GRID_SIZE / 2);
-//
-//        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
-//
-//        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
-//        mouse = mouse.sub(screenOffset);
-//        mouse = mouse.scale(1/SCALE);
-//        mouse = mouse.sub(state.getRotation());
-//        mouse = mouse.sub(new Vector2f(offset, offset));
-//
-//        int x, y;
-//        x = (int)mouse.x;
-//        y = (int)mouse.y;
-//
-//        if(x >= 0 && x < WorldModel.GRID_SIZE && y >= 0 && y < WorldModel.GRID_SIZE) {
-//            return grid[x][y];
-//        }
-//        return null;
-//    }
+    void renderMenuText(GameContainer gc, Graphics graphics) {
+        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
+        graphics.drawString("Level Select", ( gc.getWidth() / 2) - 135, 150*(1/scale));
+        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
+        graphics.drawString("Settings", ( gc.getWidth() / 2) - 100, 150*(1/scale));
+        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
+        graphics.drawString("Quit", ( gc.getWidth() / 2) - 45, 150*(1/scale));
+    }
 
-     void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale) {
+    void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE) * scale;
 
         Tile[][] grid = state.getGrid();
@@ -234,31 +240,45 @@ public class World extends BasicGameState {
         g.fill(circ);
     }
 
-    private void ascertainCurrentState(){
+    private void ascertainCurrentState() {
 //        States[] states = {
 //          States.CREDITS, States.LEVEL_SELECT, States.
 //        };
-        switch ((int) state.getRotation() % 360){
-            case 0:
-                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    current = States.LEVEL_SELECT;
-                }
-                break;
-            case 90:
-                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    System.exit(0);
-                }
-                break;
-            case 180:
-                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    System.exit(0);
-                }
-                break;
-            case 270:
-                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    current = States.SETTINGS;
-                }
-                break;
+        if (currentInput.isKeyPressed(Input.KEY_ENTER)) {
+            switch (currentState) {
+                case MENU:
+                    switch ((int) state.getRotation() % 360) {
+                        case 0:
+                            currentState = States.TRANSITION_IN;
+                            nextState = States.LEVEL_SELECT;
+                            transitionScaleTarget = 1;
+                            break;
+                        case 90:
+                            System.exit(0);
+                            break;
+                        case 180:
+                            //currentState = States.EDITOR;
+                            break;
+                        case 270:
+//                            currentState = States.SETTINGS;
+                            break;
+                    }
+                    break;
+                default:
+                    break;
+            }
+        }
+
+        if(currentInput.isKeyPressed(Input.KEY_ESCAPE)) {
+            switch (currentState) {
+                case LEVEL_SELECT:
+                    currentState = States.TRANSITION_OUT;
+                    nextState = States.MENU;
+                    transitionScaleTarget = 0.5f;
+                    break;
+                default:
+                    break;
+            }
         }
     }
 }
