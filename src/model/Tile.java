@@ -11,7 +11,11 @@ public class Tile {
         RED,
         BLUE,
         KILL,
-        FINISH
+        START,
+        FINISH,
+        SWITCH,
+        SLIDE,
+        TELEPORT
     }
 
     private Type type = Type.FIXED;

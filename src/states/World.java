@@ -56,13 +56,13 @@ public class World extends BasicGameState {
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         switch (current){
             case MENU:
+                renderWorld(gc, graphics, state, 1);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
                 graphics.drawString("Level Select", ( gc.getWidth() / 2) - 150, 150);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
                 graphics.drawString("Settings", ( gc.getWidth() / 2) - 120, 150);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
                 graphics.drawString("Quit", ( gc.getWidth() / 2) - 60, 150);
-                renderWorld(gc, graphics, state, 1);
                 break;
             case LEVEL_SELECT:
 
@@ -77,13 +77,6 @@ public class World extends BasicGameState {
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if(!state.getBall().isMoving()) {
-//                if(gc.getInput().isMousePressed(0)) {
-//                    Tile t = getTileFromMousePos(gc);
-//                    if(t != null) {
-//                        t.setActive(!t.isActive());
-//                        state.recalcBall();
-//                    }
-//                }
                 Tile[][] grid = state.getGrid();
                 if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
                     for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
@@ -135,7 +128,7 @@ public class World extends BasicGameState {
 //    }
 
      void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale) {
-        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE)* scale;
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE) * scale;
 
         Tile[][] grid = state.getGrid();
         Tile t;

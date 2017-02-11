@@ -1,10 +1,6 @@
 package main;
 
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.DisplayMode;
-import graphics.FontLoader;
 import org.newdawn.slick.AppGameContainer;
-import org.newdawn.slick.SlickException;
 
 /**
  * A game made for the Soton GameJam by:
