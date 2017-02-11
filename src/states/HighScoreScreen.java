@@ -1,6 +1,7 @@
 package states;
 
 import Listeners.ScoreListener;
+import graphics.FontLoader;
 import org.newdawn.slick.*;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.state.BasicGameState;
@@ -45,9 +46,11 @@ public class HighScoreScreen extends BasicGameState implements ScoreListener{
 
     @Override
     public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        graphics.drawString("High Score Screen !", gameContainer.getScreenWidth() / 2, 50);
+        graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
+        graphics.drawString("High Score Screen !", gameContainer.getWidth() / 2, 50);
         for(int i : highScores.keySet()){
-            graphics.drawString("Score for level: " + i + " ---- " + highScores.get(i), (gameContainer.getScreenWidth() / 2) - 32, 50 + 20*i);
+            //FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()).drawString((gameContainer.getScreenWidth() / 2) - 32, 50 + 20*i, "Hello my name is Bob");
+            //graphics.drawString("Score for level: " + i + " ---- "  highScores.get(i), (gameContainer.getScreenWidth() / 2) - 32, 50 + 20*i);
         }
     }
 

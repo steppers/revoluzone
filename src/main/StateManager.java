@@ -1,5 +1,6 @@
 package main;
 
+import graphics.FontLoader;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
@@ -8,7 +9,7 @@ import states.Menu;
 import states.World;
 
 public class StateManager extends StateBasedGame {
-    public static enum StateId {
+    public enum StateId {
         MENU,
         WORLD,
         HIGHSCORE
@@ -23,6 +24,6 @@ public class StateManager extends StateBasedGame {
         this.addState(new Menu(StateId.MENU.ordinal()));
         this.addState(new World(StateId.WORLD.ordinal()));
         this.addState(HighScoreScreen.getInstance(StateId.HIGHSCORE.ordinal()));
-        this.enterState(StateId.WORLD.ordinal());
+        this.enterState(StateId.HIGHSCORE.ordinal());
     }
 }
