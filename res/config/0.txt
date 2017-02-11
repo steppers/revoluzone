@@ -4,5 +4,5 @@
 {0,0,0,0,0,0}
 {0,0,0,0,0,0}
 {0,0,0,0,0,0}
-next_level=1.txt
+next_level=none
 score=0
