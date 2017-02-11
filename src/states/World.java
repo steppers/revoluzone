@@ -63,9 +63,14 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
+
         menuState = parser.getWorldFromFile("res/config/0.txt");
+        renderer.setState(menuState);
+
+//        state = parser.getWorldFromFile("res/config/0.txt");
+//        renderer.setState(state);
+
         state = menuState;
-        renderer.setState(state);
         state.recalcBall();
     }
 
@@ -83,8 +88,10 @@ public class World extends BasicGameState {
                 renderText(gc, graphics, 1, scale, "Quit", -90, -45, 200);
                 renderText(gc, graphics, 1, scale, "Editor", 180, -60, 200);
 
-                renderText(gc, graphics, 1, scale, "Use arrow", 0, -110, 50);
-                renderText(gc, graphics, 1, scale, "keys to turn", 0, -135, 30);
+                renderText(gc, graphics, 1, scale, "Use arrow", 0, -110, 70);
+                renderText(gc, graphics, 1, scale, "keys to turn", 0, -135, 50);
+                renderText(gc, graphics, 1, scale, "Use space to", 0, -145, 10);
+                renderText(gc, graphics, 1, scale, "toggle", 0, -70, -10);
                 break;
             case EDITOR:
                 editor.render(gc, stateBasedGame, graphics);
