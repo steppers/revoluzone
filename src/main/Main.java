@@ -1,6 +1,7 @@
 package main;
 
 import org.newdawn.slick.AppGameContainer;
+import parsing.Parser;
 
 /**
  * A game made for the Soton GameJam by:
@@ -12,7 +13,13 @@ public class Main {
     private static final String GAME_NAME = "Revolosezone";
 
     public static void main(String[] args) {
-        AppGameContainer gc;
+
+        Parser parser = new Parser();
+        parser.loadFile("res/config/config.txt");
+        parser.getData();
+
+
+        /**AppGameContainer gc;
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
             gc.setDisplayMode(2400, 1350, false);
@@ -22,6 +29,6 @@ public class Main {
             gc.start();
         }catch (Exception e){
             System.out.println(e.getMessage());
-        }
+        }*/
     }
 }
