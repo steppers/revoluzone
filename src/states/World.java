@@ -1,5 +1,6 @@
 package states;
 
+import editor.Editor;
 import filemanage.Parser;
 import graphics.FontLoader;
 import graphics.StateRenderer;
@@ -26,7 +27,8 @@ public class World extends BasicGameState {
         CREDITS,
         PLAY,
         TRANSITION_IN,
-        TRANSITION_OUT
+        TRANSITION_OUT,
+        EDITOR
     }
 
     private StateRenderer renderer;
@@ -39,6 +41,7 @@ public class World extends BasicGameState {
     private States nextState;
     private Input currentInput;
     private Parser parser;
+    private Editor editor;
 
     private WorldModel state = new WorldModel();
 
@@ -46,6 +49,7 @@ public class World extends BasicGameState {
         this.stateId = stateId;
         renderer = new StateRenderer(state);
         parser = new Parser();
+        editor = new Editor();
     }
 
 
@@ -93,6 +97,8 @@ public class World extends BasicGameState {
                 if(!renderer.isTransitioning())
                     currentState = nextState;
                 break;
+            case EDITOR:
+                editor.update(gc, delta);
             default:
                 if(!state.isRotating()) {
                     if(!state.getBall().isMoving()) {
@@ -131,7 +137,10 @@ public class World extends BasicGameState {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
                     case MENU:
-                        switch ((int) state.getRotation() % 360) {
+                        int r = (int)state.getRotation();
+                        while(r < 0)
+                            r += 360;
+                        switch (r % 360) {
                             case 0:
                                 renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
                                 currentState = States.TRANSITION_IN;
@@ -141,7 +150,9 @@ public class World extends BasicGameState {
                                 System.exit(0);
                                 break;
                             case 180:
-                                //currentState = States.EDITOR;
+                                renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
+                                currentState = States.TRANSITION_IN;
+                                nextState = States.EDITOR;
                                 break;
                             case 270:
 //                            currentState = States.SETTINGS;
@@ -162,6 +173,11 @@ public class World extends BasicGameState {
                         currentState = States.TRANSITION_OUT;
                         nextState = States.MENU;
                         break;
+                    case EDITOR:
+                        renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
+                        currentState = States.TRANSITION_OUT;
+                        nextState = States.MENU;
+                        break;
                     default:
                         break;
                 }
@@ -177,5 +193,8 @@ public class World extends BasicGameState {
         graphics.drawString("Settings", ( gc.getWidth() / 2) - 100, 150*(1/scale));
         graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
         graphics.drawString("Quit", ( gc.getWidth() / 2) - 45, 150*(1/scale));
+        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, -90);
+        graphics.drawString("Editor", ( gc.getWidth() / 2) - 45, 150*(1/scale));
+
     }
 }
