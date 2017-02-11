@@ -37,6 +37,10 @@ public class StateRenderer {
         currentState = startState;
     }
 
+    public WorldModel getNextState() {
+        return nextState;
+    }
+
     public void setState(WorldModel state) {
         this.currentState = state;
     }

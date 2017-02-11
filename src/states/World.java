@@ -44,6 +44,7 @@ public class World extends BasicGameState {
     private Editor editor;
 
     private WorldModel state = new WorldModel();
+    private WorldModel menuState = new WorldModel();
 
     public World(Integer stateId){
         this.stateId = stateId;
@@ -64,7 +65,8 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         parser.loadFile("res/config/1.txt");
-        state = parser.getData();
+        menuState = parser.getData();
+        state = menuState;
         renderer.setState(state);
     }
 
@@ -94,10 +96,13 @@ public class World extends BasicGameState {
         switch (currentState){
             case TRANSITION_IN:
             case TRANSITION_OUT:
-                if(!renderer.isTransitioning())
+                if(!renderer.isTransitioning()) {
                     currentState = nextState;
+                    state = renderer.getNextState();
+                }
                 break;
             case EDITOR:
+                state = editor.getState();
                 editor.update(gc, delta);
             default:
                 if(!state.isRotating()) {
@@ -150,7 +155,7 @@ public class World extends BasicGameState {
                                 System.exit(0);
                                 break;
                             case 180:
-                                renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
+                                renderer.transition(StateRenderer.TransitionType.GROW, editor.getState(), 1f, 1f);
                                 currentState = States.TRANSITION_IN;
                                 nextState = States.EDITOR;
                                 break;
@@ -169,12 +174,12 @@ public class World extends BasicGameState {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
                     case LEVEL_SELECT:
-                        renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
+                        renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
                         currentState = States.TRANSITION_OUT;
                         nextState = States.MENU;
                         break;
                     case EDITOR:
-                        renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
+                        renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
                         currentState = States.TRANSITION_OUT;
                         nextState = States.MENU;
                         break;

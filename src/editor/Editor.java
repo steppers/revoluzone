@@ -29,10 +29,15 @@ public class Editor {
 
     public void update(GameContainer gc, float delta) {
         state.update(delta);
+
     }
 
     public void render(GameContainer gc, Graphics graphics) {
 //        graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
+    }
+
+    public WorldModel getState(){
+        return state;
     }
 
 }
