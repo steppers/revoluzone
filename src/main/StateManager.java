@@ -3,13 +3,19 @@ package main;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
+import states.HighScoreScreen;
 import states.Menu;
 import states.World;
 
-public class StateManager extends StateBasedGame {
+import java.lang.invoke.WrongMethodTypeException;
+import java.util.ArrayList;
 
-    private final Integer MENU_ID = 0;
-    private final Integer WORLD_ID = 1;
+public class StateManager extends StateBasedGame {
+    public static enum StateId {
+        MENU,
+        WORLD,
+        HIGHSCORE
+    };
 
     public StateManager(String gameName){
         super(gameName);
@@ -17,8 +23,9 @@ public class StateManager extends StateBasedGame {
 
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
-        this.addState(new Menu(MENU_ID));
-        this.addState(new World(WORLD_ID));
-        this.enterState(MENU_ID);
+        this.addState(new Menu(StateId.MENU.ordinal()));
+        this.addState(new World(StateId.WORLD.ordinal()));
+        this.addState(HighScoreScreen.getInstance(StateId.HIGHSCORE.ordinal()));
+        this.enterState(StateId.HIGHSCORE.ordinal());
     }
 }

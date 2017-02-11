@@ -8,7 +8,7 @@ import org.newdawn.slick.state.StateBasedGame;
 
 public class Menu extends BasicGameState {
 
-    private final Integer id;
+    private Integer id;
 
     public Menu(Integer id){
         this.id = id;
@@ -21,7 +21,6 @@ public class Menu extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-
     }
 
     @Override

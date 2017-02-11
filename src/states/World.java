@@ -4,6 +4,10 @@ import model.Tile;
 import model.WorldModel;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.*;
+import Listeners.ScoreListener;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
+import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -12,24 +16,34 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class World extends BasicGameState {
 
+    private Integer stateId;
+    private Integer levelId;
+    private Integer highScore;
+    private boolean isFinished;
+    private static ScoreListener listener;
     private static final int SCALE = 35;
 
     private final Integer id;
 
+    public World(Integer stateId){
+        this.stateId = stateId;
     private WorldModel state = new WorldModel();
 
     public World(Integer id){
         this.id = id;
     }
 
+    public static void setListener(ScoreListener listenerPassed){
+        listener = listenerPassed;
+    }
+
     @Override
     public int getID() {
-        return this.id;
+        return this.stateId;
     }
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-
     }
 
     @Override
@@ -76,6 +90,9 @@ public class World extends BasicGameState {
 
     @Override
     public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
+        if(isFinished){
+            listener.levelComplete(levelId, highScore);
+        }
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if (gameContainer.getInput().isKeyDown(Input.KEY_RIGHT)) {
