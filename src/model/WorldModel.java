@@ -33,6 +33,10 @@ public class WorldModel {
         grid[2][2].setType(Tile.Type.RED);
         grid[4][3].setType(Tile.Type.BLUE);
         grid[6][5].setType(Tile.Type.FIXED);
+        grid[6][6].setType(Tile.Type.FIXED);
+        grid[5][6].setType(Tile.Type.FIXED);
+        grid[2][6].setType(Tile.Type.FIXED);
+        grid[3][6].setType(Tile.Type.BLUE);
     }
 
     public void setGrid(Tile[][] grid) {

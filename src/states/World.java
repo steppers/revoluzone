@@ -40,103 +40,7 @@ public class World extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
-
-        Tile[][] grid = state.getGrid();
-        Tile t;
-        float offset = - (WorldModel.GRID_SIZE / 2) + 0.5f;
-
-        Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
-        Shape tile = rect.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
-
-        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
-
-        //First render pass (Floor)
-        graphics.setColor(Color.white.darker(0.2f)); //Floor color
-        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-            for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
-                Vector2f pos = new Vector2f(offset + x, offset + y);
-                pos.sub(-state.getRotation());
-                pos.scale(SCALE);
-                pos.add(screenOffset);
-                tile.setLocation(pos.x, pos.y);
-                graphics.fill(tile);
-            }
-        }
-
-        //Second render pass (Shadows)
-        {
-            float shOffset = offset + 0.06f;
-            graphics.setColor(Color.white.darker(0.8f)); //Shadow color
-            for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
-                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
-                    if (state.isSolid(grid[x][y])) {
-                        Vector2f pos = new Vector2f(shOffset + x, shOffset + y);
-                        pos.sub(-state.getRotation());
-                        pos.scale(SCALE);
-                        pos.add(screenOffset);
-                        tile.setLocation(pos.x, pos.y);
-                        graphics.fill(tile);
-                    }
-                }
-            }
-
-            //Calc ball pos
-            shOffset = offset + 0.06f;
-            Vector2f pos = state.getBall().getPos().add(new Vector2f(shOffset, shOffset));
-            pos.sub(-state.getRotation());
-            pos.scale(SCALE);
-            pos.add(screenOffset);
-
-            Circle c = new Circle(0, 0, SCALE / 2);
-            Shape circ = c.transform(Transform.createRotateTransform((float) (state.getRotation() * Math.PI) / 180));
-            circ.setLocation(pos.x, pos.y);
-            graphics.fill(circ);
-        }
-
-        //Third render pass (blocks)
-        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-            for(int y = 0; y < WorldModel.GRID_SIZE; y++) {
-                t = grid[x][y];
-                Vector2f pos = new Vector2f(offset + x, offset + y);
-                pos.sub(-state.getRotation());
-                pos.scale(SCALE);
-                pos.add(screenOffset);
-                tile.setLocation(pos.x, pos.y);
-
-                switch (t.getType()) {
-                    case EMPTY:
-                        break;
-                    case FIXED:
-                        graphics.setColor(Color.white.darker(0.4f));
-                        graphics.fill(tile);
-                        break;
-                    case RED:
-                        graphics.setColor(Color.red);
-                        if(!t.isActive())
-                            graphics.setColor(graphics.getColor().multiply(new Color(1, 1, 1, 0.3f)));
-                        graphics.fill(tile);
-                        break;
-                    case BLUE:
-                        graphics.setColor(Color.blue);
-                        if(!t.isActive())
-                            graphics.setColor(graphics.getColor().multiply(new Color(1, 1, 1, 0.3f)));
-                        graphics.fill(tile);
-                        break;
-                }
-            }
-        }
-
-        Vector2f pos = state.getBall().getPos().add(new Vector2f(offset, offset));
-        pos.sub(-state.getRotation());
-        pos.scale(SCALE);
-        pos.add(screenOffset);
-
-        Circle c = new Circle(0, 0, SCALE/2);
-        Shape circ = c.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
-        circ.setLocation(pos.x, pos.y);
-        graphics.setColor(Color.cyan);
-        graphics.fill(circ);
+        renderWorld(gc, graphics);
     }
 
     @Override
@@ -190,5 +94,105 @@ public class World extends BasicGameState {
             return grid[x][y];
         }
         return null;
+    }
+
+    public void renderWorld(GameContainer gc, Graphics g) {
+        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
+
+        Tile[][] grid = state.getGrid();
+        Tile t;
+        float offset = - (WorldModel.GRID_SIZE / 2) + 0.5f;
+
+        Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
+        Shape tile = rect.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        //First render pass (Floor)
+        g.setColor(Color.white.darker(0.2f)); //Floor color
+        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
+            for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                Vector2f pos = new Vector2f(offset + x, offset + y);
+                pos.sub(-state.getRotation());
+                pos.scale(SCALE);
+                pos.add(screenOffset);
+                tile.setLocation(pos.x, pos.y);
+                g.fill(tile);
+            }
+        }
+
+        //Second render pass (Shadows)
+        {
+            Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(state.getRotation()).add(new Vector2f(offset, offset));
+            g.setColor(Color.white.darker(0.8f)); //Shadow color
+            for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
+                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                    if (state.isSolid(grid[x][y])) {
+                        Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
+                        pos.sub(-state.getRotation());
+                        pos.scale(SCALE);
+                        pos.add(screenOffset);
+                        tile.setLocation(pos.x, pos.y);
+                        g.fill(tile);
+                    }
+                }
+            }
+
+            //Calc ball pos
+            float shOffset = offset + 0.06f;
+            Vector2f pos = state.getBall().getPos().add(new Vector2f(shOffset, shOffset));
+            pos.sub(-state.getRotation());
+            pos.scale(SCALE);
+            pos.add(screenOffset);
+
+            Circle c = new Circle(0, 0, SCALE / 2);
+            Shape circ = c.transform(Transform.createRotateTransform((float) (state.getRotation() * Math.PI) / 180));
+            circ.setLocation(pos.x, pos.y);
+            g.fill(circ);
+        }
+
+        //Third render pass (blocks)
+        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
+            for(int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                t = grid[x][y];
+                Vector2f pos = new Vector2f(offset + x, offset + y);
+                pos.sub(-state.getRotation());
+                pos.scale(SCALE);
+                pos.add(screenOffset);
+                tile.setLocation(pos.x, pos.y);
+
+                switch (t.getType()) {
+                    case EMPTY:
+                        break;
+                    case FIXED:
+                        g.setColor(Color.white.darker(0.4f));
+                        g.fill(tile);
+                        break;
+                    case RED:
+                        g.setColor(Color.red);
+                        if(!t.isActive())
+                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)));
+                        g.fill(tile);
+                        break;
+                    case BLUE:
+                        g.setColor(Color.blue);
+                        if(!t.isActive())
+                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)));
+                        g.fill(tile);
+                        break;
+                }
+            }
+        }
+
+        Vector2f pos = state.getBall().getPos().add(new Vector2f(offset, offset));
+        pos.sub(-state.getRotation());
+        pos.scale(SCALE);
+        pos.add(screenOffset);
+
+        Circle c = new Circle(0, 0, SCALE/2);
+        Shape circ = c.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
+        circ.setLocation(pos.x, pos.y);
+        g.setColor(Color.cyan);
+        g.fill(circ);
     }
 }
