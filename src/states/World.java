@@ -35,11 +35,12 @@ public class World extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
+        state.recalcBall();
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        renderWorld(gc, graphics);
+        renderWorld(gc, graphics, state);
     }
 
     @Override
@@ -47,12 +48,21 @@ public class World extends BasicGameState {
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if(!state.getBall().isMoving()) {
-                if(gc.getInput().isMousePressed(0)) {
-                    Tile t = getTileFromMousePos(gc);
-                    if(t != null) {
-                        t.setActive(!t.isActive());
-                        state.recalcBall();
+//                if(gc.getInput().isMousePressed(0)) {
+//                    Tile t = getTileFromMousePos(gc);
+//                    if(t != null) {
+//                        t.setActive(!t.isActive());
+//                        state.recalcBall();
+//                    }
+//                }
+                Tile[][] grid = state.getGrid();
+                if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
+                    for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
+                        for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                            grid[x][y].setActive(!grid[x][y].isActive());
+                        }
                     }
+                    state.recalcBall();
                 } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
                     state.rotate(90);
                 } else {
@@ -66,13 +76,13 @@ public class World extends BasicGameState {
         }
         state.update(delta);
 
-        if((Display.getWidth() != gc.getWidth() || Display.getHeight() != gc.getHeight()) && !gc.getInput().isMouseButtonDown(0)) {
-            GL11.glViewport(0,0,Display.getWidth(), Display.getHeight());
+        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+            System.exit(0);
         }
     }
 
     private Tile getTileFromMousePos(GameContainer gc) {
-        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
+        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
 
         Tile[][] grid = state.getGrid();
         float offset = - (WorldModel.GRID_SIZE / 2);
@@ -95,8 +105,8 @@ public class World extends BasicGameState {
         return null;
     }
 
-    public void renderWorld(GameContainer gc, Graphics g) {
-        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
+    public void renderWorld(GameContainer gc, Graphics g, WorldModel state) {
+        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
 
         Tile[][] grid = state.getGrid();
         Tile t;
@@ -122,7 +132,7 @@ public class World extends BasicGameState {
 
         //Second render pass (Shadows)
         {
-            Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(state.getRotation()).add(new Vector2f(offset, offset));
+            Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(state.getRotation() + 25).add(new Vector2f(offset, offset));
             g.setColor(Color.white.darker(0.8f)); //Shadow color
             for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
                 for (int y = 0; y < WorldModel.GRID_SIZE; y++) {

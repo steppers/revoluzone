@@ -29,8 +29,11 @@ public class WorldModel {
         }
 
         grid[3][1].setType(Tile.Type.RED);
+        grid[3][1].setActive(true);
         grid[5][1].setType(Tile.Type.RED);
+        grid[5][1].setActive(true);
         grid[2][2].setType(Tile.Type.RED);
+        grid[2][2].setActive(true);
         grid[4][3].setType(Tile.Type.BLUE);
         grid[6][5].setType(Tile.Type.FIXED);
         grid[6][6].setType(Tile.Type.FIXED);

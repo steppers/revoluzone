@@ -10,8 +10,8 @@ public class Tile {
         FIXED,
         RED,
         BLUE,
-        GREEN,
-        PURPLE
+        KILL,
+        FINISH
     }
 
     private Type type = Type.FIXED;

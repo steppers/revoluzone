@@ -19,11 +19,10 @@ public class Main {
         AppGameContainer gc;
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
-            gc.setDisplayMode(1600, 900, false);
+            gc.setDisplayMode(2400, 1350, false);
             gc.setVSync(true);
             gc.setSmoothDeltas(true);
             gc.setMultiSample(4);
-            Display.setResizable(true);
             gc.start();
         }catch (Exception e){
             System.out.println(e.getMessage());
