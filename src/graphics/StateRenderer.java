@@ -93,7 +93,6 @@ public class StateRenderer {
         }
 
         this.nextState = nextState;
-
         transitioning = true;
     }
 
