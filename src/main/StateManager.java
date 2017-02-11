@@ -19,6 +19,6 @@ public class StateManager extends StateBasedGame {
     @Override
     public void initStatesList(GameContainer gameContainer) throws SlickException {
         this.addState(new World(StateId.WORLD.ordinal()));
-        this.enterState(StateId.HIGHSCORE.ordinal());
+        this.enterState(StateId.WORLD.ordinal());
     }
 }
