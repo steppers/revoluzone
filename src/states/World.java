@@ -8,6 +8,7 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -90,9 +91,14 @@ public class World extends BasicGameState {
                     if(!state.getBall().isMoving()) {
                         Tile[][] grid = state.getGrid();
                         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
-                            for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-                                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
-                                    grid[x][y].setActive(!grid[x][y].isActive());
+                            Vector2f p = state.getBall().getPos();
+                            Tile.Type type = grid[(int)p.x][(int)p.y].getType();
+                            if(type == Tile.Type.RED || type == Tile.Type.BLUE) {
+                            } else {
+                                for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
+                                    for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                                        grid[x][y].setActive(!grid[x][y].isActive());
+                                    }
                                 }
                             }
                             state.recalcBall();
