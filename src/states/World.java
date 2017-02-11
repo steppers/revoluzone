@@ -60,11 +60,19 @@ public class World extends BasicGameState {
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         switch (current){
             case MENU:
-
+                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
+                graphics.drawString("Level Select", ( gc.getWidth() / 2) - 150, 150);
+                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
+                graphics.drawString("Settings", ( gc.getWidth() / 2) - 120, 150);
+                graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
+                graphics.drawString("Quit", ( gc.getWidth() / 2) - 60, 150);
+                break;
             case LEVEL_SELECT:
 
                 break;
         }
+
+
     }
 
     @Override
@@ -105,31 +113,31 @@ public class World extends BasicGameState {
         }
     }
 
-    private Tile getTileFromMousePos(GameContainer gc) {
-        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
+//    private Tile getTileFromMousePos(GameContainer gc) {
+//        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
+//
+//        Tile[][] grid = state.getGrid();
+//        float offset = - (WorldModel.GRID_SIZE / 2);
+//
+//        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+//
+//        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
+//        mouse = mouse.sub(screenOffset);
+//        mouse = mouse.scale(1/SCALE);
+//        mouse = mouse.sub(state.getRotation());
+//        mouse = mouse.sub(new Vector2f(offset, offset));
+//
+//        int x, y;
+//        x = (int)mouse.x;
+//        y = (int)mouse.y;
+//
+//        if(x >= 0 && x < WorldModel.GRID_SIZE && y >= 0 && y < WorldModel.GRID_SIZE) {
+//            return grid[x][y];
+//        }
+//        return null;
+//    }
 
-        Tile[][] grid = state.getGrid();
-        float offset = - (WorldModel.GRID_SIZE / 2);
-
-        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
-
-        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
-        mouse = mouse.sub(screenOffset);
-        mouse = mouse.scale(1/SCALE);
-        mouse = mouse.sub(state.getRotation());
-        mouse = mouse.sub(new Vector2f(offset, offset));
-
-        int x, y;
-        x = (int)mouse.x;
-        y = (int)mouse.y;
-
-        if(x >= 0 && x < WorldModel.GRID_SIZE && y >= 0 && y < WorldModel.GRID_SIZE) {
-            return grid[x][y];
-        }
-        return null;
-    }
-
-    public void renderWorld(GameContainer gc, Graphics g, WorldModel state) {
+     void renderWorld(GameContainer gc, Graphics g, WorldModel state) {
         float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
 
         Tile[][] grid = state.getGrid();
@@ -240,12 +248,12 @@ public class World extends BasicGameState {
                 break;
             case 90:
                 if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    current = States.SETTINGS;
+                    System.exit(0);
                 }
                 break;
             case 180:
                 if(currentInput.isKeyPressed(Input.KEY_ENTER)){
-                    current = States.SETTINGS;
+                    System.exit(0);
                 }
                 break;
             case 270:
