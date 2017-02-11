@@ -10,7 +10,7 @@ import org.newdawn.slick.AppGameContainer;
 
 public class Main {
 
-    private static final String GAME_NAME = "Revolosezone";
+    private static final String GAME_NAME = "Squaring the Circle";
 
     public static void main(String[] args) {
 
