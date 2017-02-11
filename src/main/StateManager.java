@@ -26,6 +26,6 @@ public class StateManager extends StateBasedGame {
         this.addState(new Menu(StateId.MENU.ordinal()));
         this.addState(new World(StateId.WORLD.ordinal()));
         this.addState(HighScoreScreen.getInstance(StateId.HIGHSCORE.ordinal()));
-        this.enterState(StateId.HIGHSCORE.ordinal());
+        this.enterState(StateId.WORLD.ordinal());
     }
 }

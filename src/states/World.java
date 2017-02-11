@@ -23,14 +23,10 @@ public class World extends BasicGameState {
     private static ScoreListener listener;
     private static final int SCALE = 35;
 
-    private final Integer id;
+    private WorldModel state = new WorldModel();
 
     public World(Integer stateId){
         this.stateId = stateId;
-    private WorldModel state = new WorldModel();
-
-    public World(Integer id){
-        this.id = id;
     }
 
     public static void setListener(ScoreListener listenerPassed){
