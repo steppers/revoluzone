@@ -8,6 +8,6 @@
 {0,0,2,0,0,0,0,1,0,0}
 {0,0,0,0,0,0,3,0,0,0}
 {0,0,3,0,0,0,5,0,0,0}
-next_level=4.txt
+next_level=1.txt
 prev_level=2.txt
 score=0
