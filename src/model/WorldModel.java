@@ -9,7 +9,7 @@ public class WorldModel {
     public static final float ROT_VEL = 360f;
 
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
-    private Ball ball = new Ball(1, 6);
+    private Ball ball = new Ball(1, 1);
 
     private float rotation = 0f;
     private int rotDir = 0; //0 = left, 1 = right
@@ -27,8 +27,6 @@ public class WorldModel {
                 grid[x][y].setType(Tile.Type.EMPTY);
             }
         }
-
-        recalcBall();
     }
 
     public void setGrid(Tile[][] grid) {

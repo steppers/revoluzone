@@ -7,7 +7,6 @@ import graphics.StateRenderer;
 import model.Tile;
 import model.WorldModel;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -46,7 +45,7 @@ public class World extends BasicGameState {
     private WorldModel state = new WorldModel();
     private WorldModel menuState = new WorldModel();
 
-    public World(Integer stateId){
+    public World(Integer stateId) {
         this.stateId = stateId;
         renderer = new StateRenderer(state);
         parser = new Parser();
@@ -61,7 +60,6 @@ public class World extends BasicGameState {
 
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
-        state.recalcBall();
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
@@ -79,7 +77,8 @@ public class World extends BasicGameState {
 
         switch (currentState){
             case MENU:
-                renderMenuText(gc, graphics, 1, 0.5f);
+                renderText(gc, graphics, 1, 0.5f, "Level Select", 0, -135, 150);
+//                renderMenuText(gc, graphics, 1, 0.5f);
                 break;
             case EDITOR:
                 editor.render(gc, stateBasedGame, graphics);
@@ -142,7 +141,7 @@ public class World extends BasicGameState {
         }
         updateCurrentState();
 
-        backgroundOpacity += 2.5f * delta;
+        backgroundOpacity += 3f * delta;
     }
 
     private void updateCurrentState() {
@@ -198,6 +197,14 @@ public class World extends BasicGameState {
         }
     }
 
+    void renderText(GameContainer gc, Graphics g, float opacity, float scale, String text, float rotation, float xOffset, float yOffset) {
+        g.setColor(new Color(1,1,1,opacity));
+        g.resetTransform();
+        g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
+        g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, rotation);
+        g.drawString(text, ( gc.getWidth() / 2) - xOffset, yOffset*(1/scale));
+    }
+
     void renderMenuText(GameContainer gc, Graphics graphics, float opacity, float scale) {
         graphics.setColor(new Color(1,1,1,opacity));
         graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
@@ -216,8 +223,8 @@ public class World extends BasicGameState {
     float x, y, side;
 
     void redefinePosition(GameContainer gc) {
-        x = (float) ((Math.random())) * gc.getWidth();
-        y = (float) ((Math.random())) * gc.getHeight();
+        x = (float) Math.random() * gc.getWidth();
+        y = (float) Math.random() * gc.getHeight();
         side = (float) (gc.getWidth() * (Math.random()+0.5f) * 0.15);
     }
 
