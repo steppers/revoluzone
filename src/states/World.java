@@ -27,8 +27,7 @@ public class World extends BasicGameState {
         SETTINGS,
         CREDITS,
         LEVEL,
-        TRANSITION_IN,
-        TRANSITION_OUT,
+        TRANSITION,
         EDITOR
     }
 
@@ -92,12 +91,11 @@ public class World extends BasicGameState {
             case EDITOR:
                 editor.render(gc, stateBasedGame, graphics);
                 break;
-            case TRANSITION_IN:
-            case TRANSITION_OUT:
-                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Level Select", 0, -135, 200);
-                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Settings", 90, -100, 200);
-                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Quit", -90, -45, 200);
-                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Editor", 180, -60, 200);
+            case TRANSITION:
+//                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Level Select", 0, -135, 200);
+//                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Settings", 90, -100, 200);
+//                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Quit", -90, -45, 200);
+//                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Editor", 180, -60, 200);
                 break;
             default:
                 break;
@@ -110,8 +108,7 @@ public class World extends BasicGameState {
         renderer.update(delta);
 
         switch (currentState){
-            case TRANSITION_IN:
-            case TRANSITION_OUT:
+            case TRANSITION:
                 if(!renderer.isTransitioning()) {
                     currentState = nextState;
                     if(currentState != LEVEL_SELECT){
@@ -169,7 +166,7 @@ public class World extends BasicGameState {
                         switch (r % 360) {
                             case 0:
                                 renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
-                                currentState = States.TRANSITION_IN;
+                                currentState = States.TRANSITION;
                                 nextState = LEVEL_SELECT;
                                 break;
                             case 90:
@@ -177,7 +174,7 @@ public class World extends BasicGameState {
                                 break;
                             case 180:
                                 renderer.transition(StateRenderer.TransitionType.GROW, editor.getState(), 1f, 1f);
-                                currentState = States.TRANSITION_IN;
+                                currentState = States.TRANSITION;
                                 nextState = States.EDITOR;
                                 break;
                             case 270:
@@ -189,7 +186,7 @@ public class World extends BasicGameState {
                         break;
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
-                        currentState = States.TRANSITION_IN;
+                        currentState = States.TRANSITION;
                         nextState = States.LEVEL;
                         break;
                 }
@@ -201,17 +198,17 @@ public class World extends BasicGameState {
                 switch (currentState) {
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
-                        currentState = States.TRANSITION_OUT;
+                        currentState = States.TRANSITION;
                         nextState = States.MENU;
                         break;
                     case EDITOR:
                         renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
-                        currentState = States.TRANSITION_OUT;
+                        currentState = States.TRANSITION;
                         nextState = States.MENU;
                         break;
                     case LEVEL:
                         renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
-                        currentState = States.TRANSITION_OUT;
+                        currentState = States.TRANSITION;
                         nextState = LEVEL_SELECT;
                         break;
                     default:
@@ -225,7 +222,7 @@ public class World extends BasicGameState {
                 switch (currentState) {
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.nextLevel), 0.5f, 1f);
-                        currentState = States.TRANSITION_IN;
+                        currentState = States.TRANSITION;
                         nextState = States.LEVEL_SELECT;
                         break;
                     default:
@@ -238,7 +235,7 @@ public class World extends BasicGameState {
                 switch (currentState) {
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.prevLevel), 0.5f, 1f);
-                        currentState = States.TRANSITION_IN;
+                        currentState = States.TRANSITION;
                         nextState = States.LEVEL_SELECT;
                         break;
                     default:

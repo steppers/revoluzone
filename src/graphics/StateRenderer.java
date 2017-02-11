@@ -87,17 +87,7 @@ public class StateRenderer {
     public void transition(TransitionType type, WorldModel nextState, float transitionTarget, float transitionRate) {
         transition = type;
         this.transitionTarget = transitionTarget;
-
-        switch(transition) {
-            case SHRINK:
-                this.transitionRate = -transitionRate;
-                break;
-            case GROW:
-            case FADE:
-                this.transitionRate = transitionRate;
-                break;
-        }
-
+        this.transitionRate = transitionRate;
         this.nextState = nextState;
         transitioning = true;
     }
