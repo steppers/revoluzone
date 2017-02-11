@@ -20,7 +20,6 @@ public class World extends BasicGameState {
     private Integer stateId;
     private Integer levelId;
     private Integer highScore;
-    private static final int SCALE = 35;
 
     private WorldModel state = new WorldModel();
 
@@ -139,8 +138,7 @@ public class World extends BasicGameState {
             }
 
             //Calc ball pos
-            float shOffset = offset + 0.06f;
-            Vector2f pos = state.getBall().getPos().add(new Vector2f(shOffset, shOffset));
+            Vector2f pos = state.getBall().getPos().add(shadow);
             pos.sub(-state.getRotation());
             pos.scale(SCALE);
             pos.add(screenOffset);
