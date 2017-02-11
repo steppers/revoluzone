@@ -6,7 +6,6 @@ import org.lwjgl.opengl.Display;
 import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.*;
-import Listeners.ScoreListener;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -21,8 +20,7 @@ public class World extends BasicGameState {
     private Integer stateId;
     private Integer levelId;
     private Integer highScore;
-    private boolean isFinished;
-    private static ScoreListener listener;
+    private static final int SCALE = 35;
 
     private WorldModel state = new WorldModel();
 
@@ -30,9 +28,6 @@ public class World extends BasicGameState {
         this.stateId = stateId;
     }
 
-    public static void setListener(ScoreListener listenerPassed){
-        listener = listenerPassed;
-    }
 
     @Override
     public int getID() {
@@ -146,9 +141,6 @@ public class World extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame stateBasedGame, int i) throws SlickException {
-        if(isFinished){
-            listener.levelComplete(levelId, highScore);
-        }
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if(!state.getBall().isMoving()) {
