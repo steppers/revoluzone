@@ -1,7 +1,6 @@
 package main;
 
-import org.newdawn.slick.AppGameContainer;
-import parsing.Parser;
+import filemanage.Parser;
 
 /**
  * A game made for the Soton GameJam by:

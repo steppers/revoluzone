@@ -1,4 +1,4 @@
-package parsing;
+package filemanage;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -33,23 +33,30 @@ public class Parser {
         Integer score = 0;
         ArrayList<String> mapList = new ArrayList<>();
         try{
+            levelID = Integer.parseInt(config.getName());
+        }catch (NumberFormatException e){
+            System.err.println("Invalid file name - defaulting ID to -1.");
+            levelID = -1;
+        }
+        try{
             reader = new BufferedReader(new FileReader(config));
 
             String line = "";
 
-            //Reads the file to ascertain ID
+            //Reads lines and inputs to array of map data
             while(!((line = reader.readLine()).contains("next_level"))){
                 mapList.add(line);
-
             }
+            //Read next file name
             nextName = line.split("=")[1];
-
-            while(!((line = reader.readLine()).contains("score:"))){
+            if(!((line = reader.readLine()).contains("score:"))){
                 try{
                     score = Integer.parseInt(line.split("=")[1]);
+                    return 0;
                 }catch (NumberFormatException e){
                     System.err.println("Error ! Not a valid number. Defaulting to 0!");
                     score = 0;
+                    return 0;
                 }
             }
         }catch (FileNotFoundException e) {
@@ -68,5 +75,12 @@ public class Parser {
             }
         }
         return 0;
+    }
+
+    /**
+     * Calls the processor to begin converting data to game state information.
+     */
+    public void parseComplete(){
+
     }
 }
