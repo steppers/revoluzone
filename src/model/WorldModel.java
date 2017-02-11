@@ -6,7 +6,7 @@ package model;
 public class WorldModel {
 
     public static final int GRID_SIZE = 10;
-    public static final float ROT_VEL = 150f;
+    public static final float ROT_VEL = 230f;
 
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
     private Ball ball = new Ball(4, 1);
@@ -29,6 +29,7 @@ public class WorldModel {
         }
 
         grid[3][3].setType(Tile.BLUE);
+        grid[8][4].setType(Tile.FIXED);
     }
 
     public void setGrid(Tile[][] grid) {
@@ -60,19 +61,74 @@ public class WorldModel {
                 if(rotation < targetRotation) {
                     rotation = targetRotation;
                     rotating = false;
+                    updateBall();
                 }
             } else {
                 rotation += ROT_VEL * delta;
                 if(rotation > targetRotation) {
                     rotation = targetRotation;
                     rotating = false;
+                    updateBall();
                 }
             }
         }
     }
 
+    private void updateBall() {
+        int r = (int)rotation % 360;
+        while(r < 0)
+            r += 360;
+        int y = (int)(ball.getPos().getY());
+        int x = (int)(ball.getPos().getX());
+        switch(r) {
+            case 0:
+                for(y = y+1; y < GRID_SIZE; y++) {
+                    if(isSolid(grid[x][y])) {
+                        ball.setTarget(x, y-1);
+                        return;
+                    }
+                }
+                break;
+            case 90:
+                for(x = x+1; x < GRID_SIZE; x++) {
+                    if(isSolid(grid[x][y])) {
+                        ball.setTarget(x-1, y);
+                        return;
+                    }
+                }
+                break;
+            case 180:
+                for(y = y-1; y >= 0; y--) {
+                    if(isSolid(grid[x][y])) {
+                        ball.setTarget(x, y+1);
+                        return;
+                    }
+                }
+                break;
+            case 270:
+                for(x = x-1; x >= 0; x--) {
+                    if(isSolid(grid[x][y])) {
+                        ball.setTarget(x+1, y);
+                        return;
+                    }
+                }
+                break;
+        }
+    }
+
     public boolean isRotating() {
         return rotating;
+    }
+
+    private boolean isSolid(Tile t) {
+        switch(t.getType()) {
+            case 0:
+                return false;
+            case 1:
+                return true;
+            default:
+                return true;
+        }
     }
 
 }

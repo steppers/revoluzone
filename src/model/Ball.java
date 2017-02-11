@@ -1,16 +1,15 @@
 package model;
 
-import org.lwjgl.util.vector.Vector2f;
+import org.newdawn.slick.geom.Vector2f;
 
 /**
  * Created by steppers on 2/10/17.
  */
 public class Ball {
 
-    private static final float ACCEL = 0.7f;
+    private static final float ACCEL = 60.0f;
 
-    private float xf, yf;
-    private int xi, yi;
+    private float x, y;
 
     private int xTarget, yTarget;
 
@@ -27,21 +26,17 @@ public class Ball {
     private Direction dir;
 
     public Ball(int x, int y) {
-        xi = x;
-        yi = y;
-        xf = x;
-        yf = y;
+        this.x = x;
+        this.y = y;
     }
 
     public Vector2f getPos() {
-        return new Vector2f(xf, yf);
+        return new Vector2f(x, y);
     }
 
     public void setPos(int x, int y) {
-        xi = x;
-        yi = y;
-        xf = x;
-        yf = y;
+        this.x = x;
+        this.y = y;
     }
 
     public void update(float delta) {
@@ -49,51 +44,49 @@ public class Ball {
             switch(dir) {
                 case UP:
                     velY += ACCEL * delta;
-                    yf += velY * delta;
-                    if(yf > yTarget) {
+                    y += velY * delta;
+                    if(y >= yTarget) {
                         moving = false;
-                        yf = yTarget;
-                        yi = yTarget;
+                        y = yTarget;
                     }
                     break;
 
                 case DOWN:
                     velY -= ACCEL * delta;
-                    yf += velY * delta;
-                    if(yf < yTarget) {
+                    y += velY * delta;
+                    if(y <= yTarget) {
                         moving = false;
-                        yf = yTarget;
-                        yi = yTarget;
+                        y = yTarget;
                     }
                     break;
 
                 case RIGHT:
                     velX += ACCEL * delta;
-                    xf += velX * delta;
-                    if(xf > xTarget) {
+                    x += velX * delta;
+                    if(x >= xTarget) {
                         moving = false;
-                        xf = xTarget;
-                        xi = xTarget;
+                        x = xTarget;
                     }
                     break;
 
                 case LEFT:
                     velX -= ACCEL * delta;
-                    xf += velX * delta;
-                    if(xf < xTarget) {
+                    x += velX * delta;
+                    if(x <= xTarget) {
                         moving = false;
-                        xf = xTarget;
-                        xi = xTarget;
+                        x = xTarget;
                     }
                     break;
             }
         }
     }
 
-    public void setTarget(int x, int y) {
+    public void setTarget(int xt, int yt) {
+        xTarget = xt;
+        yTarget = yt;
         moving = true;
-        int dx = x - xi;
-        int dy = y - yi;
+        int dx = xt - (int)x;
+        int dy = yt - (int)y;
 
         if(dx == 0) {
             if(dy > 0) {
@@ -110,6 +103,10 @@ public class Ball {
         }
         velX = 0;
         velY = 0;
+    }
+
+    public boolean isMoving() {
+        return moving;
     }
 
 }

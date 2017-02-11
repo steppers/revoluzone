@@ -82,6 +82,17 @@ public class World extends BasicGameState {
                 }
             }
         }
+
+        Vector2f pos = state.getBall().getPos().add(new Vector2f(offset, offset));
+        pos.sub(-state.getRotation());
+        pos.scale(SCALE);
+        pos.add(screenOffset);
+
+        Circle c = new Circle(0, 0, SCALE/2);
+        Shape circ = c.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
+        circ.setLocation(pos.x, pos.y);
+        graphics.setColor(Color.cyan);
+        graphics.fill(circ);
     }
 
     @Override
@@ -91,12 +102,16 @@ public class World extends BasicGameState {
         }
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
-            if (gameContainer.getInput().isKeyDown(Input.KEY_RIGHT)) {
-                state.rotate(90);
-            } else {
-                if (gameContainer.getInput().isKeyDown(Input.KEY_LEFT)) {
-                    state.rotate(-90);
+            if(!state.getBall().isMoving()) {
+                if (gameContainer.getInput().isKeyDown(Input.KEY_RIGHT)) {
+                    state.rotate(90);
+                } else {
+                    if (gameContainer.getInput().isKeyDown(Input.KEY_LEFT)) {
+                        state.rotate(-90);
+                    }
                 }
+            } else {
+                state.getBall().update(delta);
             }
         }
         state.update(delta);

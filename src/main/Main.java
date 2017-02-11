@@ -16,7 +16,7 @@ public class Main{
         AppGameContainer gc;
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
-            gc.setDisplayMode(gc.getScreenWidth(), gc.getScreenHeight(), true);
+            gc.setDisplayMode(1600, 900, false);
             gc.start();
         }catch (SlickException e){
             System.out.println(e.getMessage());

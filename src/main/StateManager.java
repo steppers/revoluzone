@@ -7,9 +7,6 @@ import states.HighScoreScreen;
 import states.Menu;
 import states.World;
 
-import java.lang.invoke.WrongMethodTypeException;
-import java.util.ArrayList;
-
 public class StateManager extends StateBasedGame {
     public static enum StateId {
         MENU,
