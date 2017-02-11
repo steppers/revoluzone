@@ -40,9 +40,17 @@ public class Parser {
             //Reads the file to ascertain ID
             while(!((line = reader.readLine()).contains("next_level"))){
                 mapList.add(line);
+
             }
+            nextName = line.split("=")[1];
+
             while(!((line = reader.readLine()).contains("score:"))){
-                nextName = line.split("=")[1];
+                try{
+                    score = Integer.parseInt(line.split("=")[1]);
+                }catch (NumberFormatException e){
+                    System.err.println("Error ! Not a valid number. Defaulting to 0!");
+                    score = 0;
+                }
             }
         }catch (FileNotFoundException e) {
             //This should never be thrown as we have checked for this above
@@ -60,14 +68,5 @@ public class Parser {
             }
         }
         return 0;
-    }
-}
-
-class Level{
-    private Integer levelID;
-    private Integer[][] tileInfo;
-    private Level(Integer[][] level, Integer levelID){
-        this.tileInfo = level;
-        this.levelID = levelID;
     }
 }

@@ -7,4 +7,4 @@
 {1,1,1,1,1,1,1,1}
 {1,1,1,1,1,1,1,1}
 next_level=blah.txt
-score=none
+score=0
