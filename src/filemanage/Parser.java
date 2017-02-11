@@ -9,7 +9,7 @@ import java.util.ArrayList;
 public class Parser {
     BufferedReader reader;
     File config;
-    String nextName;
+    public String nextLevel;
     Processor fileProcessor;
 
     public WorldModel getWorldFromFile(String path){
@@ -38,7 +38,7 @@ public class Parser {
                 mapList.add(line);
             }
             //Read next file name
-            nextName = line.split("=")[1];
+            nextLevel = line.split("=")[1];
             if(!((line = reader.readLine()).contains("score:"))){
                 try{
                     score = Integer.parseInt(line.split("=")[1]);
