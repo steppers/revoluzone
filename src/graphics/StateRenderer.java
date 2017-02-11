@@ -192,6 +192,10 @@ public class StateRenderer {
                         g.setColor(Color.yellow);
                         g.fill(tile);
                         break;
+                    case FINISH:
+                        g.setColor(Color.green);
+                        g.fill(tile);
+                        break;
                 }
             }
         }
