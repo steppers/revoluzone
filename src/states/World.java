@@ -64,6 +64,7 @@ public class World extends BasicGameState {
         state.recalcBall();
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
+        redefinePosition(gameContainer);
         parser.loadFile("res/config/1.txt");
         menuState = parser.getData();
         state = menuState;
@@ -72,6 +73,7 @@ public class World extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        renderBackground(gc, graphics);
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         renderer.render(gc, graphics);
 
@@ -136,6 +138,8 @@ public class World extends BasicGameState {
                 break;
         }
         updateCurrentState();
+
+        backgroundOpacity += 2.5f * delta;
     }
 
     private void updateCurrentState() {
@@ -202,5 +206,29 @@ public class World extends BasicGameState {
         graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, -90);
         graphics.drawString("Editor", ( gc.getWidth() / 2) - 45, 150*(1/scale));
 
+    }
+
+    float backgroundOpacity = 0;
+
+    float x, y, side;
+
+    void redefinePosition(GameContainer gc) {
+        x = (float) ((Math.random())) * gc.getWidth();
+        y = (float) ((Math.random())) * gc.getHeight();
+        side = (float) (gc.getWidth() * (Math.random()+0.5f) * 0.15);
+    }
+
+    private void renderBackground(GameContainer gc, Graphics graphics){
+        graphics.setBackground(Color.lightGray);
+        graphics.clear();
+        float op = (float)(Math.sin(backgroundOpacity)/2)+0.5f;
+        System.out.println(op);
+        graphics.setLineWidth(3);
+        graphics.setColor(new Color(1,1,1,0.35f*op));
+        graphics.drawRect(x, y, side, side);
+        if ((((Math.sin(backgroundOpacity-0.1f)/2)+0.5f) > op &&
+                op < 0.1))  {
+            redefinePosition(gc);
+        }
     }
 }
