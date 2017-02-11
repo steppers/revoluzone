@@ -3,8 +3,6 @@ package states;
 import graphics.FontLoader;
 import model.Tile;
 import model.WorldModel;
-import org.lwjgl.opengl.Display;
-import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.*;
 import org.newdawn.slick.GameContainer;
@@ -54,8 +52,6 @@ public class World extends BasicGameState {
 
     @Override
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
-        renderWorld(gc, graphics, state);
-
         ascertainCurrentState();
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         switch (current){
@@ -66,6 +62,7 @@ public class World extends BasicGameState {
                 graphics.drawString("Settings", ( gc.getWidth() / 2) - 120, 150);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
                 graphics.drawString("Quit", ( gc.getWidth() / 2) - 60, 150);
+                renderWorld(gc, graphics, state, 1);
                 break;
             case LEVEL_SELECT:
 
@@ -137,8 +134,8 @@ public class World extends BasicGameState {
 //        return null;
 //    }
 
-     void renderWorld(GameContainer gc, Graphics g, WorldModel state) {
-        float SCALE = (Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE;
+     void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE)* scale;
 
         Tile[][] grid = state.getGrid();
         Tile t;
