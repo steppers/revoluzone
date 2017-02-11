@@ -63,10 +63,10 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
-        parser.loadFile("res/config/3.txt");
-        menuState = parser.getData();
+        menuState = parser.getWorldFromFile("res/config/0.txt");
         state = menuState;
         renderer.setState(state);
+        state.recalcBall();
     }
 
     @Override
@@ -75,17 +75,26 @@ public class World extends BasicGameState {
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         renderer.render(gc, graphics);
 
+        float scale = 1 - renderer.getScale();
         switch (currentState){
             case MENU:
-                renderText(gc, graphics, 1, 0.5f, "Level Select", 0, -135, 150);
-//                renderMenuText(gc, graphics, 1, 0.5f);
+                renderText(gc, graphics, 1, scale, "Level Select", 0, -135, 200);
+                renderText(gc, graphics, 1, scale, "Settings", 90, -100, 200);
+                renderText(gc, graphics, 1, scale, "Quit", -90, -45, 200);
+                renderText(gc, graphics, 1, scale, "Editor", 180, -60, 200);
+
+                renderText(gc, graphics, 1, scale, "Use arrow", 0, -110, 50);
+                renderText(gc, graphics, 1, scale, "keys to turn", 0, -135, 30);
                 break;
             case EDITOR:
                 editor.render(gc, stateBasedGame, graphics);
                 break;
             case TRANSITION_IN:
             case TRANSITION_OUT:
-                renderMenuText(gc, graphics, 1-renderer.getScale(), renderer.getScale());
+                renderText(gc, graphics, 1, scale, "Level Select", 0, -135, 200);
+                renderText(gc, graphics, 1, scale, "Settings", 90, -100, 200);
+                renderText(gc, graphics, 1, scale, "Quit", -90, -45, 200);
+                renderText(gc, graphics, 1, scale, "Editor", 180, -60, 200);
                 break;
             default:
                 break;
@@ -154,7 +163,7 @@ public class World extends BasicGameState {
                             r += 360;
                         switch (r % 360) {
                             case 0:
-                                renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
+                                renderer.transition(StateRenderer.TransitionType.GROW, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
                                 currentState = States.TRANSITION_IN;
                                 nextState = States.LEVEL_SELECT;
                                 break;
@@ -202,21 +211,9 @@ public class World extends BasicGameState {
         g.resetTransform();
         g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
         g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, rotation);
-        g.drawString(text, ( gc.getWidth() / 2) - xOffset, yOffset*(1/scale));
+        g.drawString(text, ( gc.getWidth() / 2) + xOffset, (gc.getHeight()/2) - yOffset*(1/scale));
     }
 
-    void renderMenuText(GameContainer gc, Graphics graphics, float opacity, float scale) {
-        graphics.setColor(new Color(1,1,1,opacity));
-        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
-        graphics.drawString("Level Select", ( gc.getWidth() / 2) - 135, 150*(1/scale));
-        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
-        graphics.drawString("Settings", ( gc.getWidth() / 2) - 100, 150*(1/scale));
-        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 180);
-        graphics.drawString("Quit", ( gc.getWidth() / 2) - 45, 150*(1/scale));
-        graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, -90);
-        graphics.drawString("Editor", ( gc.getWidth() / 2) - 45, 150*(1/scale));
-
-    }
 
     float backgroundOpacity = 0;
 

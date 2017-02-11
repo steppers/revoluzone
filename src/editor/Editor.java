@@ -29,7 +29,6 @@ public class Editor {
     public Editor(StateRenderer r){
         renderer = r;
         state = new WorldModel();
-        state.recalcBall();
     }
 
     public void update(GameContainer gc, float delta) {

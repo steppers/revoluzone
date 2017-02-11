@@ -12,27 +12,13 @@ public class Parser {
     String nextName;
     Processor fileProcessor;
 
-    public Parser(){
-    }
-
-    /**
-     * Tries to open the file.
-     * Returns 0 if success
-     * 1 if file not found
-     * @param path
-     * @return
-     */
-    public int loadFile(String path){
+    public WorldModel getWorldFromFile(String path){
         config = new File(path);
         if(!config.exists()) {
             System.out.println("File doesn't exist or directory is bad! (Code 1)");
-            return 1;
-        }else{
-            return 0;
+            return null;
         }
-    }
 
-    public WorldModel getData(){
         Integer levelID = 0;
         Integer score = 0;
         ArrayList<String> mapList = new ArrayList<>();
