@@ -10,6 +10,7 @@ public class Parser {
     BufferedReader reader;
     File config;
     public String nextLevel;
+    public String prevLevel;
     Processor fileProcessor;
 
     public WorldModel getWorldFromFile(String path){
@@ -39,6 +40,7 @@ public class Parser {
             }
             //Read next file name
             nextLevel = line.split("=")[1];
+            prevLevel = reader.readLine().split("=")[1];
             if(!((line = reader.readLine()).contains("score:"))){
                 try{
                     score = Integer.parseInt(line.split("=")[1]);
@@ -63,6 +65,7 @@ public class Parser {
                 e.printStackTrace();
             }
         }
+
         return parseComplete(levelID, score, mapList);
     }
 

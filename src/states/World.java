@@ -112,7 +112,9 @@ public class World extends BasicGameState {
             case TRANSITION_OUT:
                 if(!renderer.isTransitioning()) {
                     currentState = nextState;
-                    renderer.getNextState().setRotation(state.getRotation());
+                    if(currentState != States.LEVEL_SELECT){
+                        renderer.getNextState().setRotation(state.getRotation());
+                    }
                     state = renderer.getNextState();
                 }
                 break;
@@ -205,6 +207,11 @@ public class World extends BasicGameState {
                         currentState = States.TRANSITION_OUT;
                         nextState = States.MENU;
                         break;
+                    case LEVEL:
+                        renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
+                        currentState = States.TRANSITION_OUT;
+                        nextState = States.LEVEL_SELECT;
+                        break;
                     default:
                         break;
                 }
@@ -214,7 +221,7 @@ public class World extends BasicGameState {
         if (currentInput.isKeyPressed(Input.KEY_RIGHT)) {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
-                    case LEVEL:
+                    case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.nextLevel), 0.5f, 1f);
                         currentState = States.TRANSITION_IN;
                         nextState = States.LEVEL;
@@ -227,8 +234,8 @@ public class World extends BasicGameState {
         if (currentInput.isKeyPressed(Input.KEY_LEFT)) {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
-                    case LEVEL:
-                        renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.nextLevel), 0.5f, 1f);
+                    case LEVEL_SELECT:
+                        renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.prevLevel), 0.5f, 1f);
                         currentState = States.TRANSITION_IN;
                         nextState = States.LEVEL;
                         break;
