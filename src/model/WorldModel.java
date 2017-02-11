@@ -60,6 +60,7 @@ public class WorldModel {
 
     public void rotate(float angle) {
         targetRotation += angle;
+        //rotation = rotation > 360 || rotation < - 180 ? rotation - 360 : rotation;
         rotDir = targetRotation < rotation ? 0 : 1;
         rotating = true;
     }

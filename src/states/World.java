@@ -1,5 +1,6 @@
 package states;
 
+import graphics.FontLoader;
 import model.Tile;
 import model.WorldModel;
 import org.lwjgl.opengl.Display;
@@ -17,9 +18,20 @@ import org.newdawn.slick.state.StateBasedGame;
  */
 public class World extends BasicGameState {
 
+    enum States{
+        MENU,
+        LEVEL_SELECT,
+        SETTINGS,
+        CREDITS,
+        PLAY
+    }
+
     private Integer stateId;
     private Integer levelId;
     private Integer highScore;
+
+    private States current;
+    private Input currentInput;
 
     private WorldModel state = new WorldModel();
 
@@ -36,11 +48,23 @@ public class World extends BasicGameState {
     @Override
     public void init(GameContainer gameContainer, StateBasedGame stateBasedGame) throws SlickException {
         state.recalcBall();
+        current = States.MENU;
+        this.currentInput = gameContainer.getInput();
     }
 
     @Override
     public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
         renderWorld(gc, graphics, state);
+
+        ascertainCurrentState();
+        graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
+        switch (current){
+            case MENU:
+
+            case LEVEL_SELECT:
+
+                break;
+        }
     }
 
     @Override
@@ -202,5 +226,33 @@ public class World extends BasicGameState {
         circ.setLocation(pos.x, pos.y);
         g.setColor(Color.cyan);
         g.fill(circ);
+    }
+
+    private void ascertainCurrentState(){
+//        States[] states = {
+//          States.CREDITS, States.LEVEL_SELECT, States.
+//        };
+        switch ((int) state.getRotation() % 360){
+            case 0:
+                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
+                    current = States.LEVEL_SELECT;
+                }
+                break;
+            case 90:
+                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
+                    current = States.SETTINGS;
+                }
+                break;
+            case 180:
+                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
+                    current = States.SETTINGS;
+                }
+                break;
+            case 270:
+                if(currentInput.isKeyPressed(Input.KEY_ENTER)){
+                    current = States.SETTINGS;
+                }
+                break;
+        }
     }
 }
