@@ -1,6 +1,5 @@
 package main;
 
-import filemanage.Parser;
 import org.newdawn.slick.*;
 
 /**
@@ -10,7 +9,7 @@ import org.newdawn.slick.*;
 
 public class Main {
 
-    private static final String GAME_NAME = "Revolosezone";
+    private static final String GAME_NAME = "Squaring the Circle";
 
     public static void main(String[] args) {
 

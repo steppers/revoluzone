@@ -203,6 +203,10 @@ public class StateRenderer {
                         g.setColor(Color.green);
                         g.fill(tile);
                         break;
+                    case START:
+                        g.setColor(Color.green);
+                        g.fill(tile);
+                        break;
                 }
             }
         }
