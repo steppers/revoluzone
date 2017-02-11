@@ -6,16 +6,26 @@ package model;
 public class Tile {
 
     public static enum Type {
-        EMPTY,
-        FIXED,
-        RED,
-        BLUE,
-        KILL,
-        START,
-        FINISH,
-        SWITCH,
-        SLIDE,
-        TELEPORT
+        EMPTY("Empty"),
+        FIXED("Fixed"),
+        RED("Red"),
+        BLUE("Blue"),
+        KILL("Kill"),
+        START("Start"),
+        FINISH("Finish"),
+        SWITCH("Switch"),
+        SLIDE("Slide"),
+        TELEPORT("Teleport");
+
+        String name;
+
+        Type(String name){
+         this.name = name;
+        }
+
+        public String getName(){
+            return this.name;
+        }
     }
 
     private Type type = Type.FIXED;

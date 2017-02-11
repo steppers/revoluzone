@@ -50,7 +50,7 @@ public class World extends BasicGameState {
         this.stateId = stateId;
         renderer = new StateRenderer(state);
         parser = new Parser();
-        editor = new Editor();
+        editor = new Editor(renderer);
     }
 
 
@@ -65,7 +65,7 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
-        parser.loadFile("res/config/1.txt");
+        parser.loadFile("res/config/3.txt");
         menuState = parser.getData();
         state = menuState;
         renderer.setState(state);
@@ -225,7 +225,6 @@ public class World extends BasicGameState {
         graphics.setBackground(Color.lightGray);
         graphics.clear();
         float op = (float)(Math.sin(backgroundOpacity)/2)+0.5f;
-        System.out.println(op);
         graphics.setLineWidth(3);
         graphics.setColor(new Color(1,1,1,0.35f*op));
         graphics.drawRect(x, y, side, side);
