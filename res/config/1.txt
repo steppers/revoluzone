@@ -5,4 +5,5 @@
 {0,0,0,0,0,1}
 {5,1,6,0,1,1}
 next_level=2.txt
+prev_level=none
 score=0
