@@ -47,6 +47,11 @@ public class WorldModel {
         return rotation;
     }
 
+    public void setRotation(float rot) {
+        rotation = rot;
+        targetRotation = rot;
+    }
+
     public int getGridSize() {
         return GRID_SIZE;
     }

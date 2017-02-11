@@ -98,6 +98,7 @@ public class World extends BasicGameState {
             case TRANSITION_OUT:
                 if(!renderer.isTransitioning()) {
                     currentState = nextState;
+                    renderer.getNextState().setRotation(state.getRotation());
                     state = renderer.getNextState();
                 }
                 break;
