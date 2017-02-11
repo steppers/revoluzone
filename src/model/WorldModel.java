@@ -21,15 +21,15 @@ public class WorldModel {
             for(int y = 0; y < GRID_SIZE; y++) {
                 grid[x][y] = new Tile();
                 if(x == 0 || x == GRID_SIZE-1 || y == 0 || y == GRID_SIZE-1) {
-                    grid[x][y].setType(Tile.FIXED);
+                    grid[x][y].setType(Tile.Type.FIXED);
                     continue;
                 }
-                grid[x][y].setType(Tile.EMPTY);
+                grid[x][y].setType(Tile.Type.EMPTY);
             }
         }
 
-        grid[3][3].setType(Tile.BLUE);
-        grid[8][4].setType(Tile.FIXED);
+        grid[3][3].setType(Tile.Type.BLUE);
+        grid[8][4].setType(Tile.Type.FIXED);
     }
 
     public void setGrid(Tile[][] grid) {
@@ -61,20 +61,20 @@ public class WorldModel {
                 if(rotation < targetRotation) {
                     rotation = targetRotation;
                     rotating = false;
-                    updateBall();
+                    recalcBall();
                 }
             } else {
                 rotation += ROT_VEL * delta;
                 if(rotation > targetRotation) {
                     rotation = targetRotation;
                     rotating = false;
-                    updateBall();
+                    recalcBall();
                 }
             }
         }
     }
 
-    private void updateBall() {
+    public void recalcBall() {
         int r = (int)rotation % 360;
         while(r < 0)
             r += 360;
@@ -120,12 +120,16 @@ public class WorldModel {
         return rotating;
     }
 
-    private boolean isSolid(Tile t) {
+    public boolean isSolid(Tile t) {
         switch(t.getType()) {
-            case 0:
+            case EMPTY:
                 return false;
-            case 1:
+            case FIXED:
                 return true;
+            case BLUE:
+                return t.isActive() ? true : false;
+            case RED:
+                return t.isActive() ? true : false;
             default:
                 return true;
         }

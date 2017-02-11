@@ -56,6 +56,50 @@ public class World extends BasicGameState {
 
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
+        //First render pass (Floor)
+        graphics.setColor(Color.white.darker(0.2f)); //Floor color
+        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
+            for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                Vector2f pos = new Vector2f(offset + x, offset + y);
+                pos.sub(-state.getRotation());
+                pos.scale(SCALE);
+                pos.add(screenOffset);
+                tile.setLocation(pos.x, pos.y);
+                graphics.fill(tile);
+            }
+        }
+
+        //Second render pass (Shadows)
+        {
+            float shOffset = offset + 0.06f;
+            graphics.setColor(Color.white.darker(0.8f)); //Shadow color
+            for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
+                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                    if (state.isSolid(grid[x][y])) {
+                        Vector2f pos = new Vector2f(shOffset + x, shOffset + y);
+                        pos.sub(-state.getRotation());
+                        pos.scale(SCALE);
+                        pos.add(screenOffset);
+                        tile.setLocation(pos.x, pos.y);
+                        graphics.fill(tile);
+                    }
+                }
+            }
+
+            //Calc ball pos
+            shOffset = offset + 0.06f;
+            Vector2f pos = state.getBall().getPos().add(new Vector2f(shOffset, shOffset));
+            pos.sub(-state.getRotation());
+            pos.scale(SCALE);
+            pos.add(screenOffset);
+
+            Circle c = new Circle(0, 0, SCALE / 2);
+            Shape circ = c.transform(Transform.createRotateTransform((float) (state.getRotation() * Math.PI) / 180));
+            circ.setLocation(pos.x, pos.y);
+            graphics.fill(circ);
+        }
+
+        //Third render pass (blocks)
         for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
             for(int y = 0; y < WorldModel.GRID_SIZE; y++) {
                 t = grid[x][y];
@@ -66,20 +110,22 @@ public class World extends BasicGameState {
                 tile.setLocation(pos.x, pos.y);
 
                 switch (t.getType()) {
-                    case 0:
-                        graphics.setColor(Color.white);
+                    case EMPTY:
+                        break;
+                    case FIXED:
+                        graphics.setColor(Color.white.darker(0.4f));
                         graphics.fill(tile);
                         break;
-                    case 1:
-                        graphics.setColor(Color.darkGray);
-                        graphics.fill(tile);
-                        break;
-                    case 2:
+                    case RED:
                         graphics.setColor(Color.red);
+                        if(!t.isActive())
+                            graphics.setColor(graphics.getColor().multiply(new Color(1, 1, 1, 0.3f)));
                         graphics.fill(tile);
                         break;
-                    case 3:
+                    case BLUE:
                         graphics.setColor(Color.blue);
+                        if(!t.isActive())
+                            graphics.setColor(graphics.getColor().multiply(new Color(1, 1, 1, 0.3f)));
                         graphics.fill(tile);
                         break;
                 }
@@ -106,7 +152,13 @@ public class World extends BasicGameState {
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if(!state.getBall().isMoving()) {
-                if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+                if(gc.getInput().isMousePressed(0)) {
+                    Tile t = getTileFromMousePos(gc);
+                    if(t != null) {
+                        t.setActive(!t.isActive());
+                        state.recalcBall();
+                    }
+                } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
                     state.rotate(90);
                 } else {
                     if (gc.getInput().isKeyDown(Input.KEY_LEFT)) {
@@ -122,5 +174,29 @@ public class World extends BasicGameState {
         if((Display.getWidth() != gc.getWidth() || Display.getHeight() != gc.getHeight()) && !gc.getInput().isMouseButtonDown(0)) {
             GL11.glViewport(0,0,Display.getWidth(), Display.getHeight());
         }
+    }
+
+    private Tile getTileFromMousePos(GameContainer gc) {
+        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
+
+        Tile[][] grid = state.getGrid();
+        float offset = - (WorldModel.GRID_SIZE / 2);
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
+        mouse = mouse.sub(screenOffset);
+        mouse = mouse.scale(1/SCALE);
+        mouse = mouse.sub(state.getRotation());
+        mouse = mouse.sub(new Vector2f(offset, offset));
+
+        int x, y;
+        x = (int)mouse.x;
+        y = (int)mouse.y;
+
+        if(x >= 0 && x < WorldModel.GRID_SIZE && y >= 0 && y < WorldModel.GRID_SIZE) {
+            return grid[x][y];
+        }
+        return null;
     }
 }
