@@ -5,11 +5,11 @@ package model;
  */
 public class WorldModel {
 
-    public static final int GRID_SIZE = 10;
+    public static final int GRID_SIZE = 8;
     public static final float ROT_VEL = 360f;
 
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
-    private Ball ball = new Ball(4, 1);
+    private Ball ball = new Ball(1, 6);
 
     private float rotation = 0f;
     private int rotDir = 0; //0 = left, 1 = right
@@ -28,8 +28,11 @@ public class WorldModel {
             }
         }
 
-        grid[3][3].setType(Tile.Type.BLUE);
-        grid[8][4].setType(Tile.Type.FIXED);
+        grid[3][1].setType(Tile.Type.RED);
+        grid[5][1].setType(Tile.Type.RED);
+        grid[2][2].setType(Tile.Type.RED);
+        grid[4][3].setType(Tile.Type.BLUE);
+        grid[6][5].setType(Tile.Type.FIXED);
     }
 
     public void setGrid(Tile[][] grid) {
