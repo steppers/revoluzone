@@ -1,5 +1,7 @@
 package main;
 
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.DisplayMode;
 import org.newdawn.slick.AppGameContainer;
 import org.newdawn.slick.SlickException;
 
@@ -8,7 +10,7 @@ import org.newdawn.slick.SlickException;
  * Anton, Ollie and Alistair
  */
 
-public class Main{
+public class Main {
 
     private static final String GAME_NAME = "Revolosezone";
 
@@ -17,8 +19,12 @@ public class Main{
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
             gc.setDisplayMode(1600, 900, false);
+            gc.setVSync(true);
+            gc.setSmoothDeltas(true);
+            gc.setMultiSample(4);
+            Display.setResizable(true);
             gc.start();
-        }catch (SlickException e){
+        }catch (Exception e){
             System.out.println(e.getMessage());
         }
     }

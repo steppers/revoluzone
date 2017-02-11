@@ -7,7 +7,7 @@ import org.newdawn.slick.geom.Vector2f;
  */
 public class Ball {
 
-    private static final float ACCEL = 60.0f;
+    private static final float ACCEL = 90.0f;
 
     private float x, y;
 

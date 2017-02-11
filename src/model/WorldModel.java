@@ -6,7 +6,7 @@ package model;
 public class WorldModel {
 
     public static final int GRID_SIZE = 10;
-    public static final float ROT_VEL = 230f;
+    public static final float ROT_VEL = 360f;
 
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
     private Ball ball = new Ball(4, 1);

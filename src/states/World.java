@@ -2,6 +2,8 @@ package states;
 
 import model.Tile;
 import model.WorldModel;
+import org.lwjgl.opengl.Display;
+import org.lwjgl.opengl.GL11;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.*;
 import Listeners.ScoreListener;
@@ -21,7 +23,6 @@ public class World extends BasicGameState {
     private Integer highScore;
     private boolean isFinished;
     private static ScoreListener listener;
-    private static final int SCALE = 35;
 
     private WorldModel state = new WorldModel();
 
@@ -43,7 +44,9 @@ public class World extends BasicGameState {
     }
 
     @Override
-    public void render(GameContainer gameContainer, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+    public void render(GameContainer gc, StateBasedGame stateBasedGame, Graphics graphics) throws SlickException {
+        float SCALE = Math.min(gc.getHeight(), gc.getWidth()) / 15;
+
         Tile[][] grid = state.getGrid();
         Tile t;
         float offset = - (WorldModel.GRID_SIZE / 2) + 0.5f;
@@ -51,7 +54,7 @@ public class World extends BasicGameState {
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
 
-        Vector2f screenOffset = new Vector2f(gameContainer.getWidth()/2, gameContainer.getHeight()/2);
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
             for(int y = 0; y < WorldModel.GRID_SIZE; y++) {
@@ -96,17 +99,17 @@ public class World extends BasicGameState {
     }
 
     @Override
-    public void update(GameContainer gameContainer, StateBasedGame stateBasedGame, int i) throws SlickException {
+    public void update(GameContainer gc, StateBasedGame stateBasedGame, int i) throws SlickException {
         if(isFinished){
             listener.levelComplete(levelId, highScore);
         }
         float delta = (float) i / 1000;
         if(!state.isRotating()) {
             if(!state.getBall().isMoving()) {
-                if (gameContainer.getInput().isKeyDown(Input.KEY_RIGHT)) {
+                if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
                     state.rotate(90);
                 } else {
-                    if (gameContainer.getInput().isKeyDown(Input.KEY_LEFT)) {
+                    if (gc.getInput().isKeyDown(Input.KEY_LEFT)) {
                         state.rotate(-90);
                     }
                 }
@@ -115,5 +118,9 @@ public class World extends BasicGameState {
             }
         }
         state.update(delta);
+
+        if((Display.getWidth() != gc.getWidth() || Display.getHeight() != gc.getHeight()) && !gc.getInput().isMouseButtonDown(0)) {
+            GL11.glViewport(0,0,Display.getWidth(), Display.getHeight());
+        }
     }
 }
