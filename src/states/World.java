@@ -56,7 +56,7 @@ public class World extends BasicGameState {
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         switch (current){
             case MENU:
-                renderWorld(gc, graphics, state, 1);
+                renderWorld(gc, graphics, state, 0.5f);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, state.getRotation());
                 graphics.drawString("Level Select", ( gc.getWidth() / 2) - 150, 150);
                 graphics.rotate(gc.getWidth() / 2, gc.getHeight() / 2, 90);
@@ -66,6 +66,9 @@ public class World extends BasicGameState {
                 break;
             case LEVEL_SELECT:
 
+//                break;
+            default:
+                renderWorld(gc, graphics, state, 1);
                 break;
         }
 
@@ -208,6 +211,10 @@ public class World extends BasicGameState {
                         g.setColor(Color.blue);
                         if(!t.isActive())
                             g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)));
+                        g.fill(tile);
+                        break;
+                    case KILL:
+                        g.setColor(Color.yellow);
                         g.fill(tile);
                         break;
                 }

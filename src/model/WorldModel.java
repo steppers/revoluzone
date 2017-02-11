@@ -141,6 +141,8 @@ public class WorldModel {
                 return t.isActive() ? true : false;
             case RED:
                 return t.isActive() ? true : false;
+            case KILL:
+                return false;
             default:
                 return true;
         }
