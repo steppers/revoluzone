@@ -81,6 +81,9 @@ public class World extends BasicGameState {
             case MENU:
                 renderMenuText(gc, graphics, 1, 0.5f);
                 break;
+            case EDITOR:
+                editor.render(gc, stateBasedGame, graphics);
+                break;
             case TRANSITION_IN:
             case TRANSITION_OUT:
                 renderMenuText(gc, graphics, 1-renderer.getScale(), renderer.getScale());

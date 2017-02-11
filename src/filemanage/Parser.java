@@ -16,7 +16,7 @@ public class Parser {
     }
 
     /**
-     * Trys to open the file.
+     * Tries to open the file.
      * Returns 0 if success
      * 1 if file not found
      * @param path
@@ -24,7 +24,7 @@ public class Parser {
      */
     public int loadFile(String path){
         config = new File(path);
-        if(!config.exists() || !config.isDirectory()) {
+        if(!config.exists()) {
             System.out.println("File doesn't exist or directory is bad! (Code 1)");
             return 1;
         }else{
@@ -64,6 +64,7 @@ public class Parser {
         }catch (FileNotFoundException e) {
             //This should never be thrown as we have checked for this above
             System.out.println("File doesn't exist or directory is bad! (Code 1)");
+            e.printStackTrace();
         }catch (IOException e){
             System.out.println(e.getMessage());
             e.printStackTrace();
