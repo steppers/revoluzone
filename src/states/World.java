@@ -67,9 +67,6 @@ public class World extends BasicGameState {
         menuState = parser.getWorldFromFile("res/config/0.txt");
         renderer.setState(menuState);
 
-//        state = parser.getWorldFromFile("res/config/0.txt");
-//        renderer.setState(state);
-
         state = menuState;
         state.recalcBall();
     }
@@ -170,7 +167,7 @@ public class World extends BasicGameState {
                             r += 360;
                         switch (r % 360) {
                             case 0:
-                                renderer.transition(StateRenderer.TransitionType.GROW, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
+                                renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
                                 currentState = States.TRANSITION_IN;
                                 nextState = States.LEVEL_SELECT;
                                 break;
