@@ -14,6 +14,8 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import static states.World.States.LEVEL_SELECT;
+
 /**
  * Created by an6g15 on 10/02/2017.
  */
@@ -112,7 +114,7 @@ public class World extends BasicGameState {
             case TRANSITION_OUT:
                 if(!renderer.isTransitioning()) {
                     currentState = nextState;
-                    if(currentState != States.LEVEL_SELECT){
+                    if(currentState != LEVEL_SELECT){
                         renderer.getNextState().setRotation(state.getRotation());
                     }
                     state = renderer.getNextState();
@@ -137,10 +139,10 @@ public class World extends BasicGameState {
                                 }
                             }
                             state.recalcBall();
-                        } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+                        } else if (gc.getInput().isKeyDown(Input.KEY_RIGHT) && (currentState != LEVEL_SELECT)) {
                             state.rotate(90);
                         } else {
-                            if (gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+                            if (gc.getInput().isKeyDown(Input.KEY_LEFT)&& (currentState != LEVEL_SELECT)) {
                                 state.rotate(-90);
                             }
                         }
@@ -168,7 +170,7 @@ public class World extends BasicGameState {
                             case 0:
                                 renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
                                 currentState = States.TRANSITION_IN;
-                                nextState = States.LEVEL_SELECT;
+                                nextState = LEVEL_SELECT;
                                 break;
                             case 90:
                                 System.exit(0);
@@ -210,7 +212,7 @@ public class World extends BasicGameState {
                     case LEVEL:
                         renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
                         currentState = States.TRANSITION_OUT;
-                        nextState = States.LEVEL_SELECT;
+                        nextState = LEVEL_SELECT;
                         break;
                     default:
                         break;
@@ -224,7 +226,7 @@ public class World extends BasicGameState {
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.nextLevel), 0.5f, 1f);
                         currentState = States.TRANSITION_IN;
-                        nextState = States.LEVEL;
+                        nextState = States.LEVEL_SELECT;
                         break;
                     default:
                         break;
@@ -237,7 +239,7 @@ public class World extends BasicGameState {
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.prevLevel), 0.5f, 1f);
                         currentState = States.TRANSITION_IN;
-                        nextState = States.LEVEL;
+                        nextState = States.LEVEL_SELECT;
                         break;
                     default:
                         break;
