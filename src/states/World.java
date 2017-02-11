@@ -21,7 +21,8 @@ public class World extends BasicGameState {
         LEVEL_SELECT,
         SETTINGS,
         CREDITS,
-        PLAY
+        PLAY,
+        TRANSITION
     }
 
     private Integer stateId;
