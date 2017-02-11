@@ -75,28 +75,27 @@ public class World extends BasicGameState {
         graphics.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
         renderer.render(gc, graphics);
 
-        float scale = 1 - renderer.getScale();
         switch (currentState){
             case MENU:
-                renderText(gc, graphics, 1, scale, "Level Select", 0, -135, 200);
-                renderText(gc, graphics, 1, scale, "Settings", 90, -100, 200);
-                renderText(gc, graphics, 1, scale, "Quit", -90, -45, 200);
-                renderText(gc, graphics, 1, scale, "Editor", 180, -60, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Level Select", 0, -135, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Settings", 90, -100, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Quit", -90, -45, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Editor", 180, -60, 200);
 
-                renderText(gc, graphics, 1, scale, "Use arrow", 0, -110, 70);
-                renderText(gc, graphics, 1, scale, "keys to turn", 0, -135, 50);
-                renderText(gc, graphics, 1, scale, "Use space to", 0, -145, 10);
-                renderText(gc, graphics, 1, scale, "toggle", 0, -70, -10);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Use arrow", 0, -110, 70);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "keys to turn", 0, -135, 50);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Use space to", 0, -145, 10);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "toggle", 0, -70, -10);
                 break;
             case EDITOR:
                 editor.render(gc, stateBasedGame, graphics);
                 break;
             case TRANSITION_IN:
             case TRANSITION_OUT:
-                renderText(gc, graphics, 1, scale, "Level Select", 0, -135, 200);
-                renderText(gc, graphics, 1, scale, "Settings", 90, -100, 200);
-                renderText(gc, graphics, 1, scale, "Quit", -90, -45, 200);
-                renderText(gc, graphics, 1, scale, "Editor", 180, -60, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Level Select", 0, -135, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Settings", 90, -100, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Quit", -90, -45, 200);
+                renderText(gc, graphics, renderer.getOpacity(), renderer.getScale(), "Editor", 180, -60, 200);
                 break;
             default:
                 break;
