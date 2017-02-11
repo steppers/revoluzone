@@ -49,21 +49,46 @@ public class Editor {
                         grabbed.setType(type);
                         state.recalcBall();
                         break;
+                    case FIXED:
+                        grabbed.setType(type);
+                        state.recalcBall();
+                        break;
+                    case KILL:
+                        grabbed.setType(type);
+                        state.recalcBall();
+                        break;
+                    case START:
+                        grabbed.setType(type);
+                        state.recalcBall();
+                        break;
+
                 }
             }
         }
 
-        if(gc.getInput().isKeyPressed(Input.KEY_R)){
+        if(gc.getInput().isKeyPressed(Input.KEY_1)){
             type = Tile.Type.RED;
             typeString = Tile.Type.RED.toString();
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_B)){
+        if(gc.getInput().isKeyPressed(Input.KEY_2)){
             type = Tile.Type.BLUE;
             typeString = Tile.Type.BLUE.toString();
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_F)){
+        if(gc.getInput().isKeyPressed(Input.KEY_3)){
             type = Tile.Type.FINISH;
             typeString = Tile.Type.FINISH.toString();
+        }
+        if(gc.getInput().isKeyPressed(Input.KEY_4)){
+            type = Tile.Type.FIXED;
+            typeString = Tile.Type.FIXED.toString();
+        }
+        if(gc.getInput().isKeyPressed(Input.KEY_5)){
+            type = Tile.Type.KILL;
+            typeString = Tile.Type.KILL.toString();
+        }
+        if(gc.getInput().isKeyPressed(Input.KEY_6)){
+            type = Tile.Type.START;
+            typeString = Tile.Type.START.toString();
         }
     }
 

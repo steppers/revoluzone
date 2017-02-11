@@ -16,13 +16,12 @@ public class StateRenderer {
     private WorldModel nextState;
 
     public enum TransitionType {
-        FADE_IN,
-        FADE_OUT,
+        FADE,
         GROW,
         SHRINK
     }
 
-    private TransitionType transition = TransitionType.FADE_OUT;
+    private TransitionType transition = TransitionType.FADE;
     private float transitionProgress = 0.5f;
     private float transitionTarget = 0;
     private float transitionRate = 0f;
@@ -66,8 +65,7 @@ public class StateRenderer {
 
     public void render(GameContainer gc, Graphics g) {
         switch(transition) {
-            case FADE_OUT:
-            case FADE_IN:
+            case FADE:
                 opacity = transitionProgress;
                 opacityNext = 1-transitionProgress;
                 break;
@@ -78,7 +76,9 @@ public class StateRenderer {
                 break;
         }
 
-        renderWorld(gc, g, currentState, scale);
+        if(transitioning)
+            renderWorld(gc, g, currentState, scaleNext, opacityNext);
+        renderWorld(gc, g, currentState, scale, opacity);
     }
 
     public void transition(TransitionType type, WorldModel nextState, float transitionTarget, float transitionRate) {
@@ -87,11 +87,10 @@ public class StateRenderer {
 
         switch(transition) {
             case SHRINK:
-            case FADE_OUT:
                 this.transitionRate = -transitionRate;
                 break;
             case GROW:
-            case FADE_IN:
+            case FADE:
                 this.transitionRate = transitionRate;
                 break;
         }
@@ -112,7 +111,8 @@ public class StateRenderer {
         return opacity;
     }
 
-    void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale) {
+    void renderWorld(GameContainer gc, Graphics g, WorldModel state, float scale, float opacity) {
+        Color op = new Color(1,1,1,opacity);
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / state.GRID_SIZE) * scale;
 
         Tile[][] grid = state.getGrid();
@@ -125,7 +125,7 @@ public class StateRenderer {
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         //First render pass (Floor)
-        g.setColor(Color.white.darker(0.2f)); //Floor color
+        g.setColor(Color.white.darker(0.2f).multiply(op)); //Floor color
         for(int x = 0; x < state.getGridSize(); x++) {
             for (int y = 0; y < state.getGridSize(); y++) {
                 Vector2f pos = new Vector2f(offset + x, offset + y);
@@ -140,7 +140,7 @@ public class StateRenderer {
         //Second render pass (Shadows)
         {
             Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(state.getRotation() + 25).add(new Vector2f(offset, offset));
-            g.setColor(Color.white.darker(0.8f)); //Shadow color
+            g.setColor(Color.white.darker(0.8f).multiply(op)); //Shadow color
             for (int x = 0; x < state.getGridSize(); x++) {
                 for (int y = 0; y < state.getGridSize(); y++) {
                     if (state.isSolid(grid[x][y])) {
@@ -180,31 +180,31 @@ public class StateRenderer {
                     case EMPTY:
                         break;
                     case FIXED:
-                        g.setColor(Color.white.darker(0.4f));
+                        g.setColor(Color.white.darker(0.4f).multiply(op));
                         g.fill(tile);
                         break;
                     case RED:
-                        g.setColor(Color.red);
+                        g.setColor(Color.red.multiply(op));
                         if(!t.isActive())
-                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)));
+                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)).multiply(op));
                         g.fill(tile);
                         break;
                     case BLUE:
-                        g.setColor(Color.blue);
+                        g.setColor(Color.blue.multiply(op));
                         if(!t.isActive())
-                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)));
+                            g.setColor(g.getColor().multiply(new Color(1, 1, 1, 0.3f)).multiply(op));
                         g.fill(tile);
                         break;
                     case KILL:
-                        g.setColor(Color.yellow);
+                        g.setColor(Color.yellow.multiply(op));
                         g.fill(tile);
                         break;
                     case FINISH:
-                        g.setColor(Color.green);
+                        g.setColor(Color.green.multiply(op));
                         g.fill(tile);
                         break;
                     case START:
-                        g.setColor(Color.green);
+                        g.setColor(Color.green.multiply(op));
                         g.fill(tile);
                         break;
                 }
@@ -219,7 +219,7 @@ public class StateRenderer {
         Circle c = new Circle(0, 0, SCALE/2);
         Shape circ = c.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
         circ.setLocation(pos.x, pos.y);
-        g.setColor(Color.cyan);
+        g.setColor(Color.cyan.multiply(op));
         g.fill(circ);
     }
 
