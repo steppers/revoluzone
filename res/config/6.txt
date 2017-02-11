@@ -9,4 +9,5 @@
 {0,0,0,0,1,0,0,0,0,0}
 {0,0,0,0,0,0,0,0,0,0}
 next_level=7.txt
+prev_level=5.txt
 score=0
