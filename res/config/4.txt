@@ -7,4 +7,5 @@
 {3,0,0,0,2,3,0,0}
 {0,0,0,0,3,0,0,0}
 next_level=5.txt
+prev_level=3.txt
 score=0
