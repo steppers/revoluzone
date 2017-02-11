@@ -37,6 +37,10 @@ public class StateRenderer {
         currentState = startState;
     }
 
+    public void setState(WorldModel state) {
+        this.currentState = state;
+    }
+
     public void update(float delta) {
         if(transitioning) {
             transitionProgress += transitionRate * delta;
@@ -110,7 +114,7 @@ public class StateRenderer {
 
         Tile[][] grid = state.getGrid();
         Tile t;
-        float offset = - (WorldModel.GRID_SIZE / 2) + 0.5f;
+        float offset = - (state.getGridSize() / 2) + 0.5f;
 
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(state.getRotation()*Math.PI)/180));
@@ -119,8 +123,8 @@ public class StateRenderer {
 
         //First render pass (Floor)
         g.setColor(Color.white.darker(0.2f)); //Floor color
-        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-            for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+        for(int x = 0; x < state.getGridSize(); x++) {
+            for (int y = 0; y < state.getGridSize(); y++) {
                 Vector2f pos = new Vector2f(offset + x, offset + y);
                 pos.sub(-state.getRotation());
                 pos.scale(SCALE);
@@ -134,8 +138,8 @@ public class StateRenderer {
         {
             Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(state.getRotation() + 25).add(new Vector2f(offset, offset));
             g.setColor(Color.white.darker(0.8f)); //Shadow color
-            for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
-                for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+            for (int x = 0; x < state.getGridSize(); x++) {
+                for (int y = 0; y < state.getGridSize(); y++) {
                     if (state.isSolid(grid[x][y])) {
                         Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
                         pos.sub(-state.getRotation());
@@ -160,8 +164,8 @@ public class StateRenderer {
         }
 
         //Third render pass (blocks)
-        for(int x = 0; x < WorldModel.GRID_SIZE; x++) {
-            for(int y = 0; y < WorldModel.GRID_SIZE; y++) {
+        for(int x = 0; x < state.getGridSize(); x++) {
+            for(int y = 0; y < state.getGridSize(); y++) {
                 t = grid[x][y];
                 Vector2f pos = new Vector2f(offset + x, offset + y);
                 pos.sub(-state.getRotation());

@@ -21,6 +21,10 @@ public class Tile {
     private Type type = Type.FIXED;
     private boolean active = false;
 
+    public Tile(int type) {
+        this.type = Type.values()[type];
+    }
+
     public boolean isActive() {
         return active;
     }

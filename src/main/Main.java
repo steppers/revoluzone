@@ -1,7 +1,7 @@
 package main;
 
 import filemanage.Parser;
-import org.newdawn.slick.AppGameContainer;
+import org.newdawn.slick.*;
 
 /**
  * A game made for the Soton GameJam by:
@@ -10,14 +10,9 @@ import org.newdawn.slick.AppGameContainer;
 
 public class Main {
 
-    private static final String GAME_NAME = "Squaring the Circle";
+    private static final String GAME_NAME = "Revolosezone";
 
     public static void main(String[] args) {
-
-//        Parser parser = new Parser();
-//        parser.loadFile("res/config/1.txt");
-//        parser.getData();
-
 
         AppGameContainer gc;
         try{

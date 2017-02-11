@@ -5,7 +5,7 @@ package model;
  */
 public class WorldModel {
 
-    public static final int GRID_SIZE = 8;
+    public int GRID_SIZE = 8;
     public static final float ROT_VEL = 360f;
 
     private Tile[][] grid = new Tile[GRID_SIZE][GRID_SIZE];
@@ -19,7 +19,7 @@ public class WorldModel {
     public WorldModel() {
         for(int x = 0; x < GRID_SIZE; x++) {
             for(int y = 0; y < GRID_SIZE; y++) {
-                grid[x][y] = new Tile();
+                grid[x][y] = new Tile(Tile.Type.EMPTY.ordinal());
                 if(x == 0 || x == GRID_SIZE-1 || y == 0 || y == GRID_SIZE-1) {
                     grid[x][y].setType(Tile.Type.FIXED);
                     continue;
@@ -60,9 +60,16 @@ public class WorldModel {
         return rotation;
     }
 
+    public int getGridSize() {
+        return GRID_SIZE;
+    }
+
+    public void setGridSize(int gridSize){
+        this.GRID_SIZE = gridSize;
+    }
+
     public void rotate(float angle) {
         targetRotation += angle;
-        //rotation = rotation > 360 || rotation < - 180 ? rotation - 360 : rotation;
         rotDir = targetRotation < rotation ? 0 : 1;
         rotating = true;
     }

@@ -1,10 +1,12 @@
 package states;
 
+import filemanage.Parser;
 import graphics.FontLoader;
 import graphics.StateRenderer;
 import model.Tile;
 import model.WorldModel;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.*;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.SlickException;
@@ -36,12 +38,14 @@ public class World extends BasicGameState {
     private States currentState;
     private States nextState;
     private Input currentInput;
+    private Parser parser;
 
     private WorldModel state = new WorldModel();
 
     public World(Integer stateId){
         this.stateId = stateId;
         renderer = new StateRenderer(state);
+        parser = new Parser();
     }
 
 
@@ -55,6 +59,9 @@ public class World extends BasicGameState {
         state.recalcBall();
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
+        parser.loadFile("res/config/1.txt");
+        state = parser.getData();
+        renderer.setState(state);
     }
 
     @Override
@@ -95,8 +102,8 @@ public class World extends BasicGameState {
                             Tile.Type type = grid[(int)p.x][(int)p.y].getType();
                             if(type == Tile.Type.RED || type == Tile.Type.BLUE) {
                             } else {
-                                for (int x = 0; x < WorldModel.GRID_SIZE; x++) {
-                                    for (int y = 0; y < WorldModel.GRID_SIZE; y++) {
+                                for (int x = 0; x < state.getGridSize(); x++) {
+                                    for (int y = 0; y < state.getGridSize(); y++) {
                                         grid[x][y].setActive(!grid[x][y].isActive());
                                     }
                                 }

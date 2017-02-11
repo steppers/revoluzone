@@ -1,5 +1,8 @@
 package filemanage;
 
+import model.WorldModel;
+import states.World;
+
 import java.io.*;
 import java.util.ArrayList;
 
@@ -7,6 +10,7 @@ public class Parser {
     BufferedReader reader;
     File config;
     String nextName;
+    Processor fileProcessor;
 
     public Parser(){
     }
@@ -28,12 +32,12 @@ public class Parser {
         }
     }
 
-    public int getData(){
+    public WorldModel getData(){
         Integer levelID = 0;
         Integer score = 0;
         ArrayList<String> mapList = new ArrayList<>();
         try{
-            levelID = Integer.parseInt(config.getName());
+            levelID = Integer.parseInt(config.getName().substring(0,1));
         }catch (NumberFormatException e){
             System.err.println("Invalid file name - defaulting ID to -1.");
             levelID = -1;
@@ -52,11 +56,9 @@ public class Parser {
             if(!((line = reader.readLine()).contains("score:"))){
                 try{
                     score = Integer.parseInt(line.split("=")[1]);
-                    return 0;
                 }catch (NumberFormatException e){
                     System.err.println("Error ! Not a valid number. Defaulting to 0!");
                     score = 0;
-                    return 0;
                 }
             }
         }catch (FileNotFoundException e) {
@@ -74,13 +76,15 @@ public class Parser {
                 e.printStackTrace();
             }
         }
-        return 0;
+        return parseComplete(levelID, score, mapList);
     }
 
     /**
-     * Calls the processor to begin converting data to game state information.
+     * Calls the processor to getState converting data to game state information.
      */
-    public void parseComplete(){
+    public WorldModel parseComplete(Integer levelId, Integer score, ArrayList<String> mapData){
+        fileProcessor = new Processor(levelId, score, mapData);
+        return fileProcessor.getState();
 
     }
 }
