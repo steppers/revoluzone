@@ -70,6 +70,9 @@ public class StateRenderer {
                 opacityNext = 1-transitionProgress;
                 break;
             case GROW:
+                scale = 1-transitionProgress;
+                scaleNext = transitionProgress;
+                break;
             case SHRINK:
                 scale = transitionProgress;
                 scaleNext = 1-transitionProgress;
