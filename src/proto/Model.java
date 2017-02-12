@@ -459,4 +459,27 @@ public class Model extends Renderable {
         }
     }
 
+    public Tile getTileFromMousePos(GameContainer gc) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
+
+        float offset = - (gridSize / 2);
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
+        mouse = mouse.sub(screenOffset);
+        mouse = mouse.scale(1/SCALE);
+        mouse = mouse.sub(rotation);
+        mouse = mouse.sub(new Vector2f(offset, offset));
+
+        int x, y;
+        x = (int)mouse.x;
+        y = (int)mouse.y;
+
+        if(x >= 0 && x < gridSize && y >= 0 && y < gridSize) {
+            return tiles[x][y];
+        }
+        return null;
+    }
+
 }

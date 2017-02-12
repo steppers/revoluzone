@@ -5,6 +5,8 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
+import java.util.ArrayList;
+
 /**
  * Created by steppers on 2/12/17.
  */
@@ -26,9 +28,13 @@ public class GameState extends BasicGameState {
     State currentState = State.MENU;
     State previousState = State.MENU;
 
+    Tile.Type editorType = Tile.Type.FIXED;
+    ArrayList<BackgroundBox> bgBoxes;
+
     public GameState() {
         m = new Model("0.txt", 0.5f);
         tm = new TransitionManager(this);
+        bgBoxes = new ArrayList<>();
     }
 
     @Override
@@ -38,7 +44,7 @@ public class GameState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        redefinePosition(gc);
+
     }
 
     @Override
@@ -77,6 +83,11 @@ public class GameState extends BasicGameState {
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
         float delta = (float)i / 1000;
         m.update(delta);
+        Tile t = m.getTileUnderBall();
+        if(t != null && t.type == Tile.Type.KILL) {
+            Model n = new Model(m.getProperty("name") + ".txt", m.getScale(), m.getOpacity());
+            m = n;
+        }
         if(!m.isWaitingForBall()) {
             switch (currentState) {
                 case MENU:
@@ -103,8 +114,6 @@ public class GameState extends BasicGameState {
                     break;
             }
         }
-
-        backgroundOpacity += 3f * delta;
     }
 
     private void updateEditor(GameContainer gc) {
@@ -119,6 +128,12 @@ public class GameState extends BasicGameState {
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
+        }
+        if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+            Tile t = m.getTileFromMousePos(gc);
+            if(t != null) {
+
+            }
         }
     }
 
@@ -221,9 +236,9 @@ public class GameState extends BasicGameState {
                 renderText(gc, g, m.getOpacity(), m.getScale(), "toggle", 0, -70, -0.06f, m);
                 break;
             case LEVEL_SELECT:
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -90, -0.55f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("prev").split("\\.")[0], 90, -90, -0.55f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("next").split("\\.")[0], -90, -90, -0.55f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -90, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("prev").split("\\.")[0], 90, -90, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("next").split("\\.")[0], -90, -90, 0.6f, m);
                 break;
             case LEVEL:
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Best move count: " + m.getProperty("score"), 0, -225, 0.45f, m);
@@ -245,18 +260,35 @@ public class GameState extends BasicGameState {
         g.drawString(text, ( gc.getWidth() / 2) + xOffset, (gc.getHeight()/2) - (yOffset*scale*SCALE));
     }
 
-    float backgroundOpacity = 0;
-    float x, y, side;
+    private class BackgroundBox {
+        float opacity = 0;
+        float x, y, side;
 
-    void redefinePosition(GameContainer gc) {
-        x = (float) Math.random() * gc.getWidth();
-        y = (float) Math.random() * gc.getHeight();
-        side = (float) (gc.getWidth() * (Math.random()+0.5f) * 0.15);
+        void update(float delta) {
+            opacity += 3f * delta;
+        }
+
+        void redefinePosition(GameContainer gc) {
+            x = (float) Math.random() * gc.getWidth();
+            y = (float) Math.random() * gc.getHeight();
+            side = (float) (gc.getWidth() * (Math.random()+0.5f) * 0.15);
+        }
     }
 
     private void renderBackground(GameContainer gc, Graphics graphics){
         graphics.setBackground(Color.lightGray);
         graphics.clear();
+
+        for(BackgroundBox bb : bgBoxes) {
+            float op = (float)(Math.sin(bb.opacity)/2)+0.5f;
+            graphics.setLineWidth(3);
+            graphics.setColor(new Color(1,1,1,0.35f*op));
+            graphics.drawRect(bb.x, bb.y, bb.side, bb.side);
+            if ((((Math.sin(backgroundOpacity-0.1f)/2)+0.5f) > op &&
+                    op < 0.1))  {
+                redefinePosition(gc);
+            }
+        }
         float op = (float)(Math.sin(backgroundOpacity)/2)+0.5f;
         graphics.setLineWidth(3);
         graphics.setColor(new Color(1,1,1,0.35f*op));
