@@ -64,7 +64,7 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
-        menuState = parser.getWorldFromFile("res/config/0.txt");
+        menuState = parser.getWorldFromFile("res/config/7.txt");
         state = menuState;
         renderer.setState(state);
         state.recalcBall();
@@ -121,8 +121,8 @@ public class World extends BasicGameState {
                 if(!state.isRotating()) {
                     if(!state.getBall().isMoving()) {
                         Tile[][] grid = state.getGrid();
+                        Vector2f p = state.getBall().getPos();
                         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) { //TOGGLE ALL BLOCKS FOR NOW!!!
-                            Vector2f p = state.getBall().getPos();
                             Tile.Type type = grid[(int)p.x][(int)p.y].getType();
                             if(type == Tile.Type.RED || type == Tile.Type.BLUE) {
                             } else {
@@ -139,6 +139,10 @@ public class World extends BasicGameState {
                             if (gc.getInput().isKeyDown(Input.KEY_LEFT)&& (currentState != LEVEL_SELECT)) {
                                 state.rotate(-90);
                             }
+                        }
+
+                        if (grid[(int)(p.x)][(int)(p.y)].getType() == Tile.Type.SWITCH){
+                            grid[(int)(p.x)][(int)(p.y)].setActive(true);
                         }
                     } else {
                         state.getBall().update(delta);

@@ -146,6 +146,8 @@ public class WorldModel {
                 return false;
             case START:
                 return false;
+            case SWITCH:
+                return false;
             default:
                 return true;
         }

@@ -200,6 +200,13 @@ public class StateRenderer {
                         g.setColor(Color.green.multiply(op));
                         g.fill(tile);
                         break;
+                    case SWITCH:
+                        if(t.isActive())
+                            g.setColor(Color.white.multiply(op));
+                        else{
+                            g.setColor(Color.black.multiply(op));
+                        g.fill(tile);
+                        }
                 }
             }
         }
