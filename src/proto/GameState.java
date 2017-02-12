@@ -2,7 +2,9 @@ package proto;
 
 import graphics.FontLoader;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
+import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -31,13 +33,16 @@ public class GameState extends BasicGameState {
     Tile.Type editorType = Tile.Type.FIXED;
     ArrayList<BackgroundBox> bgBoxes;
     ArrayList<Rectangle> toolbar;
-//    ArrayList<Line>
+    ArrayList<Line> links;
+    private boolean linking = false;
+    private float linkX, linkY;
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
         tm = new TransitionManager(this);
         bgBoxes = new ArrayList<>();
         toolbar = new ArrayList<>();
+        links = new ArrayList<>();
     }
 
     @Override
@@ -80,6 +85,15 @@ public class GameState extends BasicGameState {
                 m.render(gc, g);
                 renderStateText(gc, g, State.EDITOR, m);
                 renderToolbar(gc, g);
+                g.setColor(Color.green);
+                g.setLineWidth(3);
+                Vector2f ms = getMouseTilePos(gc);
+                if(ms != null && linking)
+//                    g.draw(new Line(m.getWorldCoordOfTile(new Vector2f(linkX, linkY), gc), new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY())));
+                for(Line l : links) {
+                    g.draw(new Line(new Vector2f(l.getX1(), l.getY1()), m.getWorldCoordOfTile(new Vector2f(l.getX2(), l.getY2()), gc)));
+                }
+                g.setLineWidth(1);
                 break;
             case TRANSITION:
                 tm.render(gc, g);
@@ -176,17 +190,36 @@ public class GameState extends BasicGameState {
 
         }
 
-        if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
-            Tile t = m.getTileFromMousePos(gc);
-            if (t != null) {
-                t.type = editorType;
-            }
-            for (Rectangle r : toolbar) {
-                if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
-                    editorType = Tile.Type.values()[toolbar.indexOf(r)];
+        if(gc.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)) {
+            Vector2f p = getMouseTilePos(gc);
+            if(!linking) {
+                if (p != null) {
+                    linking = true;
+                    linkX = p.x;
+                    linkY = p.y;
                 }
             }
+        } else {
+            Vector2f p = getMouseTilePos(gc);
+//            if(linking) {
+                if (p != null) {
+                    linking = false;
+                    links.add(new Line(m.getWorldCoordOfTile(new Vector2f(linkX, linkY), gc), new Vector2f((int)p.x, (int)p.y)));
+                    m.tiles[(int)linkX][(int)linkY].links.add(m.getTileFromMousePos(gc));
+                } else {
+                    linking = false;
+                }
+//            }
         }
+
+//        if(gc.getInput().isMousePressed(Input.MOUSE_MIDDLE_BUTTON)) {
+//            Vector2f p = getMouseTilePos(gc);
+//            if (p != null) {
+//                linking = false;
+//                linkX = (int) p.x;
+//                linkY = (int) p.y;
+//            }
+//        }
 
     }
 
@@ -374,5 +407,28 @@ public class GameState extends BasicGameState {
             graphics.draw(toolbar.get(i));
             new Tile(i).render(11, (int)((gc.getHeight()*0.125f) + toolbar.get(i).getWidth()*i+1), (int)(toolbar.get(i).getWidth()-1), graphics, m.getOpacity());
         }
+    }
+
+    private Vector2f getMouseTilePos(GameContainer gc) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / m.gridSize) * m.getScale();
+
+        float offset = - (m.gridSize / 2);
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        Vector2f mouse = new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY());
+        mouse = mouse.sub(screenOffset);
+        mouse = mouse.scale(1/SCALE);
+        mouse = mouse.sub(m.getRotation());
+        mouse = mouse.sub(new Vector2f(offset, offset));
+
+        int x, y;
+        x = (int)mouse.x;
+        y = (int)mouse.y;
+
+        if(x >= 0 && x < m.gridSize && y >= 0 && y < m.gridSize) {
+            return new Vector2f(x, y);
+        }
+        return null;
     }
 }

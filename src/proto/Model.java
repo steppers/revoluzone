@@ -502,4 +502,19 @@ public class Model extends Renderable {
         return null;
     }
 
+    public Vector2f getWorldCoordOfTile(Vector2f tileCoord, GameContainer gc) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
+
+        float offset = - (gridSize / 2);
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        tileCoord = tileCoord.add(new Vector2f(offset, offset));
+        tileCoord = tileCoord.add(rotation);
+        tileCoord = tileCoord.scale(SCALE);
+        tileCoord = tileCoord.add(screenOffset);
+
+        return tileCoord;
+    }
+
 }
