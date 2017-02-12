@@ -315,7 +315,7 @@ public class GameState extends BasicGameState {
         for (Tile.Type t : Tile.Type.values()) {
             graphics.setColor(Color.darkGray);
             graphics.drawRect(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
-            new Tile(t.ordinal()).render(15, (int)((gc.getHeight()*0.125f) + size*t.ordinal()+5), (int)(size-5), graphics, m.getOpacity());
+            new Tile(t.ordinal()).render(11, (int)((gc.getHeight()*0.125f) + size*t.ordinal()+1), (int)(size-1), graphics, m.getOpacity());
         }
     }
 }
