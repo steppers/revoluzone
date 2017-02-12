@@ -8,6 +8,6 @@
 {1,0,0,0,0,0,0,10,0,0}
 {0,0,0,0,2,3,0,0,0,0}
 {0,0,0,0,0,0,0,0,0,0}
-next_level=6.txt
-prev_level=4.txt
-score=0
+next=Level 6.txt
+prev=Level 4.txt
+score=999
