@@ -22,8 +22,6 @@ public class StateRenderer {
     }
 
     private TransitionType transition = TransitionType.FADE;
-
-
     private float transitionProgress = 1f;
     private float transitionTarget = 0;
     private float transitionRate = 0f;
@@ -48,45 +46,71 @@ public class StateRenderer {
 
     public void update(float delta) {
         if(transitioning) {
-            transitionProgress += transitionRate * delta;
-            if (transitionRate < 0) {
-                if (transitionProgress < transitionTarget) {
-                    transitionProgress = transitionTarget;
-                    transitioning = false;
-                    currentState = nextState;
-                }
-            } else {
-                if (transitionProgress > transitionTarget) {
-                    transitionProgress = transitionTarget;
-                    transitioning = false;
-                    currentState = nextState;
-                }
+            switch(transition) {
+                case FADE:
+                    transitionProgress -= transitionRate * delta;
+                    if(transitionProgress < 0) {
+                        transitionProgress = 0;
+                        transitioning = false;
+                        currentState = nextState;
+                    }
+                    opacity = transitionProgress;
+                    opacityNext = 1 - transitionProgress;
+                    break;
+                case GROW:
+                    transitionProgress += transitionRate * delta;
+                    if(transitionProgress > 1) {
+                        transitionProgress = 1;
+                        transitioning = false;
+                        currentState = nextState;
+                    }
+                    scale = transitionProgress;
+                    opacity = 1 - transitionProgress;
+                    scaleNext = transitionProgress;
+                    opacityNext = transitionProgress;
+                    break;
+                case SHRINK:
+                    transitionProgress -= transitionRate * delta;
+                    if(transitionProgress < 0.5f) {
+                        transitionProgress = 0.5f;
+                        transitioning = false;
+                        currentState = nextState;
+                    }
+                    scale = transitionProgress;
+                    opacity = transitionProgress;
+                    scaleNext = transitionProgress;
+                    opacityNext = 1-transitionProgress;
+                    break;
             }
         }
     }
 
     public void render(GameContainer gc, Graphics g) {
-        switch(transition) {
-            case FADE:
-                opacity = transitionProgress;
-                opacityNext = 1-transitionProgress;
-                break;
-            case GROW:
-                scale = transitionProgress;
-                break;
-            case SHRINK:
-                scale = transitionProgress;
-                break;
-        }
-
         if(transitioning)
             renderWorld(gc, g, currentState, scaleNext, opacityNext);
         renderWorld(gc, g, currentState, scale, opacity);
     }
 
-    public void transition(TransitionType type, WorldModel nextState, float transitionTarget, float transitionRate) {
-        transition = type;
-        this.transitionTarget = transitionTarget;
+    public void transitionFade(WorldModel nextState, float transitionRate) {
+        transition = TransitionType.FADE;
+        this.transitionProgress = 1;
+        this.transitionRate = transitionRate;
+        this.nextState = nextState;
+        scaleNext = scale;
+        transitioning = true;
+    }
+
+    public void transitionShrink(WorldModel nextState, float transitionRate) {
+        transition = TransitionType.SHRINK;
+        this.transitionProgress = 1;
+        this.transitionRate = transitionRate;
+        this.nextState = nextState;
+        transitioning = true;
+    }
+
+    public void transitionGrow(WorldModel nextState, float transitionRate) {
+        transition = TransitionType.GROW;
+        this.transitionProgress = 0.5f;
         this.transitionRate = transitionRate;
         this.nextState = nextState;
         transitioning = true;

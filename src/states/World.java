@@ -64,7 +64,7 @@ public class World extends BasicGameState {
         currentState = States.MENU;
         this.currentInput = gameContainer.getInput();
         redefinePosition(gameContainer);
-        menuState = parser.getWorldFromFile("res/config/7.txt");
+        menuState = parser.getWorldFromFile("res/config/0.txt");
         state = menuState;
         renderer.setState(state);
         state.recalcBall();
@@ -166,7 +166,7 @@ public class World extends BasicGameState {
                             r += 360;
                         switch (r % 360) {
                             case 0:
-                                renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/2.txt"), 1f, 1f);
+                                renderer.transitionFade(parser.getWorldFromFile("res/config/Level 2.txt"), 1f);
                                 currentState = States.TRANSITION;
                                 nextState = LEVEL_SELECT;
                                 break;
@@ -174,7 +174,7 @@ public class World extends BasicGameState {
                                 System.exit(0);
                                 break;
                             case 180:
-                                renderer.transition(StateRenderer.TransitionType.GROW, editor.getState(), 1f, 1f);
+                                renderer.transitionGrow(editor.getState(), 1f);
                                 currentState = States.TRANSITION;
                                 nextState = States.EDITOR;
                                 break;
@@ -184,7 +184,7 @@ public class World extends BasicGameState {
                         }
                         break;
                     case LEVEL_SELECT:
-                        renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
+                        renderer.transitionGrow(state, 1f);
                         currentState = States.TRANSITION;
                         nextState = States.LEVEL;
                         break;
@@ -198,17 +198,17 @@ public class World extends BasicGameState {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
                     case LEVEL_SELECT:
-                        renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
+                        renderer.transitionFade(menuState, 1f);
                         currentState = States.TRANSITION;
                         nextState = States.MENU;
                         break;
                     case EDITOR:
-                        renderer.transition(StateRenderer.TransitionType.SHRINK, menuState, 0.5f, 1f);
+                        renderer.transitionShrink(menuState, 1f);
                         currentState = States.TRANSITION;
                         nextState = States.MENU;
                         break;
                     case LEVEL:
-                        renderer.transition(StateRenderer.TransitionType.SHRINK, state, 0.5f, 1f);
+                        renderer.transitionShrink(state, 1f);
                         currentState = States.TRANSITION;
                         nextState = LEVEL_SELECT;
                         break;
@@ -222,7 +222,7 @@ public class World extends BasicGameState {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
                     case LEVEL_SELECT:
-                        renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.nextLevel), 1f, 1f);
+                        renderer.transitionFade(parser.getWorldFromFile("res/config/"+parser.nextLevel), 1f);
                         currentState = States.TRANSITION;
                         nextState = States.LEVEL_SELECT;
                         break;
@@ -235,7 +235,7 @@ public class World extends BasicGameState {
             if (!renderer.isTransitioning()) {
                 switch (currentState) {
                     case LEVEL_SELECT:
-                        renderer.transition(StateRenderer.TransitionType.FADE, parser.getWorldFromFile("res/config/"+parser.prevLevel), 1f, 1f);
+                        renderer.transitionFade(parser.getWorldFromFile("res/config/"+parser.prevLevel), 1f);
                         currentState = States.TRANSITION;
                         nextState = States.LEVEL_SELECT;
                         break;

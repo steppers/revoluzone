@@ -1,6 +1,6 @@
 package main;
 
-import org.newdawn.slick.*;
+import org.newdawn.slick.AppGameContainer;
 
 /**
  * A game made for the Soton GameJam by:
@@ -17,6 +17,7 @@ public class Main {
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
             gc.setDisplayMode(gc.getScreenWidth(), gc.getScreenHeight(), false);
+//            gc.setDisplayMode(1280, 720, false);
             gc.setVSync(true);
             gc.setSmoothDeltas(true);
             gc.setMultiSample(4);

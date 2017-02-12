@@ -4,6 +4,7 @@
 {3,0,0,0,2,3}
 {0,0,0,0,0,2}
 {1,1,5,0,0,0}
-next_level=3.txt
-prev_level=1.txt
-score=0
+next=Level 3.txt
+prev=Level 1.txt
+score=999
+name=Level 2

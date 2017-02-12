@@ -65,6 +65,26 @@ public class FontLoader {
         }
     }
 
+//    public static TrueTypeFont loadFont() {
+//        try {
+//
+//            Font fontToAdd;
+//
+//            for(Fonts f : Fonts.values()){
+//                InputStream stream = ResourceLoader.getResourceAsStream("res/fonts/" + f.toString() + ".ttf");
+//                fontToAdd = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(48f);
+//                new TrueTypeFont(fontToAdd, false);
+//            }
+//
+//        } catch (IOException e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        } catch (FontFormatException e) {
+//            System.out.println(e.getMessage());
+//            e.printStackTrace();
+//        }
+//    }
+
     public static TrueTypeFont getFont(String fontToGet) {
         return fonts.get(fontToGet);
     }
