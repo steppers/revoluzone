@@ -22,7 +22,7 @@ public class StateRenderer {
     }
 
     private TransitionType transition = TransitionType.FADE;
-    private float transitionProgress = 0.5f;
+    private float transitionProgress = 1f;
     private float transitionTarget = 0;
     private float transitionRate = 0f;
     private boolean transitioning = false;
@@ -71,11 +71,9 @@ public class StateRenderer {
                 break;
             case GROW:
                 scale = transitionProgress;
-                scaleNext = 1-transitionProgress;
                 break;
             case SHRINK:
                 scale = transitionProgress;
-                scaleNext = 1-transitionProgress;
                 break;
         }
 
