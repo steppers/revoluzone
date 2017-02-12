@@ -171,6 +171,7 @@ public class Model extends Renderable {
         //Switch rect
         rect = new Rectangle(-(SCALE/2)*0.6f, -(SCALE/2)*0.6f, SCALE*0.6f, SCALE*0.6f);
         Shape switch1 = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Circle cicleSwitch = new Circle(0,0, SCALE*0.5f*0.4f);
 
         //Start/finish
         Circle circleLarge = new Circle(0,0, SCALE*0.5f*0.8f);
@@ -233,6 +234,16 @@ public class Model extends Renderable {
                             g.setColor(Color.green.multiply(opCol));
                         else
                             g.setColor(Color.red.multiply(opCol));
+                        cicleSwitch.setCenterX(pos.x);
+                        cicleSwitch.setCenterY(pos.y);
+                        g.fill(cicleSwitch);
+                        break;
+                    case LOCKED_FINISH:
+                        g.setColor(Color.darkGray.multiply(opCol));
+                        circleLarge.setCenterX(pos.x);
+                        circleLarge.setCenterY(pos.y);
+                        g.fill(circleLarge);
+                        g.setColor(Color.red.multiply(opCol));
                         circleSmall.setCenterX(pos.x);
                         circleSmall.setCenterY(pos.y);
                         g.fill(circleSmall);
@@ -256,6 +267,8 @@ public class Model extends Renderable {
         g.setColor(Color.white.darker(0.8f).multiply(opCol)); //Shadow color
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
+                if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)
+                    continue;
                 if (tiles[x][y].isSolid()) {
                     Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
                     pos.sub(-rotation);

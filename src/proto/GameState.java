@@ -135,7 +135,7 @@ public class GameState extends BasicGameState {
             tm.transitionRotate(m, currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type == Tile.Type.RED)
+            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
                 m.toggleRedBlue();
         }
         if(m.hasCompleted()) {
@@ -149,7 +149,11 @@ public class GameState extends BasicGameState {
             case SWITCH:
                 for(Tile link : t.links) {
                     link.active = true;
+                    if(link.type == Tile.Type.LOCKED_FINISH) {
+                        link.type = Tile.Type.FINISH;
+                    }
                 }
+                t.active = true;
                 break;
             default:
                 break;

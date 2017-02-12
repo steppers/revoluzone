@@ -39,6 +39,7 @@ public class Tile {
 
     public Tile(int type) {
         this.type = Type.values()[type];
+        links = new ArrayList<>();
     }
 
     public boolean isSolid() {
