@@ -20,7 +20,8 @@ public class Tile {
         TELEPORT("Teleport"),
         LOCKED_FINISH("Locked Finish"),
         BLUE_FINISH("Blue Finish"),
-        RED_FINISH("Red Finish");
+        RED_FINISH("Red Finish"),
+        GREEN("Green");
 
         String name;
 
@@ -69,6 +70,8 @@ public class Tile {
             case BLUE_FINISH:
                 return active ? true : false;
             case RED_FINISH:
+                return active ? true : false;
+            case GREEN:
                 return active ? true : false;
             default:
                 return true;

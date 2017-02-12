@@ -121,7 +121,7 @@ public class Ball extends Renderable {
         pos.scale(SCALE);
         pos.add(screenOffset);
 
-        Circle c = new Circle(0, 0, SCALE / 2);
+        Circle c = new Circle(0, 0, SCALE / 2.2f);
         Shape circ = c.transform(Transform.createRotateTransform((float) (m.getRotation() * Math.PI) / 180));
         circ.setLocation(pos.x, pos.y);
         g.fill(circ);

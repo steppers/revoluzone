@@ -206,6 +206,13 @@ public class Model extends Renderable {
                         tile.setLocation(pos.x, pos.y);
                         g.fill(tile);
                         break;
+                    case GREEN:
+                        if(t.active)
+                            break;
+                        g.setColor(Color.green.multiply(opCol).multiply(new Color(1, 1, 1, 0.3f)));
+                        tile.setLocation(pos.x, pos.y);
+                        g.fill(tile);
+                        break;
                     case START:
                         g.setColor(Color.green.darker().multiply(opCol));
                         circleLarge.setCenterX(pos.x);
@@ -281,7 +288,7 @@ public class Model extends Renderable {
         }
 
         //Render Ball shadow
-        ball.renderShadow(gc, g);
+        ball.renderShadow(gc, g, this);
     }
 
     @Override
@@ -317,6 +324,12 @@ public class Model extends Renderable {
                         if(!tiles[x][y].active)
                             break;
                         g.setColor(Color.blue.multiply(opCol));
+                        g.fill(tile);
+                        break;
+                    case GREEN:
+                        if(!tiles[x][y].active)
+                            break;
+                        g.setColor(Color.green.multiply(opCol));
                         g.fill(tile);
                         break;
                     default:
