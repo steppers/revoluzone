@@ -1,7 +1,9 @@
 package proto;
 
 import graphics.FontLoader;
+import javafx.scene.control.ToolBar;
 import org.newdawn.slick.*;
+import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 
@@ -21,7 +23,7 @@ public class GameState extends BasicGameState {
         TRANSITION,
         EDITOR
     }
-
+    public Tile.Type activeTile = Tile.Type.EMPTY;
     Model m;
     Model m2;
     TransitionManager tm;
@@ -30,11 +32,13 @@ public class GameState extends BasicGameState {
 
     Tile.Type editorType = Tile.Type.FIXED;
     ArrayList<BackgroundBox> bgBoxes;
+    ArrayList<Rectangle> toolbar;
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
         tm = new TransitionManager(this);
         bgBoxes = new ArrayList<>();
+        toolbar = new ArrayList<>();
     }
 
     @Override
@@ -46,6 +50,12 @@ public class GameState extends BasicGameState {
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
         for(int i = 0; i < 5; i++) {
             bgBoxes.add(new BackgroundBox(gc));
+        }
+
+        float size = (0.75f * gc.getHeight()) / Tile.Type.values().length;
+        for (Tile.Type t : Tile.Type.values()) {
+            Rectangle r = new Rectangle(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
+            toolbar.add(r);
         }
     }
 
@@ -144,10 +154,16 @@ public class GameState extends BasicGameState {
         }
         if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
             Tile t = m.getTileFromMousePos(gc);
-            if(t != null) {
-
+            if (t != null) {
+                t.type = editorType;
+            }
+            for (Rectangle r : toolbar) {
+                if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
+                    editorType = Tile.Type.values()[toolbar.indexOf(r)];
+                }
             }
         }
+
     }
 
     private void updateLevel(GameContainer gc) {
@@ -310,12 +326,10 @@ public class GameState extends BasicGameState {
         }
     }
     private void renderToolbar(GameContainer gc, Graphics graphics) {
-        float size = (0.75f * gc.getHeight()) / Tile.Type.values().length;
-
-        for (Tile.Type t : Tile.Type.values()) {
+        for(int i = 0; i < toolbar.size(); i++) {
             graphics.setColor(Color.darkGray);
-            graphics.drawRect(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
-            new Tile(t.ordinal()).render(11, (int)((gc.getHeight()*0.125f) + size*t.ordinal()+1), (int)(size-1), graphics, m.getOpacity());
+            graphics.draw(toolbar.get(i));
+            new Tile(i).render(11, (int)((gc.getHeight()*0.125f) + toolbar.get(i).getWidth()*i+1), (int)(toolbar.get(i).getWidth()-1), graphics, m.getOpacity());
         }
     }
 }
