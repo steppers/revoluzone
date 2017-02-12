@@ -12,3 +12,4 @@ next=Level 7.txt
 prev=Level 5.txt
 score=999
 name=Level 6
+link=7,1->9,2
