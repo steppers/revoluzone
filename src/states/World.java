@@ -179,12 +179,12 @@ public class World extends BasicGameState {
                                 break;
                         }
                         break;
-                    default:
-                        break;
                     case LEVEL_SELECT:
                         renderer.transition(StateRenderer.TransitionType.GROW, state, 1f, 1f);
                         currentState = States.TRANSITION;
                         nextState = States.LEVEL;
+                        break;
+                    default:
                         break;
                 }
             }

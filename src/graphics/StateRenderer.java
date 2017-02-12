@@ -22,6 +22,8 @@ public class StateRenderer {
     }
 
     private TransitionType transition = TransitionType.FADE;
+
+
     private float transitionProgress = 1f;
     private float transitionTarget = 0;
     private float transitionRate = 0f;
