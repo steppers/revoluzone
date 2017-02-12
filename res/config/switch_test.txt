@@ -4,8 +4,8 @@
 {0,7,0,0,0,0}
 {0,0,0,2,0,0}
 {0,0,0,7,3,0}
-next=Level 1.txt
-prev=Level 3.txt
+next=none
+prev=none
 score=0
 name=switch_test
 link=4,6->2,4
