@@ -24,7 +24,7 @@ public class Editor {
     private Input currentInput;
     private Parser parser;
     Tile grabbed;
-    Tile.Type type;
+    Tile.Type type = Tile.Type.BLUE;
 
     public Editor(StateRenderer r){
         renderer = r;
