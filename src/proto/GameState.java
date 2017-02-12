@@ -238,6 +238,7 @@ public class GameState extends BasicGameState {
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {
         switch(state) {
             case MENU:
+//                renderText(gc, g, m.getOpacity(), m.getScale(), "Squaring the Circle", 0, -135, 0.8f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -135, 0.6f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Settings", 90, -100, 0.6f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -45, 0.6f, m);

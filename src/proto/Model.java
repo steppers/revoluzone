@@ -167,6 +167,9 @@ public class Model extends Renderable {
         //Full floor tile
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Rectangle stripeRect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
+        Shape stripe = stripeRect.transform(Transform.createScaleTransform(0.333f, 1f));
+        stripe = stripe.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
 
         //Switch rect
         rect = new Rectangle(-(SCALE/2)*0.6f, -(SCALE/2)*0.6f, SCALE*0.6f, SCALE*0.6f);
@@ -191,6 +194,9 @@ public class Model extends Renderable {
                         g.setColor(Color.yellow.multiply(opCol));
                         tile.setLocation(pos.x, pos.y);
                         g.fill(tile);
+                        g.setColor(Color.black.multiply(opCol));
+                        stripe.setLocation(pos.x, pos.y);
+                        g.fill(stripe);
                         break;
                     case RED:
                         if(t.active)
@@ -271,7 +277,7 @@ public class Model extends Renderable {
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
         
         Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(rotation + 25).add(new Vector2f(offset, offset));
-        g.setColor(Color.white.darker(0.8f).multiply(opCol)); //Shadow color
+        g.setColor(Color.white.darker(0.8f).multiply(opCol).multiply(new Color(1,1,1,0.7f))); //Shadow color
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)

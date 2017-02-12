@@ -115,7 +115,7 @@ public class Ball extends Renderable {
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(m.getRotation() + 25).add(new Vector2f(offset, offset));
-        g.setColor(Color.white.darker(0.8f).multiply(new Color(1,1,1,m.getOpacity()))); //Shadow color
+        g.setColor(Color.white.darker(0.8f).multiply(new Color(1,1,1,m.getOpacity())).multiply(new Color(1,1,1,0.7f))); //Shadow color
         Vector2f pos = new Vector2f(x, y).add(shadow);
         pos.sub(-m.getRotation());
         pos.scale(SCALE);
@@ -140,7 +140,7 @@ public class Ball extends Renderable {
         Circle c = new Circle(0, 0, SCALE/2.2f);
         Shape circ = c.transform(Transform.createRotateTransform((float)(m.getRotation()*Math.PI)/180));
         circ.setLocation(pos.x, pos.y);
-        g.setColor(Color.cyan.multiply(new Color(1,1,1,m.getOpacity())));
+        g.setColor(Color.cyan.multiply(new Color(0.9f,0.9f,0.9f,m.getOpacity())));
         g.fill(circ);
     }
 }
