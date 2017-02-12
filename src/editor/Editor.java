@@ -10,6 +10,7 @@ import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.StateBasedGame;
+import proto.GameState;
 
 /**
  * Created by an6g15 on 11/02/2017.
@@ -104,6 +105,7 @@ public class Editor {
         graphics.drawString("X: " + x.toString(), 70, 100);
         graphics.drawString("Y: " + y.toString(), 70, 150);
 
+
     }
 
     public WorldModel getState(){
@@ -133,4 +135,6 @@ public class Editor {
         }
         return null;
     }
+
+
 }

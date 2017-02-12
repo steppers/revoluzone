@@ -70,6 +70,7 @@ public class GameState extends BasicGameState {
             case EDITOR:
                 m.render(gc, g);
                 renderStateText(gc, g, State.EDITOR, m);
+                renderToolbar(gc, g);
                 break;
             case TRANSITION:
                 tm.render(gc, g);
@@ -306,6 +307,15 @@ public class GameState extends BasicGameState {
                     op < 0.1))  {
                 bb.redefinePosition(gc);
             }
+        }
+    }
+    private void renderToolbar(GameContainer gc, Graphics graphics) {
+        float size = (0.75f * gc.getHeight()) / Tile.Type.values().length;
+
+        for (Tile.Type t : Tile.Type.values()) {
+            graphics.setColor(Color.darkGray);
+            graphics.drawRect(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
+            new Tile(t.ordinal()).render(15, (int)((gc.getHeight()*0.125f) + size*t.ordinal()+5), (int)(size-5), graphics, m.getOpacity());
         }
     }
 }
