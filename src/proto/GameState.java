@@ -44,7 +44,9 @@ public class GameState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-
+        for(int i = 0; i < 5; i++) {
+            bgBoxes.add(new BackgroundBox(gc));
+        }
     }
 
     @Override
@@ -113,6 +115,10 @@ public class GameState extends BasicGameState {
                 default:
                     break;
             }
+        }
+
+        for(int j = 0; j < 5; j++) {
+            bgBoxes.get(j).update(delta);
         }
     }
 
@@ -264,6 +270,11 @@ public class GameState extends BasicGameState {
         float opacity = 0;
         float x, y, side;
 
+        public BackgroundBox(GameContainer gc) {
+            redefinePosition(gc);
+            opacity = (float)Math.random();
+        }
+
         void update(float delta) {
             opacity += 3f * delta;
         }
@@ -284,18 +295,10 @@ public class GameState extends BasicGameState {
             graphics.setLineWidth(3);
             graphics.setColor(new Color(1,1,1,0.35f*op));
             graphics.drawRect(bb.x, bb.y, bb.side, bb.side);
-            if ((((Math.sin(backgroundOpacity-0.1f)/2)+0.5f) > op &&
+            if ((((Math.sin(bb.opacity-0.1f)/2)+0.5f) > op &&
                     op < 0.1))  {
-                redefinePosition(gc);
+                bb.redefinePosition(gc);
             }
-        }
-        float op = (float)(Math.sin(backgroundOpacity)/2)+0.5f;
-        graphics.setLineWidth(3);
-        graphics.setColor(new Color(1,1,1,0.35f*op));
-        graphics.drawRect(x, y, side, side);
-        if ((((Math.sin(backgroundOpacity-0.1f)/2)+0.5f) > op &&
-                op < 0.1))  {
-            redefinePosition(gc);
         }
     }
 }
