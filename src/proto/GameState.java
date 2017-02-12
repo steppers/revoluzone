@@ -86,11 +86,16 @@ public class GameState extends BasicGameState {
         float delta = (float)i / 1000;
         m.update(delta);
         Tile t = m.getTileUnderBall();
-        if(t != null && t.type == Tile.Type.KILL) {
+        if(t.type == Tile.Type.KILL) {
             Model n = new Model(m.getProperty("name") + ".txt", m.getScale(), m.getOpacity());
             m = n;
         }
-        if(!m.isWaitingForBall()) {
+        if(m.hasCompleted()) {
+            if(m.score < Integer.parseInt(m.getProperty("score"))) {
+                m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
+            }
+            tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
+        } else if(!m.isWaitingForBall()) {
             switch (currentState) {
                 case MENU:
                     updateMenu(gc);
