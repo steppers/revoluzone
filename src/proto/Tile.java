@@ -86,7 +86,7 @@ public class Tile {
 
 
     public void render(int x, int y, int size, Graphics g, float opacity) {
-        Rectangle rect = new Rectangle(0, 0, size, size);
+        Rectangle rect = new Rectangle(x, y, size, size);
         Shape stripe = rect.transform(Transform.createScaleTransform(0.333f, 1f));
         switch(type) {
             case EMPTY:
