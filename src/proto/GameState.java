@@ -90,7 +90,7 @@ public class GameState extends BasicGameState {
             Model n = new Model(m.getProperty("name") + ".txt", m.getScale(), m.getOpacity());
             m = n;
         }
-        if(m.hasCompleted()) {
+        if(m.hasCompleted() && currentState == State.LEVEL) {
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
             }
