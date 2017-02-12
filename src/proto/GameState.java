@@ -1,7 +1,6 @@
 package proto;
 
 import graphics.FontLoader;
-import javafx.scene.control.ToolBar;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.state.BasicGameState;
@@ -33,6 +32,7 @@ public class GameState extends BasicGameState {
     Tile.Type editorType = Tile.Type.FIXED;
     ArrayList<BackgroundBox> bgBoxes;
     ArrayList<Rectangle> toolbar;
+//    ArrayList<Line>
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
@@ -86,6 +86,8 @@ public class GameState extends BasicGameState {
                 tm.render(gc, g);
                 renderStateText(gc, g, previousState, m);
                 renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
+                if(previousState == State.EDITOR && tm.getNewState() != State.MENU)
+                    renderToolbar(gc, g);
                 break;
             default:
                 break;
@@ -153,6 +155,18 @@ public class GameState extends BasicGameState {
             m.toggleRedBlue();
         }
         if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+            Tile t = m.getTileFromMousePos(gc);
+            if (t != null) {
+                t.type = editorType;
+            }
+            for (Rectangle r : toolbar) {
+                if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
+                    editorType = Tile.Type.values()[toolbar.indexOf(r)];
+                }
+            }
+        }
+
+        if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
             Tile t = m.getTileFromMousePos(gc);
             if (t != null) {
                 t.type = editorType;
