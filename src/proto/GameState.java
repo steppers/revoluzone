@@ -16,7 +16,6 @@ public class GameState extends BasicGameState {
     public enum State {
         MENU,
         LEVEL_SELECT,
-        SETTINGS,
         CREDITS,
         LEVEL,
         TRANSITION,
@@ -89,6 +88,9 @@ public class GameState extends BasicGameState {
                 if(previousState == State.EDITOR && tm.getNewState() != State.MENU)
                     renderToolbar(gc, g);
                 break;
+            case CREDITS:
+                m.render(gc, g);
+                renderStateText(gc, g, State.CREDITS, m);
             default:
                 break;
         }
@@ -109,30 +111,35 @@ public class GameState extends BasicGameState {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
             }
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
-        } else if(!m.isWaitingForBall()) {
-            switch (currentState) {
-                case MENU:
-                    updateMenu(gc);
-                    break;
-                case LEVEL_SELECT:
-                    updateLevelSelect(gc);
-                    break;
-                case LEVEL:
-                    updateLevel(gc);
-                    break;
-                case EDITOR:
-                    updateEditor(gc);
-                    break;
-                case TRANSITION:
-                    if (!tm.isTransitioning()) {
-                        currentState = tm.getNewState();
-                        m = tm.getNewModel();
-                    } else {
-                        tm.update(delta);
-                    }
-                    break;
-                default:
-                    break;
+        } else {
+            if (!m.isWaitingForBall()) {
+                switch (currentState) {
+                    case MENU:
+                        updateMenu(gc);
+                        break;
+                    case LEVEL_SELECT:
+                        updateLevelSelect(gc);
+                        break;
+                    case LEVEL:
+                        updateLevel(gc);
+                        break;
+                    case EDITOR:
+                        updateEditor(gc, m);
+                        break;
+                    case TRANSITION:
+                        if (!tm.isTransitioning()) {
+                            currentState = tm.getNewState();
+                            m = tm.getNewModel();
+                        } else {
+                            tm.update(delta);
+                        }
+                        break;
+                    case CREDITS:
+                        updateCREDITS(gc);
+                        break;
+                    default:
+                        break;
+                }
             }
         }
 
@@ -141,7 +148,7 @@ public class GameState extends BasicGameState {
         }
     }
 
-    private void updateEditor(GameContainer gc) {
+    private void updateEditor(GameContainer gc, Model m) {
         if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
             tm.transitionShrink(m, State.MENU, 0.5f, 0.3f);
         }
@@ -158,12 +165,15 @@ public class GameState extends BasicGameState {
             Tile t = m.getTileFromMousePos(gc);
             if (t != null) {
                 t.type = editorType;
+                m.initRedBlue();
             }
             for (Rectangle r : toolbar) {
                 if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
                     editorType = Tile.Type.values()[toolbar.indexOf(r)];
                 }
+
             }
+
         }
 
         if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
@@ -234,6 +244,7 @@ public class GameState extends BasicGameState {
                     tm.transitionGrow(m, State.EDITOR, 1.0f, 0.3f);
                     break;
                 case 270:
+                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.5f, 1f), State.CREDITS, 1f);
                     break;
             }
         }
@@ -265,13 +276,27 @@ public class GameState extends BasicGameState {
             m.toggleRedBlue();
         }
     }
+    private void updateCREDITS(GameContainer gc){
+        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+            tm.transitionRotate(m, currentState, 90, 0.2f);
+        }
+        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+            tm.transitionRotate(m, currentState, -90, 0.2f);
+        }
+        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
+            m.toggleRedBlue();
+        }
+        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+            tm.transitionFade(m, new Model("0.txt", 0.5f, 0f), State.MENU, 0.4f);
+        }
+    }
 
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {
         switch(state) {
             case MENU:
 //                renderText(gc, g, m.getOpacity(), m.getScale(), "Squaring the Circle", 0, -135, 0.8f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -135, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Settings", 90, -100, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Credits", 90, -100, 0.6f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -45, 0.6f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Editor", 180, -60, 0.6f, m);
                 renderText(gc, g, m.getOpacity(), m.getScale(), "Use arrow", 0, -110, 0.16f, m);
@@ -290,6 +315,10 @@ public class GameState extends BasicGameState {
             case TRANSITION:
 
                 break;
+            case CREDITS:
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Ollie Steptoe", 0, -140, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Alistair Brewin", 90, -160, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Anton Nikitin", -90, -150, 0.6f, m);
             default:
                 break;
         }

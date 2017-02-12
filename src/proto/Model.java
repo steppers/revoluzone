@@ -59,7 +59,7 @@ public class Model extends Renderable {
         return tiles[(int)ball.x][(int)ball.y];
     }
 
-    private void initRedBlue() {
+    public void initRedBlue() {
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.RED) {
