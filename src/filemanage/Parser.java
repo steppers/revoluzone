@@ -7,7 +7,6 @@ import java.io.*;
 import java.util.ArrayList;
 
 public class Parser {
-    BufferedReader reader;
     File config;
     public String nextLevel;
     public String prevLevel;
@@ -29,8 +28,7 @@ public class Parser {
             System.err.println("Invalid file name - defaulting ID to -1.");
             levelID = -1;
         }
-        try{
-            reader = new BufferedReader(new FileReader(config));
+        try(BufferedReader reader = new BufferedReader(new FileReader(config))){
 
             String line = "";
 
@@ -49,21 +47,10 @@ public class Parser {
                     score = 0;
                 }
             }
-        }catch (FileNotFoundException e) {
+        }catch (IOException e) {
             //This should never be thrown as we have checked for this above
-            System.out.println("File doesn't exist or directory is bad! (Code 1)");
+            System.err.println("IO Error occurred! (Code 1)");
             e.printStackTrace();
-        }catch (IOException e){
-            System.out.println(e.getMessage());
-            e.printStackTrace();
-
-        } finally {
-            try{
-                reader.close();
-            } catch (IOException e){
-                System.out.println(e.getMessage());
-                e.printStackTrace();
-            }
         }
 
         return parseComplete(levelID, score, mapList);
