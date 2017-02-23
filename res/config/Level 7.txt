@@ -9,7 +9,7 @@
 {0,0,0,0,0,0,0,0,0,0}
 {0,0,0,0,0,0,0,0,0,5}
 next=Level 1.txt
-prev=Level 5.txt
+prev=Level 6.txt
 score=999
-name=Level 6
+name=Level 7
 link=7,1->9,2
