@@ -6,8 +6,8 @@
 {1,0,0,0,0,2,0,0}
 {3,0,0,0,2,3,0,0}
 {0,0,0,0,3,0,0,0}
-next=Level 5.txt
-prev=Level 3.txt
+next=Level 6.txt
+prev=Level 4.txt
 score=999
-name=Level 4
+name=Level 5
 link=1,5->5,2
