@@ -4,7 +4,7 @@
 {1,0,0,0,0,1}
 {0,0,2,0,0,0}
 {0,0,0,1,0,0}
-next=Level 3.txt
+next=Level 4.txt
 prev=Level 2.txt
 score=999
-name=Level 2_2
+name=Level 3
