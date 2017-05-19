@@ -3,15 +3,13 @@ package proto;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
-import org.newdawn.slick.geom.Circle;
-import org.newdawn.slick.geom.Shape;
-import org.newdawn.slick.geom.Transform;
-import org.newdawn.slick.geom.Vector2f;
+import org.newdawn.slick.geom.*;
+import org.w3c.dom.css.Rect;
 
 /**
  * Created by steppers on 2/12/17.
  */
-public class Ball extends Renderable {
+public class Slider extends Renderable {
 
     private static final float G = 90f;
 
@@ -20,10 +18,10 @@ public class Ball extends Renderable {
     private boolean moving = false;
     private float velX = 0, velY = 0;
     private float accelX = 0, accelY = 0;
-    private float destX = 1, destY = 1;
+    public float destX = 0, destY = 0;
 
 
-    public Ball(int x, int y) {
+    public Slider(int x, int y) {
         this.x = x;
         this.y = y;
     }
@@ -53,6 +51,7 @@ public class Ball extends Renderable {
                 }
             }
         }
+
     }
 
     public void move(int destX, int destY) {
@@ -95,6 +94,8 @@ public class Ball extends Renderable {
         return moving;
     }
 
+
+
     @Override
     public void renderBackPlane(GameContainer gc, Graphics g) {
 
@@ -117,10 +118,10 @@ public class Ball extends Renderable {
         pos.scale(SCALE);
         pos.add(screenOffset);
 
-        Circle c = new Circle(0, 0, SCALE / 2.2f);
-        Shape circ = c.transform(Transform.createRotateTransform((float) (m.getRotation() * Math.PI) / 180));
-        circ.setLocation(pos.x, pos.y);
-        g.fill(circ);
+        Rectangle r = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
+        Shape rect = r.transform(Transform.createRotateTransform((float) (m.getRotation() * Math.PI) / 180));
+        rect.setLocation(pos.x, pos.y);
+        g.fill(rect);
     }
 
     public void renderObject(GameContainer gc, Graphics g, Model m) {
@@ -133,10 +134,10 @@ public class Ball extends Renderable {
         pos.scale(SCALE);
         pos.add(screenOffset);
 
-        Circle c = new Circle(0, 0, SCALE/2.2f);
-        Shape circ = c.transform(Transform.createRotateTransform((float)(m.getRotation()*Math.PI)/180));
-        circ.setLocation(pos.x, pos.y);
-        g.setColor(Color.cyan.multiply(new Color(0.9f,0.9f,0.9f,m.getOpacity())));
-        g.fill(circ);
+        Rectangle r = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
+        Shape rect = r.transform(Transform.createRotateTransform((float)(m.getRotation()*Math.PI)/180));
+        rect.setLocation(pos.x, pos.y);
+        g.setColor(Color.magenta.multiply(new Color(0.9f,0.9f,0.9f,m.getOpacity())));
+        g.fill(rect);
     }
 }

@@ -43,6 +43,7 @@ public class GameState extends BasicGameState {
         bgBoxes = new ArrayList<>();
         toolbar = new ArrayList<>();
         links = new ArrayList<>();
+
     }
 
     @Override
@@ -61,6 +62,7 @@ public class GameState extends BasicGameState {
             Rectangle r = new Rectangle(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
             toolbar.add(r);
         }
+        graphics.FontLoader.loadFont(gc);
     }
 
     @Override
@@ -126,7 +128,7 @@ public class GameState extends BasicGameState {
             }
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
         } else {
-            if (!m.isWaitingForBall()) {
+            if (!m.isWaiting()) {
                 switch (currentState) {
                     case MENU:
                         updateMenu(gc);
@@ -163,13 +165,13 @@ public class GameState extends BasicGameState {
     }
 
     private void updateEditor(GameContainer gc, Model m) {
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionShrink(m, State.MENU, 0.5f, 0.3f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionRotate(m, currentState, 90, 0.2f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionRotate(m, currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
@@ -224,14 +226,14 @@ public class GameState extends BasicGameState {
     }
 
     private void updateLevel(GameContainer gc) {
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionShrink(m, State.LEVEL_SELECT, 0.5f, 0.3f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             m.score += 1;
             tm.transitionRotate(m, currentState, 90, 0.2f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             m.score += 1;
             tm.transitionRotate(m, currentState, -90, 0.2f);
         }
@@ -262,7 +264,7 @@ public class GameState extends BasicGameState {
     }
 
     private void updateMenu(GameContainer gc) {
-        if(gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
             int r = (int)m.getRotation();
             while(r < 0)
                 r += 360;
@@ -281,10 +283,10 @@ public class GameState extends BasicGameState {
                     break;
             }
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionRotate(m, currentState, 90, 0.2f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionRotate(m, currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
@@ -293,16 +295,16 @@ public class GameState extends BasicGameState {
     }
 
     private void updateLevelSelect(GameContainer gc) {
-        if(gc.getInput().isKeyPressed(Input.KEY_ENTER)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
             tm.transitionGrow(m, State.LEVEL, 1.0f, 0.3f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionFade(m, new Model("0.txt", 0.5f, 0f), State.MENU, 0.4f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.5f, 0f), currentState, 90, 0.3f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.5f, 0f), currentState, -90, 0.3f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
@@ -310,16 +312,16 @@ public class GameState extends BasicGameState {
         }
     }
     private void updateCREDITS(GameContainer gc){
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionRotate(m, currentState, 90, 0.2f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionRotate(m, currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionFade(m, new Model("0.txt", 0.5f, 0f), State.MENU, 0.4f);
         }
     }
@@ -328,30 +330,30 @@ public class GameState extends BasicGameState {
         switch(state) {
             case MENU:
 //                renderText(gc, g, m.getOpacity(), m.getScale(), "Squaring the Circle", 0, -135, 0.8f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -135, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Credits", 90, -100, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -45, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Editor", 180, -60, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use arrow", 0, -110, 0.16f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "keys to turn", 0, -135, 0.10f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use space to", 0, -145, 0.0f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "toggle", 0, -70, -0.06f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Credits", 90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -graphics.FontLoader.getFontSize(), 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Editor", 180, -graphics.FontLoader.getFontSize()*(float)(5/4), 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Use arrow", 0, -graphics.FontLoader.getFontSize()*2.5f, 0.16f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "keys to turn", 0, -graphics.FontLoader.getFontSize()*3, 0.10f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Use space to", 0, -graphics.FontLoader.getFontSize()*3, 0.0f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "toggle", 0, -graphics.FontLoader.getFontSize()*2.5f, -0.06f*((float)gc.getHeight()/1440), m);
                 break;
             case LEVEL_SELECT:
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -90, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("prev").split("\\.")[0], 90, -90, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("next").split("\\.")[0], -90, -90, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("prev").split("\\.")[0], 90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("next").split("\\.")[0], -90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
                 break;
             case LEVEL:
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Best move count: " + m.getProperty("score"), 0, -225, 0.45f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Your move count: " + m.score, 0, -225, -0.40f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Best move count: " + m.getProperty("score"), 0, -graphics.FontLoader.getFontSize()*4.5f, 0.48f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Your move count: " + m.score, 0, -graphics.FontLoader.getFontSize()*4.5f, -0.43f*((float)gc.getHeight()/1440), m);
             case TRANSITION:
 
                 break;
             case CREDITS:
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Ollie Steptoe", 0, -140, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Alistair Brewin", 90, -160, 0.6f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Anton Nikitin", -90, -150, 0.6f, m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Ollie Steptoe", 0, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Alistair Brewin", 90, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
+                renderText(gc, g, m.getOpacity(), m.getScale(), "Anton Nikitin", -90, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
             default:
                 break;
         }

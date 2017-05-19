@@ -23,12 +23,11 @@ public class Tile {
         START("Start"),
         FINISH("Finish"),
         SWITCH("Switch"),
-        SLIDE("Slide"),
+        RED_FINISH("Red Finish"),
         TELEPORT("Teleport"),
         LOCKED_FINISH("Locked Finish"),
         BLUE_FINISH("Blue Finish"),
-        RED_FINISH("Red Finish"),
-        GREEN("Green");
+        SLIDER("Slider Start");
 
         String name;
 
@@ -44,46 +43,67 @@ public class Tile {
     public Type type = Type.FIXED;
     public boolean active = false;
     public ArrayList<Tile> links;
+    public boolean isRail = false;
+    public int x,y;
 
     public Tile(int type) {
         this.type = Type.values()[type];
         links = new ArrayList<>();
     }
 
-    public boolean isSolid() {
+    public boolean isSolid(Model m) {
         switch(type) {
             case EMPTY:
-                return false;
+                return hasSlider(x,y,m);
             case FIXED:
                 return true;
             case RED:
-                return active ? true : false;
+                if(active) {
+                    return active;
+                }
+                else{
+                    return hasSlider(x,y,m);
+                }
             case BLUE:
-                return active ? true : false;
+                if(active) {
+                    return active;
+                }
+                else{
+                    return hasSlider(x,y,m);
+                }
             case KILL:
-                return false;
+                return hasSlider(x,y,m);
             case START:
-                return false;
+                return hasSlider(x,y,m);
             case FINISH:
-                return false;
+                return hasSlider(x,y,m);
             case SWITCH:
-                return false;
-            case SLIDE:
-                return false;
-            case TELEPORT:
-                return false;
+                return hasSlider(x,y,m);
             case LOCKED_FINISH:
                 return true;
-            case BLUE_FINISH:
-                return active ? true : false;
-            case RED_FINISH:
-                return active ? true : false;
-            case GREEN:
-                return active ? true : false;
+            case SLIDER:
+                return hasSlider(x,y,m);
             default:
                 return true;
         }
     }
+
+    public boolean hasSlider(int x, int y, Model m){
+        int counter = 0;
+        for(int i = 0; i < m.sliders.size(); i++){
+            if(x == m.sliders.get(i).destX && y == m.sliders.get(i).destY){
+                    counter++;
+                    break;
+            }
+        }
+        if(counter == 0){
+            return false;
+        }
+        else{
+            return true;
+        }
+    }
+
 
     public void render(int x, int y, int size, Graphics g, float opacity) {
         Rectangle rect = new Rectangle(x, y, size, size);
@@ -142,8 +162,6 @@ public class Tile {
                     g.setColor(Color.red.multiply(new Color(1,1,1,opacity)));
                 g.fill(cicleSwitch);
                 break;
-            case SLIDE:
-                break;
             case TELEPORT:
                 break;
             case LOCKED_FINISH:
@@ -156,9 +174,7 @@ public class Tile {
                 break;
             case RED_FINISH:
                 break;
-            case GREEN:
-                g.setColor(Color.green.multiply(new Color(1,1,1,opacity)));
-                g.fill(rect);
+            case SLIDER:
                 break;
             default:
                 break;

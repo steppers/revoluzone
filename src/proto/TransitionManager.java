@@ -144,6 +144,7 @@ public class TransitionManager {
                     if(from.getRotation() > rotationTarget) {
                         transitioning = false;
                         from.setRotation(rotationTarget);
+                        to.recalcSlider();
                         to.recalcBall();
                     }
                     break;
@@ -152,6 +153,7 @@ public class TransitionManager {
                     if(from.getRotation() < rotationTarget) {
                         transitioning = false;
                         from.setRotation(rotationTarget);
+                        to.recalcSlider();
                         to.recalcBall();
                     }
                     break;
@@ -165,6 +167,7 @@ public class TransitionManager {
                         from.setRotation(rotationTarget);
                         to.setRotation(0);
                         to.setOpacity(1);
+                        to.recalcSlider();
                         to.recalcBall();
                     }
                     break;
@@ -178,6 +181,7 @@ public class TransitionManager {
                         from.setRotation(rotationTarget);
                         to.setRotation(0);
                         to.setOpacity(1);
+                        to.recalcSlider();
                         to.recalcBall();
                     }
                     break;

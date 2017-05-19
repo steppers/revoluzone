@@ -4,11 +4,14 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
+import sun.invoke.empty.Empty;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 /**
  * Created by steppers on 2/12/17.
@@ -19,11 +22,13 @@ public class Model extends Renderable {
 
     public int gridSize;
     public int score = 0;
+    public boolean containsSlider = false;
 
     private HashMap<String, String> properties;
 
     public Tile[][] tiles;
     public Ball ball;
+    public List<Slider> sliders = new ArrayList<>();
 
     private float rotation = 0;
     private float scale = 1;
@@ -38,7 +43,9 @@ public class Model extends Renderable {
         setOpacity(1);
         setScale(scale);
         initRedBlue();
+        recalcSlider();
         recalcBall();
+
     }
 
     public Model(String fileName, float scale, float opacity) {
@@ -47,12 +54,19 @@ public class Model extends Renderable {
         setOpacity(opacity);
         setScale(scale);
         initRedBlue();
+        recalcSlider();
         recalcBall();
+
     }
 
     public void update(float delta) {
         //Update our rotation here
         ball.update(delta);
+        if(containsSlider){
+            for(int i = 0; i < sliders.size(); i++) {
+                sliders.get(i).update(delta);
+            }
+        }
     }
 
     public Tile getTileUnderBall() {
@@ -80,11 +94,29 @@ public class Model extends Renderable {
             }
         }
         recalcBall();
+        recalcSlider();
     }
 
-    public boolean isWaitingForBall() {
-        return ball.isMoving();
+    public boolean isWaiting() {
+        int movingCount = 0;
+
+        for (int i = 0; i < sliders.size(); i++) {
+            if (sliders.get(i).isMoving()) {
+                movingCount++;
+            }
+        }
+        if (ball.isMoving()) {
+            movingCount++;
+        }
+        if (movingCount == 0) {
+            return false;
+        } else {
+            return true;
+        }
     }
+
+
+
 
     public void recalcBall() {
         int r = (int)rotation % 360;
@@ -95,7 +127,7 @@ public class Model extends Renderable {
         switch(r) {
             case 0:
                 for(y = y+1; y < gridSize; y++) {
-                    if(tiles[x][y].isSolid()) {
+                    if(tiles[x][y].isSolid(this)) {
                         ball.move(x, y-1);
                         return;
                     }
@@ -103,7 +135,7 @@ public class Model extends Renderable {
                 break;
             case 90:
                 for(x = x+1; x < gridSize; x++) {
-                    if(tiles[x][y].isSolid()) {
+                    if(tiles[x][y].isSolid(this)) {
                         ball.move(x-1, y);
                         return;
                     }
@@ -111,7 +143,7 @@ public class Model extends Renderable {
                 break;
             case 180:
                 for(y = y-1; y >= 0; y--) {
-                    if(tiles[x][y].isSolid()) {
+                    if(tiles[x][y].isSolid(this)) {
                         ball.move(x, y+1);
                         return;
                     }
@@ -119,12 +151,60 @@ public class Model extends Renderable {
                 break;
             case 270:
                 for(x = x-1; x >= 0; x--) {
-                    if(tiles[x][y].isSolid()) {
+                    if(tiles[x][y].isSolid(this)) {
                         ball.move(x+1, y);
                         return;
                     }
                 }
                 break;
+        }
+    }
+
+    public void recalcSlider() {
+        int r = (int)rotation % 360;
+        while(r < 0) {
+            r += 360;
+        }
+        if (containsSlider) {
+            for (int i = 0; i < sliders.size(); i++) {
+                int y = (int) (sliders.get(i).y);
+                int x = (int) (sliders.get(i).x);
+
+                switch (r) {
+                    case 0:
+                        for (y = y + 1; y < gridSize; y++) {
+                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                                sliders.get(i).move(x, y - 1);
+                                break;
+                            }
+                        }
+                        break;
+                    case 90:
+                        for (x = x + 1; x < gridSize; x++) {
+                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                                sliders.get(i).move(x - 1, y);
+                                break;
+                            }
+                        }
+                        break;
+                    case 180:
+                        for (y = y - 1; y >= 0; y--) {
+                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                                sliders.get(i).move(x, y + 1);
+                                break;
+                            }
+                        }
+                        break;
+                    case 270:
+                        for (x = x - 1; x >= 0; x--) {
+                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                                sliders.get(i).move(x + 1, y);
+                                break;
+                            }
+                        }
+                        break;
+                }
+            }
         }
     }
 
@@ -212,13 +292,6 @@ public class Model extends Renderable {
                         tile.setLocation(pos.x, pos.y);
                         g.fill(tile);
                         break;
-                    case GREEN:
-                        if(t.active)
-                            break;
-                        g.setColor(Color.green.multiply(opCol).multiply(new Color(1, 1, 1, 0.3f)));
-                        tile.setLocation(pos.x, pos.y);
-                        g.fill(tile);
-                        break;
                     case START:
                         g.setColor(Color.green.darker().multiply(opCol));
                         circleLarge.setCenterX(pos.x);
@@ -283,19 +356,26 @@ public class Model extends Renderable {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)
                     continue;
-                if (tiles[x][y].isSolid()) {
-                    Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
-                    pos.sub(-rotation);
-                    pos.scale(SCALE);
-                    pos.add(screenOffset);
-                    tile.setLocation(pos.x, pos.y);
-                    g.fill(tile);
+                if (tiles[x][y].isSolid(this) && !(tiles[x][y].type == Tile.Type.EMPTY)) {
+                    if (tiles[x][y].active) {
+                        Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
+                        pos.sub(-rotation);
+                        pos.scale(SCALE);
+                        pos.add(screenOffset);
+                        tile.setLocation(pos.x, pos.y);
+                        g.fill(tile);
+                    }
                 }
             }
         }
 
         //Render Ball shadow
         ball.renderShadow(gc, g, this);
+        if(containsSlider) {
+            for (int i = 0; i < sliders.size(); i++) {
+                sliders.get(i).renderShadow(gc, g, this);
+            }
+        }
     }
 
     @Override
@@ -306,6 +386,19 @@ public class Model extends Renderable {
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
 
+        Rectangle rail = new Rectangle(-SCALE/2f, -SCALE/10, SCALE, SCALE/5);
+        Shape railX = rail.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railY = rail.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+
+        Rectangle railStop = new Rectangle(0, -SCALE/10, SCALE/2, SCALE/5);
+        Shape railStopX1 = railStop.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railStopY1 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+        Shape railStopX2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI)));
+        Shape railStopY2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+3*Math.PI/2)));
+
+        Circle dot = new Circle(0, 0, SCALE / 6f);
+        Shape railDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < gridSize; x++) {
@@ -315,6 +408,13 @@ public class Model extends Renderable {
                 pos.scale(SCALE);
                 pos.add(screenOffset);
                 tile.setLocation(pos.x, pos.y);
+                railX.setLocation(pos.x, pos.y);
+                railY.setLocation(pos.x, pos.y);
+                railStopX1.setLocation(pos.x, pos.y);
+                railStopX2.setLocation(pos.x, pos.y);
+                railStopY1.setLocation(pos.x, pos.y);
+                railStopY2.setLocation(pos.x, pos.y);
+                railDot.setLocation(pos.x, pos.y);
 
                 switch (tiles[x][y].type) {
                     case FIXED:
@@ -333,18 +433,37 @@ public class Model extends Renderable {
                         g.setColor(Color.blue.multiply(opCol));
                         g.fill(tile);
                         break;
-                    case GREEN:
-                        if(!tiles[x][y].active)
-                            break;
-                        g.setColor(Color.green.multiply(opCol));
-                        g.fill(tile);
-                        break;
                     default:
                         break;
+                }
+                if(tiles[x][y].isRail){
+                    g.setColor(Color.black.multiply(opCol));
+                    if(tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railX);
+                    }if(tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railY);
+                    }if(tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
+                        g.fill(railStopX1);
+                        g.fill(railDot);
+                    }if(!tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railStopX2);
+                        g.fill(railDot);
+                    }if(tiles[x][y+1].isRail && !tiles[x][y-1].isRail){
+                        g.fill(railStopY1);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railStopY2);
+                        g.fill(railDot);
+                    }
                 }
             }
         }
         ball.renderObject(gc, g, this);
+        if(containsSlider) {
+            for(int i = 0; i < sliders.size(); i++) {
+                sliders.get(i).renderObject(gc, g, this);
+            }
+        }
     }
 
     public void setRotation(float rotation) {
@@ -413,8 +532,15 @@ public class Model extends Renderable {
                     initTiles(ids.length);
                 for(int i = 0; i < ids.length; i++) {
                     tiles[i+1][y] = new Tile(Integer.parseInt(ids[i]));
+                    tiles[i+1][y].x = i+1;
+                    tiles[i+1][y].y = y;
                     if(ids[i].equals("5")) {
                         ball = new Ball(i+1, y);
+                    }
+                    if(ids[i].equals("12")) {
+                        sliders.add(new Slider(i+1, y));
+                        containsSlider = true;
+
                     }
                 }
                 y++;
@@ -450,15 +576,28 @@ public class Model extends Renderable {
                 properties.put("score", data);
                 break;
             case "link"://Links switches, teleporters and sliders
-                String first = data.split("->")[0];
-                String second = data.split("->")[1];
-                int sx, sy, tx, ty;
-                sx = Integer.parseInt(first.split(",")[0]);
-                sy = Integer.parseInt(first.split(",")[1]);
-                tx = Integer.parseInt(second.split(",")[0]);
-                ty = Integer.parseInt(second.split(",")[1]);
-                tiles[sx][sy].links.add(tiles[tx][ty]);
+                String firstLink = data.split("->")[0];
+                String secondLink = data.split("->")[1];
+                int L1x, L1y, L2x, L2y;
+                L1x = Integer.parseInt(firstLink.split(",")[0]);
+                L1y = Integer.parseInt(firstLink.split(",")[1]);
+                L2x = Integer.parseInt(secondLink.split(",")[0]);
+                L2y = Integer.parseInt(secondLink.split(",")[1]);
+                tiles[L1x][L1y].links.add(tiles[L2x][L2y]);
                 break;
+            case "rail":
+                String firstRail = data.split("->")[0];
+                String secondRail = data.split("->")[1];
+                int R1x, R1y, R2x, R2y;
+                R1x = Integer.parseInt(firstRail.split(",")[0]);
+                R1y = Integer.parseInt(firstRail.split(",")[1]);
+                R2x = Integer.parseInt(secondRail.split(",")[0]);
+                R2y = Integer.parseInt(secondRail.split(",")[1]);
+                for(int x = Math.min(R1x, R2x); x <= Math.max(R1x, R2x); x++) {
+                    for(int y = Math.min(R1y, R2y); y <= Math.max(R1y, R2y); y++) {
+                        tiles[x][y].isRail = true;
+                    }
+                }
             default:
                 properties.put(type, data);
         }

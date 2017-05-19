@@ -1,5 +1,6 @@
 package graphics;
 
+import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.TrueTypeFont;
 import org.newdawn.slick.util.ResourceLoader;
 
@@ -13,6 +14,8 @@ import java.util.Hashtable;
  * Created by an6g15 on 11/02/2017.
  */
 public class FontLoader {
+
+    private static float fontSize;
 
     public enum Fonts{
 
@@ -32,7 +35,6 @@ public class FontLoader {
     static {
         fonts = new Hashtable<>();
         fontsArrayList = new ArrayList<>();
-        loadFont();
     }
 
     private static Hashtable<String, TrueTypeFont> fonts;
@@ -44,15 +46,33 @@ public class FontLoader {
          * Evvvvvvvvvvvvveeeeeeeeeeerrrrrrrrrrrrr...............
          */
     }
+    public static float getFontSize(){
+        return fontSize;
+    }
 
-    public static void loadFont() {
+    public static void loadFont(GameContainer gc) {
+
+        if(gc.getWidth() >= 2300) {
+            fontSize = 48f;
+        }
+        else if(gc.getWidth() < 2300 && gc.getWidth() >= 1900){
+            fontSize = 36f;
+        }
+        else if(gc.getWidth() < 1900 && gc.getWidth() >= 1600){
+            fontSize = 24f;
+        }
+        else{
+            fontSize = 18f;
+        }
+
         try {
 
             Font fontToAdd;
 
             for(Fonts f : Fonts.values()){
+
                 InputStream stream = ResourceLoader.getResourceAsStream("res/fonts/" + f.toString() + ".ttf");
-                fontToAdd = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(48f);
+                fontToAdd = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(fontSize);
                 fonts.put(f.toString(), new TrueTypeFont(fontToAdd, false));
             }
 
@@ -65,25 +85,6 @@ public class FontLoader {
         }
     }
 
-//    public static TrueTypeFont loadFont() {
-//        try {
-//
-//            Font fontToAdd;
-//
-//            for(Fonts f : Fonts.values()){
-//                InputStream stream = ResourceLoader.getResourceAsStream("res/fonts/" + f.toString() + ".ttf");
-//                fontToAdd = Font.createFont(Font.TRUETYPE_FONT, stream).deriveFont(48f);
-//                new TrueTypeFont(fontToAdd, false);
-//            }
-//
-//        } catch (IOException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        } catch (FontFormatException e) {
-//            System.out.println(e.getMessage());
-//            e.printStackTrace();
-//        }
-//    }
 
     public static TrueTypeFont getFont(String fontToGet) {
         return fonts.get(fontToGet);
