@@ -23,27 +23,21 @@ public class GameState extends BasicGameState {
         TRANSITION,
         EDITOR
     }
-    public Tile.Type activeTile = Tile.Type.EMPTY;
     Model m;
     Model m2;
     TransitionManager tm;
     State currentState = State.MENU;
     State previousState = State.MENU;
 
-    Tile.Type editorType = Tile.Type.FIXED;
     ArrayList<BackgroundBox> bgBoxes;
-    ArrayList<Rectangle> toolbar;
-    ArrayList<Line> links;
-    private boolean linking = false;
-    private float linkSrcX, linkSrcY;
-    private float linkDstX, linkDstY;
+    Editor editor;
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
         tm = new TransitionManager(this);
         bgBoxes = new ArrayList<>();
-        toolbar = new ArrayList<>();
-        links = new ArrayList<>();
+        editor = new Editor(this, tm);
+        editor.setModel(m);
     }
 
     @Override
@@ -57,11 +51,7 @@ public class GameState extends BasicGameState {
             bgBoxes.add(new BackgroundBox(gc));
         }
 
-        float size = (0.75f * gc.getHeight()) / Tile.Type.values().length;
-        for (Tile.Type t : Tile.Type.values()) {
-            Rectangle r = new Rectangle(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
-            toolbar.add(r);
-        }
+        editor.init(gc);
         graphics.FontLoader.loadFont(gc);
     }
 
@@ -84,31 +74,14 @@ public class GameState extends BasicGameState {
                 renderStateText(gc, g, State.LEVEL, m);
                 break;
             case EDITOR:
-                m.render(gc, g);
-                renderStateText(gc, g, State.EDITOR, m);
-                renderToolbar(gc, g);
-                g.setColor(Color.orange);
-                g.setLineWidth(3);
-                if(linking) {
-                    Line l = new Line(new Vector2f((int)linkSrcX, (int)linkSrcY), new Vector2f((int)linkDstX, (int)linkDstY));
-                    m.drawLink(l, gc, g);
-                }
-                for(Line l : links) {
-                    m.drawLink(l, gc, g);
-                }
-                g.setLineWidth(1);
+                editor.render(gc, g);
                 break;
             case TRANSITION:
                 tm.render(gc, g);
                 renderStateText(gc, g, previousState, m);
                 renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
                 if(previousState == State.EDITOR && tm.getNewState() != State.MENU) {
-                    renderToolbar(gc, g);
-                    g.setColor(Color.orange);
-                    g.setLineWidth(3);
-                    for(Line l : links) {
-                        m.drawLink(l, gc, g);
-                    }
+                    editor.renderTransition(gc, g);
                 }
                 break;
             case CREDITS:
@@ -147,7 +120,8 @@ public class GameState extends BasicGameState {
                         updateLevel(gc);
                         break;
                     case EDITOR:
-                        updateEditor(gc, m);
+                        editor.setModel(m);
+                        editor.update(gc);
                         break;
                     case TRANSITION:
                         if (!tm.isTransitioning()) {
@@ -173,93 +147,6 @@ public class GameState extends BasicGameState {
 
         for(int j = 0; j < 5; j++) {
             bgBoxes.get(j).update(delta);
-        }
-    }
-
-    private void updateEditor(GameContainer gc, Model m) {
-        if(!linking) {
-            if(gc.getInput().isKeyPressed(Input.KEY_R)) {
-                m.reset();
-            }
-            if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-                tm.transitionShrink(m, State.MENU, 0.5f, 0.3f);
-            }
-            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-                tm.transitionRotate(m, currentState, 90, 0.2f);
-            }
-            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-                tm.transitionRotate(m, currentState, -90, 0.2f);
-            }
-            if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-                m.toggleRedBlue();
-            }
-            //Left mouse clicks
-            if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-                Tile t = m.getTileFromMousePos(gc);
-                //Set a tile if on the level
-                if (t != null) {
-                    t.type = editorType;
-                    m.reset();
-                }
-                //Set current tile type if on toolbar
-                for (Rectangle r : toolbar) {
-                    if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
-                        editorType = Tile.Type.values()[toolbar.indexOf(r)];
-                    }
-                }
-            }
-
-            //Detect link start
-            if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
-                Vector2f p = getMouseTilePos(gc);
-                if(p != null) {
-                    if (p != null) {
-                        linking = true;
-                        linkSrcX = p.x;
-                        linkSrcY = p.y;
-                        linkDstX = p.x;
-                        linkDstY = p.y;
-                    }
-                }
-            }
-
-            //Clear links from tile
-            if(gc.getInput().isMousePressed(Input.MOUSE_MIDDLE_BUTTON)) {
-                Tile t = m.getTileFromMousePos(gc);
-                if(t != null) {
-                    t.links.clear();
-                }
-            }
-
-            //Update the tiles under the ball
-            Tile t = m.getTileUnderBall();
-            t.activate();
-        } else {
-            //Prevent inputs queuing up
-            if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
-            if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {}
-
-            //Update the current link end
-            Vector2f p = getMouseTilePos(gc);
-            if(p != null) {
-                linkDstX = p.x;
-                linkDstY = p.y;
-                //Detect link end
-                if (gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
-                    if (p != null) {
-                        linking = false;
-                        links.add(new Line(new Vector2f((int) linkSrcX, (int) linkSrcY), new Vector2f((int) linkDstX, (int) linkDstY)));
-                        m.tiles[(int) linkSrcX][(int) linkSrcY].links.add(m.tiles[(int) p.x][(int) p.y]);
-                        linkSrcX = -100f;
-                        linkSrcY = -100f;
-                        linkDstX = -100f;
-                        linkDstY = -100f;
-                    }
-                }
-            }
         }
     }
 
@@ -429,15 +316,8 @@ public class GameState extends BasicGameState {
             }
         }
     }
-    private void renderToolbar(GameContainer gc, Graphics graphics) {
-        for(int i = 0; i < toolbar.size(); i++) {
-            graphics.setColor(Color.darkGray);
-            graphics.draw(toolbar.get(i));
-            new Tile(i).render(11, (int)((gc.getHeight()*0.125f) + toolbar.get(i).getWidth()*i+1), (int)(toolbar.get(i).getWidth()-1), graphics, m.getOpacity());
-        }
-    }
 
-    private Vector2f getMouseTilePos(GameContainer gc) {
+    public Vector2f getMouseTilePos(GameContainer gc) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / m.gridSize) * m.getScale();
 
         float offset = - (m.gridSize / 2);
