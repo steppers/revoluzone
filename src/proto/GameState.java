@@ -43,7 +43,6 @@ public class GameState extends BasicGameState {
         bgBoxes = new ArrayList<>();
         toolbar = new ArrayList<>();
         links = new ArrayList<>();
-
     }
 
     @Override
@@ -156,6 +155,11 @@ public class GameState extends BasicGameState {
                     default:
                         break;
                 }
+            } else {
+                if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {}
+                if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {}
+                if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {}
+                if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
             }
         }
 
