@@ -2,11 +2,12 @@ package proto;
 
 import graphics.FontLoader;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import proto.UI.TextRenderer;
+import proto.states.Editor;
+import proto.states.Menu;
 
 import java.util.ArrayList;
 
@@ -23,21 +24,21 @@ public class GameState extends BasicGameState {
         TRANSITION,
         EDITOR
     }
-    Model m;
-    Model m2;
-    TransitionManager tm;
-    State currentState = State.MENU;
+    public Model m;
+    public TransitionManager tm;
+    public State currentState = State.MENU;
     State previousState = State.MENU;
+    public TextRenderer textRenderer;
 
+    //State stuff
     ArrayList<BackgroundBox> bgBoxes;
     Editor editor;
+    Menu menu;
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
         tm = new TransitionManager(this);
         bgBoxes = new ArrayList<>();
-        editor = new Editor(this, tm);
-        editor.setModel(m);
     }
 
     @Override
@@ -51,8 +52,10 @@ public class GameState extends BasicGameState {
             bgBoxes.add(new BackgroundBox(gc));
         }
 
+        editor = new Editor(this, tm);
         editor.init(gc);
-        graphics.FontLoader.loadFont(gc);
+        textRenderer = new TextRenderer(gc);
+        menu = new Menu(this, tm);
     }
 
     @Override
@@ -62,8 +65,7 @@ public class GameState extends BasicGameState {
         renderBackground(gc, g);
         switch(currentState) {
             case MENU:
-                m.render(gc, g);
-                renderStateText(gc, g, currentState, m);
+                menu.render(gc, g);
                 break;
             case LEVEL_SELECT:
                 m.render(gc, g);
@@ -111,7 +113,7 @@ public class GameState extends BasicGameState {
             if (!m.isWaiting()) {
                 switch (currentState) {
                     case MENU:
-                        updateMenu(gc);
+                        menu.update(gc);
                         break;
                     case LEVEL_SELECT:
                         updateLevelSelect(gc);
@@ -120,7 +122,6 @@ public class GameState extends BasicGameState {
                         updateLevel(gc);
                         break;
                     case EDITOR:
-                        editor.setModel(m);
                         editor.update(gc);
                         break;
                     case TRANSITION:
@@ -176,37 +177,6 @@ public class GameState extends BasicGameState {
         t.activate();
     }
 
-    private void updateMenu(GameContainer gc) {
-        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
-            int r = (int)m.getRotation();
-            while(r < 0)
-                r += 360;
-            switch(r % 360) {
-                case 0:
-                    tm.transitionFade(m, new Model("Level 1.txt", 0.5f, 0f), State.LEVEL_SELECT, 0.6f);
-                    break;
-                case 90:
-                    System.exit(-1);
-                    break;
-                case 180:
-                    tm.transitionGrow(m, State.EDITOR, 1.0f, 0.3f);
-                    break;
-                case 270:
-                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.5f, 1f), State.CREDITS, 1f);
-                    break;
-            }
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
-    }
-
     private void updateLevelSelect(GameContainer gc) {
         if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
             tm.transitionGrow(m, State.LEVEL, 1.0f, 0.3f);
@@ -242,15 +212,7 @@ public class GameState extends BasicGameState {
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {
         switch(state) {
             case MENU:
-//                renderText(gc, g, m.getOpacity(), m.getScale(), "Squaring the Circle", 0, -135, 0.8f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Credits", 90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -graphics.FontLoader.getFontSize(), 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Editor", 180, -graphics.FontLoader.getFontSize()*(float)(5/4), 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use arrow", 0, -graphics.FontLoader.getFontSize()*2.5f, 0.16f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "keys to turn", 0, -graphics.FontLoader.getFontSize()*3, 0.10f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use space to", 0, -graphics.FontLoader.getFontSize()*3, 0.0f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "toggle", 0, -graphics.FontLoader.getFontSize()*2.5f, -0.06f*((float)gc.getHeight()/1440), m);
+                menu.renderText(g, m);
                 break;
             case LEVEL_SELECT:
                 renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);

@@ -1,4 +1,4 @@
-package proto;
+package proto.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -7,6 +7,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
+import proto.GameState;
+import proto.Model;
+import proto.Tile;
+import proto.TransitionManager;
 
 import java.util.ArrayList;
 
@@ -39,11 +43,8 @@ public class Editor {
         }
     }
 
-    public void setModel(Model model) {
-        m = model;
-    }
-
     public void update(GameContainer gc) {
+        m = gs.m;
         if(!linking) {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
@@ -131,6 +132,7 @@ public class Editor {
     }
 
     public void render(GameContainer gc, Graphics g) {
+        m = gs.m;
         m.render(gc, g);
         renderText(gc, g);
         renderToolbar(gc, g);
