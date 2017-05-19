@@ -41,6 +41,7 @@ public class Tile {
     }
 
     public Type type = Type.FIXED;
+    public Type resetType = Type.FIXED;
     public boolean active = false;
     public ArrayList<Tile> links;
     public boolean isRail = false;
@@ -48,15 +49,14 @@ public class Tile {
 
     public Tile(int type) {
         this.type = Type.values()[type];
+        resetType = this.type;
         links = new ArrayList<>();
     }
 
     public void reset() {
+        this.type = resetType;
         active = false;
         switch(type) {
-            case FINISH:
-                type = Type.LOCKED_FINISH;
-                break;
             case RED:
                 active = true;
                 break;
