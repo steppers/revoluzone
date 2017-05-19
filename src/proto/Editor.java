@@ -66,6 +66,7 @@ public class Editor {
                 //Set a tile if on the level
                 if (t != null) {
                     t.type = drawTileType;
+                    t.resetType = drawTileType;
                     m.reset();
                 }
                 //Set current tile type if on toolbar
