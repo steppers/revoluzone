@@ -1,0 +1,12 @@
+<component name="ArtifactManager">
+  <artifact name="revoluzone:jar2">
+    <output-path>$PROJECT_DIR$/out/artifacts/revoluzone_jar2</output-path>
+    <root id="root">
+      <element id="archive" name="revoluzone.jar">
+        <element id="module-output" name="revoluzone" />
+        <element id="dir-copy" path="$PROJECT_DIR$/res" />
+      </element>
+      <element id="library" level="project" name="lwjgl" />
+    </root>
+  </artifact>
+</component>
