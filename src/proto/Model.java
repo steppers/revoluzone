@@ -22,7 +22,6 @@ public class Model extends Renderable {
 
     public int gridSize;
     public int score = 0;
-    public boolean containsSlider = false;
 
     private HashMap<String, String> properties;
 
@@ -62,10 +61,8 @@ public class Model extends Renderable {
     public void update(float delta) {
         //Update our rotation here
         ball.update(delta);
-        if(containsSlider){
-            for(int i = 0; i < sliders.size(); i++) {
-                sliders.get(i).update(delta);
-            }
+        for(int i = 0; i < sliders.size(); i++) {
+            sliders.get(i).update(delta);
         }
     }
 
@@ -115,9 +112,6 @@ public class Model extends Renderable {
         }
     }
 
-
-
-
     public void recalcBall() {
         int r = (int)rotation % 360;
         while(r < 0)
@@ -165,45 +159,43 @@ public class Model extends Renderable {
         while(r < 0) {
             r += 360;
         }
-        if (containsSlider) {
-            for (int i = 0; i < sliders.size(); i++) {
-                int y = (int) (sliders.get(i).y);
-                int x = (int) (sliders.get(i).x);
+        for (int i = 0; i < sliders.size(); i++) {
+            int y = (int) (sliders.get(i).y);
+            int x = (int) (sliders.get(i).x);
 
-                switch (r) {
-                    case 0:
-                        for (y = y + 1; y < gridSize; y++) {
-                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
-                                sliders.get(i).move(x, y - 1);
-                                break;
-                            }
+            switch (r) {
+                case 0:
+                    for (y = y + 1; y < gridSize; y++) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                            sliders.get(i).move(x, y - 1);
+                            break;
                         }
-                        break;
-                    case 90:
-                        for (x = x + 1; x < gridSize; x++) {
-                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
-                                sliders.get(i).move(x - 1, y);
-                                break;
-                            }
+                    }
+                    break;
+                case 90:
+                    for (x = x + 1; x < gridSize; x++) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                            sliders.get(i).move(x - 1, y);
+                            break;
                         }
-                        break;
-                    case 180:
-                        for (y = y - 1; y >= 0; y--) {
-                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
-                                sliders.get(i).move(x, y + 1);
-                                break;
-                            }
+                    }
+                    break;
+                case 180:
+                    for (y = y - 1; y >= 0; y--) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                            sliders.get(i).move(x, y + 1);
+                            break;
                         }
-                        break;
-                    case 270:
-                        for (x = x - 1; x >= 0; x--) {
-                            if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
-                                sliders.get(i).move(x + 1, y);
-                                break;
-                            }
+                    }
+                    break;
+                case 270:
+                    for (x = x - 1; x >= 0; x--) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                            sliders.get(i).move(x + 1, y);
+                            break;
                         }
-                        break;
-                }
+                    }
+                    break;
             }
         }
     }
@@ -371,10 +363,8 @@ public class Model extends Renderable {
 
         //Render Ball shadow
         ball.renderShadow(gc, g, this);
-        if(containsSlider) {
-            for (int i = 0; i < sliders.size(); i++) {
-                sliders.get(i).renderShadow(gc, g, this);
-            }
+        for (int i = 0; i < sliders.size(); i++) {
+            sliders.get(i).renderShadow(gc, g, this);
         }
     }
 
@@ -459,10 +449,8 @@ public class Model extends Renderable {
             }
         }
         ball.renderObject(gc, g, this);
-        if(containsSlider) {
-            for(int i = 0; i < sliders.size(); i++) {
-                sliders.get(i).renderObject(gc, g, this);
-            }
+        for(int i = 0; i < sliders.size(); i++) {
+            sliders.get(i).renderObject(gc, g, this);
         }
     }
 
@@ -539,8 +527,6 @@ public class Model extends Renderable {
                     }
                     if(ids[i].equals("12")) {
                         sliders.add(new Slider(i+1, y));
-                        containsSlider = true;
-
                     }
                 }
                 y++;
