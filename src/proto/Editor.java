@@ -7,7 +7,6 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import org.newdawn.slick.state.StateBasedGame;
 
 import java.util.ArrayList;
 
@@ -22,7 +21,6 @@ public class Editor {
 
     private Tile.Type drawTileType = Tile.Type.EMPTY;
     private ArrayList<Rectangle> toolbar;
-    private ArrayList<Line> links;
     private boolean linking = false;
     private float linkSrcX, linkSrcY;
     private float linkDstX, linkDstY;
@@ -30,7 +28,6 @@ public class Editor {
     public Editor(GameState gameState, TransitionManager tm) {
         gs = gameState;
         toolbar = new ArrayList<>();
-        links = new ArrayList<>();
         this.tm = tm;
     }
 
@@ -121,7 +118,6 @@ public class Editor {
                 if (gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
                     if (p != null) {
                         linking = false;
-                        links.add(new Line(new Vector2f((int) linkSrcX, (int) linkSrcY), new Vector2f((int) linkDstX, (int) linkDstY)));
                         m.tiles[(int) linkSrcX][(int) linkSrcY].links.add(m.tiles[(int) p.x][(int) p.y]);
                         linkSrcX = -100f;
                         linkSrcY = -100f;
@@ -143,8 +139,13 @@ public class Editor {
             Line l = new Line(new Vector2f((int)linkSrcX, (int)linkSrcY), new Vector2f((int)linkDstX, (int)linkDstY));
             m.drawLink(l, gc, g);
         }
-        for(Line l : links) {
-            m.drawLink(l, gc, g);
+        for(int x = 0; x < m.gridSize; x++) {
+            for (int y = 0; y < m.gridSize; y++) {
+                for (Tile t : m.tiles[x][y].links) {
+                    Line l = new Line(x, y, t.x, t.y);
+                    m.drawLink(l, gc, g);
+                }
+            }
         }
         g.setLineWidth(1);
     }
@@ -153,8 +154,13 @@ public class Editor {
         renderToolbar(gc, g);
         g.setColor(Color.orange);
         g.setLineWidth(3);
-        for(Line l : links) {
-            m.drawLink(l, gc, g);
+        for(int x = 0; x < m.gridSize; x++) {
+            for (int y = 0; y < m.gridSize; y++) {
+                for (Tile t : m.tiles[x][y].links) {
+                    Line l = new Line(x, y, t.x, t.y);
+                    m.drawLink(l, gc, g);
+                }
+            }
         }
     }
 
