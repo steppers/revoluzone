@@ -41,7 +41,7 @@ public class Model extends Renderable {
         loadFromFile(fileName);
         setOpacity(1);
         setScale(scale);
-        initRedBlue();
+        reset();
         recalcSlider();
         recalcBall();
 
@@ -52,7 +52,7 @@ public class Model extends Renderable {
         loadFromFile(fileName);
         setOpacity(opacity);
         setScale(scale);
-        initRedBlue();
+        reset();
         recalcSlider();
         recalcBall();
 
@@ -70,14 +70,10 @@ public class Model extends Renderable {
         return tiles[(int)ball.x][(int)ball.y];
     }
 
-    public void initRedBlue() {
+    public void reset() {
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
-                if(tiles[x][y].type == Tile.Type.RED) {
-                    tiles[x][y].active = true;
-                } else {
-                    tiles[x][y].active = false;
-                }
+                tiles[x][y].reset();
             }
         }
     }
@@ -452,6 +448,50 @@ public class Model extends Renderable {
         for(int i = 0; i < sliders.size(); i++) {
             sliders.get(i).renderObject(gc, g, this);
         }
+    }
+
+    public void drawLink(Line l, GameContainer gc, Graphics g) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
+        float offset = - (gridSize / 2) + 0.5f;
+        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
+
+        Circle dot = new Circle(0, 0, SCALE / 8f);
+        Shape linkDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+
+        Vector2f posSrc = new Vector2f(offset + l.getX1(), offset + l.getY1());
+        posSrc.sub(-rotation);
+        posSrc.scale(SCALE);
+        posSrc.add(screenOffset);
+
+        Vector2f posDst = new Vector2f(offset + l.getX2(), offset + l.getY2());
+        posDst.sub(-rotation);
+        posDst.scale(SCALE);
+        posDst.add(screenOffset);
+
+        g.draw(new Line(posSrc, posDst));
+
+        linkDot.setLocation(posSrc);
+        g.fill(linkDot);
+        linkDot.setLocation(posDst);
+        g.fill(linkDot);
+
+        Vector2f dir = posDst.sub(posSrc);
+        Vector2f normal = dir.getPerpendicular().normalise();
+        Vector2f center = dir.scale(0.5f);
+        center  = center.add(posSrc);
+        Vector2f arrow1 = new Vector2f();
+        Vector2f arrow2 = new Vector2f();
+        arrow1.set(normal);
+        arrow2.set(normal.negate());
+        Transform t = Transform.createRotateTransform((float)(60f*Math.PI)/180);
+        arrow1 = t.transform(arrow1).scale(30f);
+        t = Transform.createRotateTransform((float)(-60f*Math.PI)/180);
+        arrow2 = t.transform(arrow2).scale(30f);
+        arrow1.add(center);
+        arrow2.add(center);
+
+        g.draw(new Line(center, arrow1));
+        g.draw(new Line(center, arrow2));
     }
 
     public void setRotation(float rotation) {

@@ -51,6 +51,37 @@ public class Tile {
         links = new ArrayList<>();
     }
 
+    public void reset() {
+        active = false;
+        switch(type) {
+            case FINISH:
+                type = Type.LOCKED_FINISH;
+                break;
+            case RED:
+                active = true;
+                break;
+            case BLUE:
+                active = false;
+                break;
+            default:
+                break;
+        }
+    }
+
+    public void activate() {
+        switch(type) {
+            case SWITCH:
+                links.forEach(Tile::activate);
+                active = true;
+                break;
+            case LOCKED_FINISH:
+                type = Tile.Type.FINISH;
+                break;
+            default:
+                break;
+        }
+    }
+
     public boolean isSolid(Model m) {
         switch(type) {
             case EMPTY:

@@ -16,7 +16,7 @@ public class Main {
         AppGameContainer gc;
         try{
             gc = new AppGameContainer(new StateManager(GAME_NAME));
-            gc.setDisplayMode(gc.getScreenWidth(), gc.getScreenHeight(), true);
+            gc.setDisplayMode(gc.getScreenWidth()-100, gc.getScreenHeight()-80, false);
 //            gc.setDisplayMode(1920, 1080, true);
 //            gc.setDisplayMode(1280, 720, false);
             gc.setVSync(true);

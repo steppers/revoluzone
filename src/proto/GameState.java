@@ -35,7 +35,8 @@ public class GameState extends BasicGameState {
     ArrayList<Rectangle> toolbar;
     ArrayList<Line> links;
     private boolean linking = false;
-    private float linkX, linkY;
+    private float linkSrcX, linkSrcY;
+    private float linkDstX, linkDstY;
 
     public GameState() {
         m = new Model("0.txt", 0.5f);
@@ -86,13 +87,14 @@ public class GameState extends BasicGameState {
                 m.render(gc, g);
                 renderStateText(gc, g, State.EDITOR, m);
                 renderToolbar(gc, g);
-                g.setColor(Color.green);
+                g.setColor(Color.orange);
                 g.setLineWidth(3);
-                Vector2f ms = getMouseTilePos(gc);
-                if(ms != null && linking)
-//                    g.draw(new Line(m.getWorldCoordOfTile(new Vector2f(linkX, linkY), gc), new Vector2f(gc.getInput().getMouseX(), gc.getInput().getMouseY())));
+                if(linking) {
+                    Line l = new Line(new Vector2f((int)linkSrcX, (int)linkSrcY), new Vector2f((int)linkDstX, (int)linkDstY));
+                    m.drawLink(l, gc, g);
+                }
                 for(Line l : links) {
-                    g.draw(new Line(new Vector2f(l.getX1(), l.getY1()), m.getWorldCoordOfTile(new Vector2f(l.getX2(), l.getY2()), gc)));
+                    m.drawLink(l, gc, g);
                 }
                 g.setLineWidth(1);
                 break;
@@ -100,8 +102,14 @@ public class GameState extends BasicGameState {
                 tm.render(gc, g);
                 renderStateText(gc, g, previousState, m);
                 renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
-                if(previousState == State.EDITOR && tm.getNewState() != State.MENU)
+                if(previousState == State.EDITOR && tm.getNewState() != State.MENU) {
                     renderToolbar(gc, g);
+                    g.setColor(Color.orange);
+                    g.setLineWidth(3);
+                    for(Line l : links) {
+                        m.drawLink(l, gc, g);
+                    }
+                }
                 break;
             case CREDITS:
                 m.render(gc, g);
@@ -169,64 +177,90 @@ public class GameState extends BasicGameState {
     }
 
     private void updateEditor(GameContainer gc, Model m) {
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-            tm.transitionShrink(m, State.MENU, 0.5f, 0.3f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
-        if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-            Tile t = m.getTileFromMousePos(gc);
-            if (t != null) {
-                t.type = editorType;
-                m.initRedBlue();
+        if(!linking) {
+            if(gc.getInput().isKeyPressed(Input.KEY_R)) {
+                m.reset();
             }
-            for (Rectangle r : toolbar) {
-                if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
-                    editorType = Tile.Type.values()[toolbar.indexOf(r)];
+            if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
+                tm.transitionShrink(m, State.MENU, 0.5f, 0.3f);
+            }
+            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+                tm.transitionRotate(m, currentState, 90, 0.2f);
+            }
+            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
+                tm.transitionRotate(m, currentState, -90, 0.2f);
+            }
+            if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
+                m.toggleRedBlue();
+            }
+            //Left mouse clicks
+            if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                Tile t = m.getTileFromMousePos(gc);
+                //Set a tile if on the level
+                if (t != null) {
+                    t.type = editorType;
+                    m.reset();
                 }
-
-            }
-
-        }
-
-        if(gc.getInput().isMouseButtonDown(Input.MOUSE_RIGHT_BUTTON)) {
-            Vector2f p = getMouseTilePos(gc);
-            if(!linking) {
-                if (p != null) {
-                    linking = true;
-                    linkX = p.x;
-                    linkY = p.y;
+                //Set current tile type if on toolbar
+                for (Rectangle r : toolbar) {
+                    if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
+                        editorType = Tile.Type.values()[toolbar.indexOf(r)];
+                    }
                 }
             }
+
+            //Detect link start
+            if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
+                Vector2f p = getMouseTilePos(gc);
+                if(p != null) {
+                    if (p != null) {
+                        linking = true;
+                        linkSrcX = p.x;
+                        linkSrcY = p.y;
+                        linkDstX = p.x;
+                        linkDstY = p.y;
+                    }
+                }
+            }
+
+            //Clear links from tile
+            if(gc.getInput().isMousePressed(Input.MOUSE_MIDDLE_BUTTON)) {
+                Tile t = m.getTileFromMousePos(gc);
+                if(t != null) {
+                    t.links.clear();
+                }
+            }
+
+            //Update the tiles under the ball
+            Tile t = m.getTileUnderBall();
+            t.activate();
         } else {
+            //Prevent inputs queuing up
+            if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {}
+            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {}
+            if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {}
+            if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
+            if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {}
+
+            //Update the current link end
             Vector2f p = getMouseTilePos(gc);
-//            if(linking) {
-                if (p != null) {
-                    linking = false;
-                    links.add(new Line(m.getWorldCoordOfTile(new Vector2f(linkX, linkY), gc), new Vector2f((int)p.x, (int)p.y)));
-                    m.tiles[(int)linkX][(int)linkY].links.add(m.getTileFromMousePos(gc));
-                } else {
-                    linking = false;
+            if(p != null) {
+                linkDstX = p.x;
+                linkDstY = p.y;
+                //Detect link end
+                if (gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
+                    if (p != null) {
+                        linking = false;
+                        links.add(new Line(new Vector2f((int) linkSrcX, (int) linkSrcY), new Vector2f((int) linkDstX, (int) linkDstY)));
+                        m.tiles[(int) linkSrcX][(int) linkSrcY].links.add(m.tiles[(int) p.x][(int) p.y]);
+                        linkSrcX = -100f;
+                        linkSrcY = -100f;
+                        linkDstX = -100f;
+                        linkDstY = -100f;
+                    }
                 }
-//            }
+            }
         }
-
-//        if(gc.getInput().isMousePressed(Input.MOUSE_MIDDLE_BUTTON)) {
-//            Vector2f p = getMouseTilePos(gc);
-//            if (p != null) {
-//                linking = false;
-//                linkX = (int) p.x;
-//                linkY = (int) p.y;
-//            }
-//        }
-
     }
 
     private void updateLevel(GameContainer gc) {
@@ -252,19 +286,7 @@ public class GameState extends BasicGameState {
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
         }
         Tile t = m.getTileUnderBall();
-        switch(t.type) {
-            case SWITCH:
-                for(Tile link : t.links) {
-                    link.active = true;
-                    if(link.type == Tile.Type.LOCKED_FINISH) {
-                        link.type = Tile.Type.FINISH;
-                    }
-                }
-                t.active = true;
-                break;
-            default:
-                break;
-        }
+        t.activate();
     }
 
     private void updateMenu(GameContainer gc) {
