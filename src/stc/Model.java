@@ -330,7 +330,6 @@ public class Model extends Renderable {
                         g.setColor(Color.darkGray.multiply(opCol));
                         switch1.setLocation(pos.x, pos.y);
                         g.fill(switch1);
-                        System.out.println(opCol);
                         if(t.active)
                             g.setColor(Color.green.multiply(opCol));
                         else
@@ -598,6 +597,8 @@ public class Model extends Renderable {
     private void processPropertyLine(String line) {
         String type = line.split("=")[0].trim();
         String data = line.split("=")[1].trim();
+        StringBuilder s = new StringBuilder();
+        String[] lines = data.split("\\\\n");
         switch (type) {
             case "name":
                 properties.put("name", data);
@@ -610,6 +611,22 @@ public class Model extends Renderable {
                 break;
             case "score":
                 properties.put("score", data);
+                break;
+            case "message_left":
+                for(int i = 0; i < lines.length; i++) {
+                    s.append(lines[i]);
+                    if(i != lines.length-1)
+                        s.append("\n");
+                }
+                properties.put("message_left", s.toString());
+                break;
+            case "message_right":
+                for(int i = 0; i < lines.length; i++) {
+                    s.append(lines[i]);
+                    if(i != lines.length-1)
+                        s.append("\n");
+                }
+                properties.put("message_right", s.toString());
                 break;
             case "link"://Links switches, teleporters and sliders
                 String firstLink = data.split("->")[0];

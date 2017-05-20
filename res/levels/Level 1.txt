@@ -8,3 +8,5 @@ next=Level 2.txt
 prev=Level 12.txt
 score=999
 name=Level 1
+message_left=Rotate with\nthe arrow keys\nto guide the\nblue ball into\nthe hole
+message_right=Use space to\ntoggle the\nred blocks\non/off
