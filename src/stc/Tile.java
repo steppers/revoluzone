@@ -142,7 +142,7 @@ public class Tile {
         Shape stripe = rect.transform(Transform.createScaleTransform(0.3333f, 1f));
         stripe = stripe.transform(Transform.createTranslateTransform((float)size/2f, 0));
         Shape railStripe = rect.transform(Transform.createScaleTransform(0.2f, 1f));
-        railStripe = railStripe.transform(Transform.createTranslateTransform((float)size/2f, 0));
+        railStripe = railStripe.transform(Transform.createTranslateTransform(((float)size*0.6f)+1, 0));
 
         //Switch rect
         Rectangle swrect = new Rectangle(x+(size*0.2f), y+(size*0.2f), size*0.6f, size*0.6f);

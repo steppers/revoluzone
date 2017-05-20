@@ -251,8 +251,9 @@ public class Editor {
             Color c = Color.darkGray;
             c.a = (m.getScale()-0.6f)*2f;
             graphics.setColor(c);
+            graphics.setLineWidth(3f);
             graphics.draw(toolbar.get(i));
-            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + toolbar.get(i).getWidth() * i + 1), (int) (toolbar.get(i).getWidth() - 1), graphics, (m.getScale()-0.6f)*2f);
+            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + (toolbar.get(i).getHeight() * i) + 1), (int)toolbar.get(i).getWidth()-1, graphics, (m.getScale()-0.6f)*2f);
         }
     }
 
