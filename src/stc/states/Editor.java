@@ -33,6 +33,7 @@ public class Editor {
     private TextLabel placeInstructions;
     private TextLabel linkAddInstructions;
     private TextLabel linkRemoveInstructions;
+    private TextLabel saveInstructions;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -65,18 +66,19 @@ public class Editor {
         temp = new TextLabel();
         temp.scale = m.getScale()/0.6f;
         temp.color = Color.green.darker(0.4f);
-        temp.anchor.set(1.0f, 0.1f);
         temp.text = "Left click:\nPlace Tile";
+        temp.anchor.set(1.0f, 0.1f);
         temp.offset.set(-0.1f, 0.0f);
         placeInstructions = temp.clone();
-        temp.anchor.set(1.0f, 0.3f);
         temp.text = "Right click:\nStart Link";
-        temp.offset.set(-0.1f, 0.0f);
+        temp.anchor.set(1.0f, 0.3f);
         linkAddInstructions = temp.clone();
-        temp.anchor.set(1.0f, 0.5f);
         temp.text = "Middle click:\nRemove links";
-        temp.offset.set(-0.1f, 0.0f);
+        temp.anchor.set(1.0f, 0.5f);
         linkRemoveInstructions = temp.clone();
+        temp.text = "S Key:\nSave";
+        temp.anchor.set(1.0f, 0.7f);
+        saveInstructions = temp.clone();
     }
 
     public void update(GameContainer gc) {
@@ -250,6 +252,10 @@ public class Editor {
         linkRemoveInstructions.scaleOffset(m.getScale());
         linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
         tr.renderText(g, linkRemoveInstructions);
+        saveInstructions.scale = m.getScale();
+        saveInstructions.scaleOffset(m.getScale());
+        saveInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, saveInstructions);
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {

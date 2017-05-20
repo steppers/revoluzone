@@ -70,9 +70,9 @@ public class Tile {
     }
 
     public void activate() {
+        links.forEach(Tile::activate);
         switch(type) {
             case SWITCH:
-                links.forEach(Tile::activate);
                 active = true;
                 break;
             case LOCKED_FINISH:
