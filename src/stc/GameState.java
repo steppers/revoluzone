@@ -186,7 +186,7 @@ public class GameState extends BasicGameState {
     public Vector2f getMouseTilePos(GameContainer gc) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / m.gridSize) * m.getScale();
 
-        float offset = - (m.gridSize / 2);
+        float offset = - ((float)m.gridSize / 2);
 
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 

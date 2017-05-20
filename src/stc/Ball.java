@@ -112,7 +112,7 @@ public class Ball extends Renderable {
 
     public void renderShadow(GameContainer gc, Graphics g, Model m) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / m.gridSize) * m.getScale();
-        float offset = - (m.gridSize / 2) + 0.5f;
+        float offset = - ((float)m.gridSize / 2) + 0.5f;
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(m.getRotation() + 25).add(new Vector2f(offset, offset));
@@ -130,7 +130,7 @@ public class Ball extends Renderable {
 
     public void renderObject(GameContainer gc, Graphics g, Model m) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / m.gridSize) * m.getScale();
-        float offset = - (m.gridSize / 2) + 0.5f;
+        float offset = - ((float)m.gridSize / 2) + 0.5f;
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         Vector2f pos = new Vector2f(offset + x, offset + y);

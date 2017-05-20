@@ -207,7 +207,7 @@ public class Model extends Renderable {
     @Override
     public void renderBackPlane(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
-        float offset = - (gridSize / 2) + 0.5f;
+        float offset = - ((float)gridSize / 2) + 0.5f;
 
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
@@ -231,7 +231,7 @@ public class Model extends Renderable {
     public void renderFloorPlane(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
         Tile t;
-        float offset = - (gridSize / 2) + 0.5f;
+        float offset = - ((float)gridSize / 2) + 0.5f;
 
         //Full floor tile
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
@@ -377,7 +377,7 @@ public class Model extends Renderable {
     @Override
     public void renderShadow(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
-        float offset = - (gridSize / 2) + 0.5f;
+        float offset = - ((float)gridSize / 2) + 0.5f;
 
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
@@ -411,7 +411,7 @@ public class Model extends Renderable {
     @Override
     public void renderObject(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
-        float offset = - (gridSize / 2) + 0.5f;
+        float offset = - ((float)gridSize / 2) + 0.5f;
 
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
@@ -456,7 +456,7 @@ public class Model extends Renderable {
 
     public void drawLink(Line l, GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
-        float offset = - (gridSize / 2) + 0.5f;
+        float offset = - ((float)gridSize / 2) + 0.5f;
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         Circle dot = new Circle(0, 0, SCALE / 8f);
@@ -719,6 +719,34 @@ public class Model extends Renderable {
         }
     }
 
+    public void resize(int newSize) {
+        Tile[][] newTiles = new Tile[newSize+2][newSize+2];
+        int newGridSize = newSize+2;
+
+        for(int x = 0; x < newSize+2; x++) {
+            for(int y = 0; y < newSize+2; y++) {
+                if(x == 0 || y == 0 || x == newSize+1 || y == newSize+1) {
+                    newTiles[x][y] = new Tile(Tile.Type.FIXED.ordinal());
+                } else {
+                    newTiles[x][y] = new Tile(Tile.Type.EMPTY.ordinal());
+                }
+            }
+        }
+
+        int smaller = Math.min(newGridSize, gridSize);
+        for(int x = 1; x < smaller-1; x++) {
+            for(int y = 1; y < smaller-1; y++) {
+                newTiles[x][y] = tiles[x][y];
+            }
+        }
+        tiles = newTiles;
+        gridSize = newGridSize;
+
+        reset();
+        recalcSlider();
+        recalcBall();
+    }
+
     private void initTiles(int size) {
         tiles = new Tile[size+2][size+2];
         gridSize = size+2;
@@ -737,7 +765,7 @@ public class Model extends Renderable {
     public Tile getTileFromMousePos(GameContainer gc) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
 
-        float offset = - (gridSize / 2);
+        float offset = - ((float)gridSize / 2);
 
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
@@ -760,7 +788,7 @@ public class Model extends Renderable {
     public Vector2f getWorldCoordOfTile(Vector2f tileCoord, GameContainer gc) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
 
-        float offset = - (gridSize / 2);
+        float offset = - ((float)gridSize / 2);
 
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 

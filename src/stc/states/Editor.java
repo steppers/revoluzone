@@ -79,6 +79,9 @@ public class Editor {
         temp.text = "S Key:\nSave";
         temp.anchor.set(1.0f, 0.7f);
         saveInstructions = temp.clone();
+        temp.text = "< & > keys\nChange map Size";
+        temp.anchor.set(1.0f, 0.7f);
+        saveInstructions = temp.clone();
     }
 
     public void update(GameContainer gc) {
@@ -101,6 +104,20 @@ public class Editor {
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                 m.toggleRedBlue();
+            }
+            if(gc.getInput().isKeyPressed(Input.KEY_COMMA)) {
+                if(m.gridSize > 4) {
+                    m.resize(m.gridSize - 3);
+                    if ((int) m.ball.x == (m.gridSize - 1)) {
+                        m.ball = new Ball(m.gridSize - 2, (int) m.ball.y);
+                    }
+                    if ((int) m.ball.y == (m.gridSize - 1)) {
+                        m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
+                    }
+                }
+            }
+            if(gc.getInput().isKeyPressed(Input.KEY_PERIOD)) {
+                m.resize(m.gridSize-1);
             }
             //Left mouse clicks
             if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
