@@ -19,15 +19,16 @@ public class Tile {
         FIXED("Fixed"),
         RED("Red"),
         BLUE("Blue"),
+        KILL("Kill"),
         START("Start"),
         FINISH("Finish"),
         SWITCH("Switch"),
-        LOCKED_FINISH("Locked Finish"),
-        KILL("Kill"),
-        TELEPORT("Teleport"),
         RED_FINISH("Red Finish"),
+        TELEPORT("Teleport"),
+        LOCKED_FINISH("Locked Finish"),
         BLUE_FINISH("Blue Finish"),
-        SLIDER("Slider Start");
+        SLIDER("Slider"),
+        RAIL("Rail");
 
         String name;
 
