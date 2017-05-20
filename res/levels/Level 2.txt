@@ -8,3 +8,5 @@ next=Level 3.txt
 prev=Level 1.txt
 score=999
 name=Level 2
+message_left=Good job!\nKeep on spinning!
+message_right=Use space to\ntoggle between\nred & blue\nblocks

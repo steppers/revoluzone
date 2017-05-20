@@ -115,6 +115,8 @@ public class PlayLevel {
         String msg = m.getProperty("message_left");
         if(msg != null)
             messageLeft.text = msg;
+        else
+            messageLeft.text = "";
         messageLeft.scale = m.getScale();
         messageLeft.scaleOffset(m.getScale());
         messageLeft.color.a = (m.getScale()-0.6f)*2f;
@@ -123,6 +125,8 @@ public class PlayLevel {
         msg = m.getProperty("message_right");
         if(msg != null)
             messageRight.text = msg;
+        else
+            messageRight.text = "";
         messageRight.scale = m.getScale();
         messageRight.scaleOffset(m.getScale());
         messageRight.color.a = (m.getScale()-0.6f)*2f;
