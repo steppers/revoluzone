@@ -1,9 +1,9 @@
-package main;
+package stc.main;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.SlickException;
 import org.newdawn.slick.state.StateBasedGame;
-import proto.GameState;
+import stc.GameState;
 
 public class StateManager extends StateBasedGame {
 

@@ -1,4 +1,4 @@
-package proto.states;
+package stc.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -7,12 +7,12 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import proto.GameState;
-import proto.Model;
-import proto.Tile;
-import proto.TransitionManager;
-import proto.UI.TextLabel;
-import proto.UI.TextRenderer;
+import stc.GameState;
+import stc.Model;
+import stc.Tile;
+import stc.TransitionManager;
+import stc.UI.TextLabel;
+import stc.UI.TextRenderer;
 
 import java.util.ArrayList;
 

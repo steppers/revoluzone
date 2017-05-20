@@ -1,12 +1,10 @@
-package proto.UI;
+package stc.UI;
 
-import graphics.FontLoader;
-import org.newdawn.slick.Color;
+import stc.graphics.FontLoader;
 import org.newdawn.slick.Font;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
-import proto.UI.TextLabel;
 
 /**
  * Created by Ollie on 19/05/2017.
@@ -20,7 +18,7 @@ public class TextRenderer {
 
     public TextRenderer(GameContainer gc) {
         updateDisplaySize(gc);
-        graphics.FontLoader.loadFont(gc);
+        stc.graphics.FontLoader.loadFont(gc);
         font = FontLoader.getFont(FontLoader.Fonts.PixelGame.toString());
     }
 

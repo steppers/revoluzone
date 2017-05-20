@@ -1,12 +1,12 @@
-package proto.states;
+package stc.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import proto.*;
-import proto.UI.TextLabel;
-import proto.UI.TextRenderer;
+import stc.*;
+import stc.UI.TextLabel;
+import stc.UI.TextRenderer;
 
 import java.util.ArrayList;
 

@@ -1,4 +1,4 @@
-package proto.UI;
+package stc.UI;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;

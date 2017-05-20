@@ -1,4 +1,4 @@
-package main;
+package stc.main;
 
 import org.newdawn.slick.AppGameContainer;
 

@@ -1,15 +1,12 @@
-package proto;
+package stc;
 
-import graphics.FontLoader;
-import org.lwjgl.opengl.Display;
+import stc.graphics.FontLoader;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import proto.UI.TextRenderer;
-import proto.states.*;
-
-import java.util.ArrayList;
+import stc.UI.TextRenderer;
+import stc.states.*;
 
 /**
  * Created by steppers on 2/12/17.

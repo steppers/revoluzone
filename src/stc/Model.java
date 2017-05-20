@@ -1,10 +1,9 @@
-package proto;
+package stc;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
-import sun.invoke.empty.Empty;
 
 import java.io.BufferedReader;
 import java.io.File;

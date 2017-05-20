@@ -1,4 +1,4 @@
-package proto;
+package stc;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
