@@ -307,6 +307,7 @@ public class Model extends Renderable {
                         g.setColor(Color.darkGray.multiply(opCol));
                         switch1.setLocation(pos.x, pos.y);
                         g.fill(switch1);
+                        System.out.println(opCol);
                         if(t.active)
                             g.setColor(Color.green.multiply(opCol));
                         else

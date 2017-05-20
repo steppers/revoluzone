@@ -208,7 +208,9 @@ public class Editor {
     public void renderTransition(GameContainer gc, Graphics g) {
         m = gs.m;
         renderToolbar(gc, g);
-        g.setColor(Color.orange);
+        Color c = new Color(Color.orange);
+        c.a = (m.getScale()-0.6f)*2f;
+        g.setColor(c);
         g.setLineWidth(3);
         for(int x = 0; x < m.gridSize; x++) {
             for (int y = 0; y < m.gridSize; y++) {
@@ -252,9 +254,9 @@ public class Editor {
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {
         graphics.resetTransform();
+        Color c = new Color(Color.darkGray);
+        c.a = (m.getScale()-0.6f)*2f;
         for(int i = 0; i < toolbar.size(); i++) {
-            Color c = Color.darkGray;
-            c.a = (m.getScale()-0.6f)*2f;
             graphics.setColor(c);
             graphics.setLineWidth(3f);
             graphics.draw(toolbar.get(i));

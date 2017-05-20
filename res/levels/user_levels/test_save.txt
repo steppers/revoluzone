@@ -8,6 +8,7 @@ name=test_save
 next=null.txt
 prev=null.txt
 score=999
+link=6,1->3,3
 rail=5,1->5,1
 rail=5,2->5,2
 rail=5,3->5,3
