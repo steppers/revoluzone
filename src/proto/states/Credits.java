@@ -40,19 +40,20 @@ public class Credits {
         temp.text = "Anton Nikitin";
         temp.rotation = 90f;
         labels.add(temp.clone());
+        temp.text = "2017";
+        temp.rotation = 180f;
+        labels.add(temp.clone());
+        temp.text = "Southampton Game Jam";
+        temp.offset.set(0f, -0.54f);
+        labels.add(temp.clone());
+        temp.text = "Many thanks to";
+        temp.offset.set(0f, -0.62f);
+        labels.add(temp.clone());
     }
 
-    public void update(GameContainer gc) {
+    public void update(GameContainer gc, float delta) {
         m = gs.m;
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, gs.currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, gs.currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
+        m.setRotation(m.getRotation() + 35f * delta);
         if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionFade(m, new Model("0.txt", 0.6f, 0f), GameState.State.MENU, 0.4f);
         }
