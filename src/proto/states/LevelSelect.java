@@ -23,8 +23,7 @@ public class LevelSelect {
     private TextRenderer tr;
 
     private ArrayList<TextLabel> labels;
-    private TextLabel instructions1;
-    private TextLabel instructions2;
+    private TextLabel instructions;
 
     public LevelSelect(GameState gameState, TransitionManager tm) {
         gs = gameState;
@@ -45,13 +44,10 @@ public class LevelSelect {
         temp.rotation = -90f;
         labels.add(temp.clone());
 
-        instructions1 = new TextLabel("Arrow keys to choose level");
-        instructions1.anchor.set(0.5f, 0.5f);
-        instructions1.offset.set(0f, 0.64f);
-        instructions1.color = Color.green.darker(0.4f);
-        instructions2 = instructions1.clone();
-        instructions2.offset.set(0f, 0.75f);
-        instructions2.text = "Enter to play, Esc to go back";
+        instructions = new TextLabel("Arrow keys to choose level\nEnter to play, Esc to go back");
+        instructions.anchor.set(0.5f, 0.5f);
+        instructions.offset.set(0f, 0.7f);
+        instructions.color = Color.green.darker(0.4f);
     }
 
     public void update(GameContainer gc) {
@@ -109,14 +105,10 @@ public class LevelSelect {
                 tr.renderText(g, l);
             }
         }
-        instructions1.scale = m.getScale()/0.6f;
-        instructions1.scaleOffset(m.getScale());
-        instructions1.color.a = m.getOpacity();
-        tr.renderText(g, instructions1);
-        instructions2.scale = m.getScale()/0.6f;
-        instructions2.scaleOffset(m.getScale());
-        instructions2.color.a = m.getOpacity();
-        tr.renderText(g, instructions2);
+        instructions.scale = m.getScale()/0.6f;
+        instructions.scaleOffset(m.getScale());
+        instructions.color.a = m.getOpacity();
+        tr.renderText(g, instructions);
     }
 
 }

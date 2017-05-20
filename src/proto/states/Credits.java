@@ -40,14 +40,9 @@ public class Credits {
         temp.text = "Anton Nikitin";
         temp.rotation = 90f;
         labels.add(temp.clone());
-        temp.text = "2017";
         temp.rotation = 180f;
-        labels.add(temp.clone());
-        temp.text = "Southampton Game Jam";
-        temp.offset.set(0f, -0.54f);
-        labels.add(temp.clone());
-        temp.text = "Many thanks to";
-        temp.offset.set(0f, -0.62f);
+        temp.text = "Many thanks to\nSouthampton Game Jam\n2017";
+        temp.offset.set(0f, -0.5f);
         labels.add(temp.clone());
     }
 

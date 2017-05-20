@@ -20,8 +20,7 @@ public class Menu {
     private TextRenderer tr;
 
     private ArrayList<TextLabel> labels;
-    private TextLabel instructions1;
-    private TextLabel instructions2;
+    private TextLabel instructions;
 
     public Menu(GameState gameState, TransitionManager tm) {
         gs = gameState;
@@ -44,13 +43,10 @@ public class Menu {
         temp.rotation = 90f;
         labels.add(temp.clone());
 
-        instructions1 = new TextLabel("Press Space to toggle blocks");
-        instructions1.anchor.set(0.5f, 0.5f);
-        instructions1.offset.set(0f, 0.64f);
-        instructions1.color = Color.green.darker(0.4f);
-        instructions2 = instructions1.clone();
-        instructions2.offset.set(0f, 0.75f);
-        instructions2.text = "Arrows to rotate, Enter & Esc to navigate menus";
+        instructions = new TextLabel("Press Space to toggle blocks\nArrows to rotate, Enter & Esc to navigate menus");
+        instructions.anchor.set(0.5f, 0.5f);
+        instructions.offset.set(0f, 0.7f);
+        instructions.color = Color.green.darker(0.4f);
     }
 
     public void update(GameContainer gc) {
@@ -61,16 +57,16 @@ public class Menu {
                 r += 360;
             switch(r % 360) {
                 case 0:
-                    tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.6f);
+                    tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
                     break;
                 case 90:
-                    tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.4f);
+                    tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.3f);
                     break;
                 case 180:
                     tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
                     break;
                 case 270:
-                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.6f, 1f), GameState.State.CREDITS, 0.4f);
+                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
                     break;
             }
         }
@@ -118,13 +114,9 @@ public class Menu {
                 tr.renderText(g, l);
             }
         }
-        instructions1.scale = m.getScale()/0.6f;
-        instructions1.scaleOffset(m.getScale());
-        instructions1.color.a = m.getOpacity();
-        tr.renderText(g, instructions1);
-        instructions2.scale = m.getScale()/0.6f;
-        instructions2.scaleOffset(m.getScale());
-        instructions2.color.a = m.getOpacity();
-        tr.renderText(g, instructions2);
+        instructions.scale = m.getScale()/0.6f;
+        instructions.scaleOffset(m.getScale());
+        instructions.color.a = m.getOpacity();
+        tr.renderText(g, instructions);
     }
 }

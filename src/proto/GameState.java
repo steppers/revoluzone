@@ -1,6 +1,7 @@
 package proto;
 
 import graphics.FontLoader;
+import org.lwjgl.opengl.Display;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
@@ -54,10 +55,9 @@ public class GameState extends BasicGameState {
         for(int i = 0; i < 5; i++) {
             bgBoxes.add(new BackgroundBox(gc));
         }
-
-        editor = new Editor(this, tm);
-        editor.init(gc);
         textRenderer = new TextRenderer(gc);
+
+        editor = new Editor(this, tm, gc);
         menu = new Menu(this, tm);
         credits = new Credits(this, tm);
         levelSelect = new LevelSelect(this, tm);
@@ -101,7 +101,7 @@ public class GameState extends BasicGameState {
                 credits.render(gc, g);
                 break;
             case QUIT:
-                System.exit(0);
+                gc.exit();
                 break;
             default:
                 break;
@@ -110,6 +110,9 @@ public class GameState extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
+        if(Display.isCloseRequested()) {
+
+        }
         float delta = (float)i / 1000;
         m.update(delta);
         Tile t = m.getTileUnderBall();
@@ -178,6 +181,9 @@ public class GameState extends BasicGameState {
                 break;
             case LEVEL:
                 playLevel.renderText(g, m);
+                break;
+            case EDITOR:
+                editor.renderText(g, m);
                 break;
             case TRANSITION:
                 break;

@@ -19,13 +19,13 @@ public class Tile {
         FIXED("Fixed"),
         RED("Red"),
         BLUE("Blue"),
-        KILL("Kill"),
         START("Start"),
         FINISH("Finish"),
         SWITCH("Switch"),
-        RED_FINISH("Red Finish"),
-        TELEPORT("Teleport"),
         LOCKED_FINISH("Locked Finish"),
+        KILL("Kill"),
+        TELEPORT("Teleport"),
+        RED_FINISH("Red Finish"),
         BLUE_FINISH("Blue Finish"),
         SLIDER("Slider Start");
 

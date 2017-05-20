@@ -20,6 +20,10 @@ public class TextLabel {
     public float rotationOffset = 0f;
     public float offsetScale = 1f;
 
+    public TextLabel() {
+
+    }
+
     public TextLabel(String text) {
         this.text = text;
     }

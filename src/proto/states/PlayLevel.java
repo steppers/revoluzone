@@ -39,7 +39,6 @@ public class PlayLevel {
         labels.add(temp.clone());
         temp.text = "Your move count: " + m.score;
         temp.rotation = 180f;
-        temp.scale = m.getScale()/0.6f;
         labels.add(temp.clone());
     }
 
