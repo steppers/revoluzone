@@ -1,4 +1,4 @@
-package proto.states;
+package stc.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -7,10 +7,12 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import proto.GameState;
-import proto.Model;
-import proto.Tile;
-import proto.TransitionManager;
+import stc.GameState;
+import stc.Model;
+import stc.Tile;
+import stc.TransitionManager;
+import stc.UI.TextLabel;
+import stc.UI.TextRenderer;
 
 import java.util.ArrayList;
 
@@ -22,6 +24,7 @@ public class Editor {
     private GameState gs;
     private TransitionManager tm;
     private Model m;
+    private TextRenderer tr;
 
     private Tile.Type drawTileType = Tile.Type.EMPTY;
     private ArrayList<Rectangle> toolbar;
@@ -29,18 +32,54 @@ public class Editor {
     private float linkSrcX, linkSrcY;
     private float linkDstX, linkDstY;
 
-    public Editor(GameState gameState, TransitionManager tm) {
-        gs = gameState;
-        toolbar = new ArrayList<>();
-        this.tm = tm;
-    }
+    private ArrayList<TextLabel> labels;
+    private TextLabel placeInstructions;
+    private TextLabel linkAddInstructions;
+    private TextLabel linkRemoveInstructions;
 
-    public void init(GameContainer gc) {
+    public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
+        gs = gameState;
+        this.tm = tm;
+        tr = gs.textRenderer;
+        m = gs.m;
+        toolbar = new ArrayList<>();
+
+        //Initialisation
         float size = (0.75f * gc.getHeight()) / Tile.Type.values().length;
         for (Tile.Type t : Tile.Type.values()) {
             Rectangle r = new Rectangle(10, (gc.getHeight()*0.125f) + size*t.ordinal(), size, size);
             toolbar.add(r);
         }
+
+        //Labels
+        labels = new ArrayList<>();
+        TextLabel temp = new TextLabel("Selected:\n" + drawTileType.getName());
+        temp.anchor.set(0.5f, 0.5f);
+        temp.offset.set(0f, -0.41f);
+        temp.scale = m.getScale()/0.6f;
+        labels.add(temp.clone());
+        temp.rotation = 90f;
+        labels.add(temp.clone());
+        temp.rotation = 180f;
+        labels.add(temp.clone());
+        temp.rotation = -90f;
+        labels.add(temp.clone());
+
+        temp = new TextLabel();
+        temp.scale = m.getScale()/0.6f;
+        temp.color = Color.green.darker(0.4f);
+        temp.anchor.set(1.0f, 0.1f);
+        temp.text = "Left click:\nPlace Tile";
+        temp.offset.set(-0.1f, 0.0f);
+        placeInstructions = temp.clone();
+        temp.anchor.set(1.0f, 0.3f);
+        temp.text = "Right click:\nStart Link";
+        temp.offset.set(-0.1f, 0.0f);
+        linkAddInstructions = temp.clone();
+        temp.anchor.set(1.0f, 0.5f);
+        temp.text = "Middle click:\nRemove links";
+        temp.offset.set(-0.1f, 0.0f);
+        linkRemoveInstructions = temp.clone();
     }
 
     public void update(GameContainer gc) {
@@ -74,6 +113,9 @@ public class Editor {
                 for (Rectangle r : toolbar) {
                     if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
                         drawTileType = Tile.Type.values()[toolbar.indexOf(r)];
+                        for(TextLabel l : labels) {
+                            l.text = "Selected:\n" + drawTileType.getName();
+                        }
                     }
                 }
             }
@@ -88,6 +130,7 @@ public class Editor {
                         linkSrcY = p.y;
                         linkDstX = p.x;
                         linkDstY = p.y;
+                        linkAddInstructions.text = "Right click:\nEnd Link";
                     }
                 }
             }
@@ -125,6 +168,7 @@ public class Editor {
                         linkSrcY = -100f;
                         linkDstX = -100f;
                         linkDstY = -100f;
+                        linkAddInstructions.text = "Right click:\nStart Link";
                     }
                 }
             }
@@ -154,6 +198,7 @@ public class Editor {
     }
 
     public void renderTransition(GameContainer gc, Graphics g) {
+        m = gs.m;
         renderToolbar(gc, g);
         g.setColor(Color.orange);
         g.setLineWidth(3);
@@ -168,10 +213,37 @@ public class Editor {
     }
 
     public void renderText(Graphics g, Model m) {
-
+        if(gs.currentState == GameState.State.TRANSITION) {
+            for(TextLabel l : labels) {
+                l.color.a = (m.getScale()-0.6f)*2f;
+                l.offsetRotation(m.getRotation());
+                l.scaleOffset(m.getScale());
+                tr.renderText(g, l);
+            }
+        } else {
+            for (TextLabel l : labels) {
+                l.color.a = m.getOpacity();
+                l.offsetRotation(m.getRotation());
+                l.scaleOffset(m.getScale());
+                tr.renderText(g, l);
+            }
+        }
+        placeInstructions.scale = m.getScale();
+        placeInstructions.scaleOffset(m.getScale());
+        placeInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, placeInstructions);
+        linkAddInstructions.scale = m.getScale();
+        linkAddInstructions.scaleOffset(m.getScale());
+        linkAddInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, linkAddInstructions);
+        linkRemoveInstructions.scale = m.getScale();
+        linkRemoveInstructions.scaleOffset(m.getScale());
+        linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, linkRemoveInstructions);
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {
+        graphics.resetTransform();
         for(int i = 0; i < toolbar.size(); i++) {
             graphics.setColor(Color.darkGray);
             graphics.draw(toolbar.get(i));

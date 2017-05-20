@@ -1,10 +1,9 @@
-package proto;
+package stc;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
-import sun.invoke.empty.Empty;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -490,6 +489,8 @@ public class Model extends Renderable {
 
         g.draw(new Line(center, arrow1));
         g.draw(new Line(center, arrow2));
+
+        g.resetTransform();
     }
 
     public void setRotation(float rotation) {

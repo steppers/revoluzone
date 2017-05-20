@@ -1,4 +1,4 @@
-package proto;
+package stc;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Graphics;
@@ -27,7 +27,8 @@ public class Tile {
         TELEPORT("Teleport"),
         LOCKED_FINISH("Locked Finish"),
         BLUE_FINISH("Blue Finish"),
-        SLIDER("Slider Start");
+        SLIDER("Slider"),
+        RAIL("Rail");
 
         String name;
 

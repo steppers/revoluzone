@@ -1,4 +1,4 @@
-package proto.UI;
+package stc.UI;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.geom.Vector2f;
@@ -19,6 +19,10 @@ public class TextLabel {
     //Additional
     public float rotationOffset = 0f;
     public float offsetScale = 1f;
+
+    public TextLabel() {
+
+    }
 
     public TextLabel(String text) {
         this.text = text;

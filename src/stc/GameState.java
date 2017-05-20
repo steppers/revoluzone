@@ -1,14 +1,12 @@
-package proto;
+package stc;
 
-import graphics.FontLoader;
+import stc.graphics.FontLoader;
 import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import proto.UI.TextRenderer;
-import proto.states.*;
-
-import java.util.ArrayList;
+import stc.UI.TextRenderer;
+import stc.states.*;
 
 /**
  * Created by steppers on 2/12/17.
@@ -29,19 +27,18 @@ public class GameState extends BasicGameState {
     public State currentState = State.MENU;
     public State previousState = State.MENU;
     public TextRenderer textRenderer;
+    private Background background;
 
     //State stuff
-    ArrayList<BackgroundBox> bgBoxes;
-    Editor editor;
-    Menu menu;
-    Credits credits;
-    LevelSelect levelSelect;
-    PlayLevel playLevel;
+    private Editor editor;
+    private Menu menu;
+    private Credits credits;
+    private LevelSelect levelSelect;
+    private PlayLevel playLevel;
 
     public GameState() {
         m = new Model("0.txt", 0.6f);
         tm = new TransitionManager(this);
-        bgBoxes = new ArrayList<>();
     }
 
     @Override
@@ -51,13 +48,10 @@ public class GameState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
-        for(int i = 0; i < 5; i++) {
-            bgBoxes.add(new BackgroundBox(gc));
-        }
-
-        editor = new Editor(this, tm);
-        editor.init(gc);
+        background = new Background(gc);
         textRenderer = new TextRenderer(gc);
+
+        editor = new Editor(this, tm, gc);
         menu = new Menu(this, tm);
         credits = new Credits(this, tm);
         levelSelect = new LevelSelect(this, tm);
@@ -68,7 +62,7 @@ public class GameState extends BasicGameState {
     public void render(GameContainer gc, StateBasedGame sbg, Graphics g) throws SlickException {
         g.setFont(FontLoader.getFont(FontLoader.Fonts.PixelGame.toString()));
 
-        renderBackground(gc, g);
+        background.render(gc, g);
         switch(currentState) {
             case MENU:
                 menu.render(gc, g);
@@ -101,7 +95,7 @@ public class GameState extends BasicGameState {
                 credits.render(gc, g);
                 break;
             case QUIT:
-                System.exit(0);
+                gc.exit();
                 break;
             default:
                 break;
@@ -162,10 +156,7 @@ public class GameState extends BasicGameState {
                 if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
             }
         }
-
-        for(int j = 0; j < 5; j++) {
-            bgBoxes.get(j).update(delta);
-        }
+        background.update(delta);
     }
 
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {
@@ -179,6 +170,9 @@ public class GameState extends BasicGameState {
             case LEVEL:
                 playLevel.renderText(g, m);
                 break;
+            case EDITOR:
+                editor.renderText(g, m);
+                break;
             case TRANSITION:
                 break;
             case CREDITS:
@@ -186,42 +180,6 @@ public class GameState extends BasicGameState {
                 break;
             default:
                 break;
-        }
-    }
-
-    private class BackgroundBox {
-        float opacity = 0;
-        float x, y, side;
-
-        public BackgroundBox(GameContainer gc) {
-            redefinePosition(gc);
-            opacity = (float)Math.random();
-        }
-
-        void update(float delta) {
-            opacity += 3f * delta;
-        }
-
-        void redefinePosition(GameContainer gc) {
-            x = (float) Math.random() * gc.getWidth();
-            y = (float) Math.random() * gc.getHeight();
-            side = (float) (gc.getWidth() * (Math.random()+0.5f) * 0.15);
-        }
-    }
-
-    private void renderBackground(GameContainer gc, Graphics graphics){
-        graphics.setBackground(Color.lightGray);
-        graphics.clear();
-
-        for(BackgroundBox bb : bgBoxes) {
-            float op = (float)(Math.sin(bb.opacity)/2)+0.5f;
-            graphics.setLineWidth(3);
-            graphics.setColor(new Color(1,1,1,0.35f*op));
-            graphics.drawRect(bb.x, bb.y, bb.side, bb.side);
-            if ((((Math.sin(bb.opacity-0.1f)/2)+0.5f) > op &&
-                    op < 0.1))  {
-                bb.redefinePosition(gc);
-            }
         }
     }
 

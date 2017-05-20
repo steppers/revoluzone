@@ -1,4 +1,4 @@
-package graphics;
+package stc.graphics;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.TrueTypeFont;

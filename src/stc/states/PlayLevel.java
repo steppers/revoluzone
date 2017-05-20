@@ -1,14 +1,14 @@
-package proto.states;
+package stc.states;
 
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
-import proto.GameState;
-import proto.Model;
-import proto.Tile;
-import proto.TransitionManager;
-import proto.UI.TextLabel;
-import proto.UI.TextRenderer;
+import stc.GameState;
+import stc.Model;
+import stc.Tile;
+import stc.TransitionManager;
+import stc.UI.TextLabel;
+import stc.UI.TextRenderer;
 
 import java.util.ArrayList;
 
@@ -39,7 +39,6 @@ public class PlayLevel {
         labels.add(temp.clone());
         temp.text = "Your move count: " + m.score;
         temp.rotation = 180f;
-        temp.scale = m.getScale()/0.6f;
         labels.add(temp.clone());
     }
 
