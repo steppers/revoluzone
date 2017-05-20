@@ -492,6 +492,8 @@ public class Model extends Renderable {
 
         g.draw(new Line(center, arrow1));
         g.draw(new Line(center, arrow2));
+
+        g.resetTransform();
     }
 
     public void setRotation(float rotation) {
