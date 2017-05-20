@@ -102,8 +102,14 @@ public class Editor {
                 Tile t = m.getTileFromMousePos(gc);
                 //Set a tile if on the level
                 if (t != null) {
-                    t.type = drawTileType;
-                    t.resetType = drawTileType;
+                    if(drawTileType == Tile.Type.RAIL) {
+                        t.isRail = true;
+                    } else {
+                        t.type = drawTileType;
+                        t.resetType = drawTileType;
+                        if(drawTileType != Tile.Type.SLIDER)
+                            t.isRail = false;
+                    }
                     m.reset();
                 }
                 //Set current tile type if on toolbar
@@ -242,9 +248,11 @@ public class Editor {
     private void renderToolbar(GameContainer gc, Graphics graphics) {
         graphics.resetTransform();
         for(int i = 0; i < toolbar.size(); i++) {
-            graphics.setColor(Color.darkGray);
+            Color c = Color.darkGray;
+            c.a = (m.getScale()-0.6f)*2f;
+            graphics.setColor(c);
             graphics.draw(toolbar.get(i));
-            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + toolbar.get(i).getWidth() * i + 1), (int) (toolbar.get(i).getWidth() - 1), graphics, m.getOpacity());
+            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + toolbar.get(i).getWidth() * i + 1), (int) (toolbar.get(i).getWidth() - 1), graphics, (m.getScale()-0.6f)*2f);
         }
     }
 

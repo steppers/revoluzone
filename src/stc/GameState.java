@@ -80,7 +80,7 @@ public class GameState extends BasicGameState {
                 tm.render(gc, g);
                 renderStateText(gc, g, previousState, m);
                 renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
-                if(previousState == State.EDITOR && tm.getNewState() != State.MENU) {
+                if(previousState == State.EDITOR || tm.getNewState() == State.EDITOR) {
                     editor.renderTransition(gc, g);
                 }
                 if(tm.getNewState() == State.QUIT) {

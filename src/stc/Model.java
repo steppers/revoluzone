@@ -167,7 +167,7 @@ public class Model extends Renderable {
             switch (r) {
                 case 0:
                     for (y = y + 1; y < gridSize; y++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x, y - 1);
                             break;
                         }
@@ -175,7 +175,7 @@ public class Model extends Renderable {
                     break;
                 case 90:
                     for (x = x + 1; x < gridSize; x++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x - 1, y);
                             break;
                         }
@@ -183,7 +183,7 @@ public class Model extends Renderable {
                     break;
                 case 180:
                     for (y = y - 1; y >= 0; y--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x, y + 1);
                             break;
                         }
@@ -191,7 +191,7 @@ public class Model extends Renderable {
                     break;
                 case 270:
                     for (x = x - 1; x >= 0; x--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x + 1, y);
                             break;
                         }
@@ -442,6 +442,8 @@ public class Model extends Renderable {
                         g.fill(railDot);
                     }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
                         g.fill(railStopY2);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && !tiles[x][y-1].isRail && !tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
                         g.fill(railDot);
                     }
                 }
