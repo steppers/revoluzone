@@ -7,10 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import stc.GameState;
-import stc.Model;
-import stc.Tile;
-import stc.TransitionManager;
+import stc.*;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
 
@@ -36,6 +33,7 @@ public class Editor {
     private TextLabel placeInstructions;
     private TextLabel linkAddInstructions;
     private TextLabel linkRemoveInstructions;
+    private TextLabel saveInstructions;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -68,18 +66,19 @@ public class Editor {
         temp = new TextLabel();
         temp.scale = m.getScale()/0.6f;
         temp.color = Color.green.darker(0.4f);
-        temp.anchor.set(1.0f, 0.1f);
         temp.text = "Left click:\nPlace Tile";
+        temp.anchor.set(1.0f, 0.1f);
         temp.offset.set(-0.1f, 0.0f);
         placeInstructions = temp.clone();
-        temp.anchor.set(1.0f, 0.3f);
         temp.text = "Right click:\nStart Link";
-        temp.offset.set(-0.1f, 0.0f);
+        temp.anchor.set(1.0f, 0.3f);
         linkAddInstructions = temp.clone();
-        temp.anchor.set(1.0f, 0.5f);
         temp.text = "Middle click:\nRemove links";
-        temp.offset.set(-0.1f, 0.0f);
+        temp.anchor.set(1.0f, 0.5f);
         linkRemoveInstructions = temp.clone();
+        temp.text = "S Key:\nSave";
+        temp.anchor.set(1.0f, 0.7f);
+        saveInstructions = temp.clone();
     }
 
     public void update(GameContainer gc) {
@@ -87,6 +86,9 @@ public class Editor {
         if(!linking) {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
+            }
+            if(gc.getInput().isKeyPressed(Input.KEY_S)) {
+                m.saveToFile("test_save");
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
@@ -105,9 +107,17 @@ public class Editor {
                 Tile t = m.getTileFromMousePos(gc);
                 //Set a tile if on the level
                 if (t != null) {
-                    t.type = drawTileType;
-                    t.resetType = drawTileType;
+                    if(drawTileType == Tile.Type.RAIL) {
+                        t.isRail = true;
+                    } else {
+                        t.type = drawTileType;
+                        t.resetType = drawTileType;
+                        if(drawTileType != Tile.Type.SLIDER)
+                            t.isRail = false;
+                    }
                     m.reset();
+                    m.recalcBall();
+                    m.recalcSlider();
                 }
                 //Set current tile type if on toolbar
                 for (Rectangle r : toolbar) {
@@ -200,7 +210,9 @@ public class Editor {
     public void renderTransition(GameContainer gc, Graphics g) {
         m = gs.m;
         renderToolbar(gc, g);
-        g.setColor(Color.orange);
+        Color c = new Color(Color.orange);
+        c.a = (m.getScale()-0.6f)*2f;
+        g.setColor(c);
         g.setLineWidth(3);
         for(int x = 0; x < m.gridSize; x++) {
             for (int y = 0; y < m.gridSize; y++) {
@@ -240,14 +252,21 @@ public class Editor {
         linkRemoveInstructions.scaleOffset(m.getScale());
         linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
         tr.renderText(g, linkRemoveInstructions);
+        saveInstructions.scale = m.getScale();
+        saveInstructions.scaleOffset(m.getScale());
+        saveInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, saveInstructions);
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {
         graphics.resetTransform();
+        Color c = new Color(Color.darkGray);
+        c.a = (m.getScale()-0.6f)*2f;
         for(int i = 0; i < toolbar.size(); i++) {
-            graphics.setColor(Color.darkGray);
+            graphics.setColor(c);
+            graphics.setLineWidth(3f);
             graphics.draw(toolbar.get(i));
-            new Tile(i).render(11, (int)((gc.getHeight()*0.125f) + toolbar.get(i).getWidth()*i+1), (int)(toolbar.get(i).getWidth()-1), graphics, m.getOpacity());
+            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + (toolbar.get(i).getHeight() * i) + 1), (int)toolbar.get(i).getWidth()-1, graphics, (m.getScale()-0.6f)*2f);
         }
     }
 

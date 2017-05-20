@@ -43,7 +43,7 @@ public class Tile {
 
     public Type type = Type.FIXED;
     public Type resetType = Type.FIXED;
-    public boolean active = true;
+    public boolean active = false;
     public ArrayList<Tile> links;
     public boolean isRail = false;
     public int x,y;
@@ -70,9 +70,9 @@ public class Tile {
     }
 
     public void activate() {
+        links.forEach(Tile::activate);
         switch(type) {
             case SWITCH:
-                links.forEach(Tile::activate);
                 active = true;
                 break;
             case LOCKED_FINISH:
@@ -116,7 +116,7 @@ public class Tile {
             case SLIDER:
                 return hasSlider(m);
             default:
-                return true;
+                return hasSlider(m);
         }
     }
 
@@ -124,8 +124,8 @@ public class Tile {
         int counter = 0;
         for(int i = 0; i < m.sliders.size(); i++){
             if(this.x == m.sliders.get(i).destX && this.y == m.sliders.get(i).destY){
-                    counter++;
-                    break;
+                counter++;
+                break;
             }
         }
         if(counter == 0){
@@ -139,8 +139,10 @@ public class Tile {
 
     public void render(int x, int y, int size, Graphics g, float opacity) {
         Rectangle rect = new Rectangle(x, y, size, size);
-        Shape stripe = rect.transform(Transform.createScaleTransform(0.333f, 1f));
-        stripe = stripe.transform(Transform.createTranslateTransform(+size/2, 0));
+        Shape stripe = rect.transform(Transform.createScaleTransform(0.3333f, 1f));
+        stripe = stripe.transform(Transform.createTranslateTransform((float)size/2f, 0));
+        Shape railStripe = rect.transform(Transform.createScaleTransform(0.2f, 1f));
+        railStripe = railStripe.transform(Transform.createTranslateTransform(((float)size*0.6f)+1, 0));
 
         //Switch rect
         Rectangle swrect = new Rectangle(x+(size*0.2f), y+(size*0.2f), size*0.6f, size*0.6f);
@@ -206,7 +208,15 @@ public class Tile {
                 break;
             case RED_FINISH:
                 break;
+            case RAIL:
+                g.setColor(Color.white.darker(0.2f).multiply(new Color(1,1,1,opacity)));
+                g.fill(rect);
+                g.setColor(Color.black.multiply(new Color(1,1,1,opacity)));
+                g.fill(railStripe);
+                break;
             case SLIDER:
+                g.setColor(Color.magenta.multiply(new Color(0.9f,0.9f,0.9f,1.0f)));
+                g.fill(rect);
                 break;
             default:
                 break;

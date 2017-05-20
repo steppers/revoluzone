@@ -37,7 +37,7 @@ public class GameState extends BasicGameState {
     private PlayLevel playLevel;
 
     public GameState() {
-        m = new Model("0.txt", 0.6f);
+        m = new Model("user_levels/test_save.txt", 0.6f);
         tm = new TransitionManager(this);
     }
 
@@ -80,7 +80,7 @@ public class GameState extends BasicGameState {
                 tm.render(gc, g);
                 renderStateText(gc, g, previousState, m);
                 renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
-                if(previousState == State.EDITOR && tm.getNewState() != State.MENU) {
+                if(previousState == State.EDITOR || tm.getNewState() == State.EDITOR) {
                     editor.renderTransition(gc, g);
                 }
                 if(tm.getNewState() == State.QUIT) {

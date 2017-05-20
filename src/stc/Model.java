@@ -5,9 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -72,8 +70,12 @@ public class Model extends Renderable {
     public Tile getTileUnderSlider(Slider s){return tiles[(int)s.x][(int)s.y];}
 
     public void reset() {
+        sliders.clear();
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
+                if(tiles[x][y].type == Tile.Type.SLIDER) {
+                    sliders.add(new Slider(x,y));
+                }
                 tiles[x][y].reset();
             }
         }
@@ -163,7 +165,7 @@ public class Model extends Renderable {
             switch (r) {
                 case 0:
                     for (y = y + 1; y < gridSize; y++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x, y - 1);
                             break;
                         }
@@ -171,7 +173,7 @@ public class Model extends Renderable {
                     break;
                 case 90:
                     for (x = x + 1; x < gridSize; x++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x - 1, y);
                             break;
                         }
@@ -179,7 +181,7 @@ public class Model extends Renderable {
                     break;
                 case 180:
                     for (y = y - 1; y >= 0; y--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x, y + 1);
                             break;
                         }
@@ -187,7 +189,7 @@ public class Model extends Renderable {
                     break;
                 case 270:
                     for (x = x - 1; x >= 0; x--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
                             sliders.get(i).move(x + 1, y);
                             break;
                         }
@@ -249,6 +251,20 @@ public class Model extends Renderable {
         Circle circleLarge = new Circle(0,0, SCALE*0.5f*0.8f);
         Circle circleSmall = new Circle(0,0, SCALE*0.5f*0.7f);
 
+        //Rails
+        Rectangle rail = new Rectangle(-SCALE/2f, -SCALE/10, SCALE, SCALE/5);
+        Shape railX = rail.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railY = rail.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+
+        Rectangle railStop = new Rectangle(0, -SCALE/10, SCALE/2, SCALE/5);
+        Shape railStopX1 = railStop.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railStopY1 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+        Shape railStopX2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI)));
+        Shape railStopY2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+3*Math.PI/2)));
+
+        Circle dot = new Circle(0, 0, SCALE / 6f);
+        Shape railDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < gridSize; x++) {
@@ -257,6 +273,15 @@ public class Model extends Renderable {
                 pos.sub(-rotation);
                 pos.scale(SCALE);
                 pos.add(screenOffset);
+
+                railX.setLocation(pos.x, pos.y);
+                railY.setLocation(pos.x, pos.y);
+                railStopX1.setLocation(pos.x, pos.y);
+                railStopX2.setLocation(pos.x, pos.y);
+                railStopY1.setLocation(pos.x, pos.y);
+                railStopY2.setLocation(pos.x, pos.y);
+                railDot.setLocation(pos.x, pos.y);
+
                 t = tiles[x][y];
                 switch(t.type) {
                     case KILL:
@@ -305,6 +330,7 @@ public class Model extends Renderable {
                         g.setColor(Color.darkGray.multiply(opCol));
                         switch1.setLocation(pos.x, pos.y);
                         g.fill(switch1);
+                        System.out.println(opCol);
                         if(t.active)
                             g.setColor(Color.green.multiply(opCol));
                         else
@@ -323,6 +349,28 @@ public class Model extends Renderable {
                         circleSmall.setCenterY(pos.y);
                         g.fill(circleSmall);
                         break;
+                }
+                if(tiles[x][y].isRail){
+                    g.setColor(Color.black.multiply(opCol));
+                    if(tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railX);
+                    }if(tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railY);
+                    }if(tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
+                        g.fill(railStopX1);
+                        g.fill(railDot);
+                    }if(!tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railStopX2);
+                        g.fill(railDot);
+                    }if(tiles[x][y+1].isRail && !tiles[x][y-1].isRail){
+                        g.fill(railStopY1);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railStopY2);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && !tiles[x][y-1].isRail && !tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
+                        g.fill(railDot);
+                    }
                 }
             }
         }
@@ -371,19 +419,6 @@ public class Model extends Renderable {
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
 
-        Rectangle rail = new Rectangle(-SCALE/2f, -SCALE/10, SCALE, SCALE/5);
-        Shape railX = rail.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-        Shape railY = rail.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
-
-        Rectangle railStop = new Rectangle(0, -SCALE/10, SCALE/2, SCALE/5);
-        Shape railStopX1 = railStop.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-        Shape railStopY1 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
-        Shape railStopX2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI)));
-        Shape railStopY2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+3*Math.PI/2)));
-
-        Circle dot = new Circle(0, 0, SCALE / 6f);
-        Shape railDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < gridSize; x++) {
@@ -393,13 +428,6 @@ public class Model extends Renderable {
                 pos.scale(SCALE);
                 pos.add(screenOffset);
                 tile.setLocation(pos.x, pos.y);
-                railX.setLocation(pos.x, pos.y);
-                railY.setLocation(pos.x, pos.y);
-                railStopX1.setLocation(pos.x, pos.y);
-                railStopX2.setLocation(pos.x, pos.y);
-                railStopY1.setLocation(pos.x, pos.y);
-                railStopY2.setLocation(pos.x, pos.y);
-                railDot.setLocation(pos.x, pos.y);
 
                 switch (tiles[x][y].type) {
                     case FIXED:
@@ -420,26 +448,6 @@ public class Model extends Renderable {
                         break;
                     default:
                         break;
-                }
-                if(tiles[x][y].isRail){
-                    g.setColor(Color.black.multiply(opCol));
-                    if(tiles[x+1][y].isRail && tiles[x-1][y].isRail){
-                        g.fill(railX);
-                    }if(tiles[x][y+1].isRail && tiles[x][y-1].isRail){
-                        g.fill(railY);
-                    }if(tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
-                        g.fill(railStopX1);
-                        g.fill(railDot);
-                    }if(!tiles[x+1][y].isRail && tiles[x-1][y].isRail){
-                        g.fill(railStopX2);
-                        g.fill(railDot);
-                    }if(tiles[x][y+1].isRail && !tiles[x][y-1].isRail){
-                        g.fill(railStopY1);
-                        g.fill(railDot);
-                    }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
-                        g.fill(railStopY2);
-                        g.fill(railDot);
-                    }
                 }
             }
         }
@@ -541,7 +549,7 @@ public class Model extends Renderable {
     }
 
     private void loadFromFile(String path) {
-        File file = new File("res/config/" + path);
+        File file = new File("res/levels/" + path);
         if(!file.exists()) {
             System.out.println("File not found: " + path);
             System.exit(1);
@@ -572,7 +580,8 @@ public class Model extends Renderable {
                 }
                 y++;
             }
-            processPropertyLine(line);
+            if(line.length() != 1)
+                processPropertyLine(line);
 
             //Process modifiers
             while((line = br.readLine()) != null) {
@@ -627,6 +636,68 @@ public class Model extends Renderable {
                 }
             default:
                 properties.put(type, data);
+        }
+    }
+
+    public void saveToFile(String filename) {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter("res/levels/user_levels/" + filename + ".txt");
+            bw = new BufferedWriter(fw);
+
+            StringBuilder data = new StringBuilder();
+
+            for(int y = 1; y < tiles.length-1; y++) {
+                data.append("{");
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    data.append(tiles[x][y].resetType.ordinal() + ((x < tiles.length-2) ? "," : ""));
+                }
+                data.append("}\n");
+            }
+            data.append("name=test_save\n");
+            data.append("next=null.txt\n");
+            data.append("prev=null.txt\n");
+            data.append("score=999\n");
+
+            for(int y = 1; y < tiles.length-1; y++) {
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    for(Tile to : tiles[x][y].links) {
+                        data.append("link=" + x + "," + y + "->" + to.x + "," + to.y + "\n");
+                    }
+                }
+            }
+
+            Tile t;
+            for(int y = 1; y < tiles.length-1; y++) {
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    t = tiles[x][y];
+                    if(t.isRail) {
+                        data.append("rail=" + x + "," + y + "->" + x + "," + y + "\n");
+                    }
+                }
+            }
+
+            bw.write(data.toString());
+
+        } catch (IOException e) {
+            System.err.println("Error writing file: " + filename);
+            e.printStackTrace();
+            System.exit(3);
+        } finally {
+            try {
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException ex) {
+                System.err.println("Error writing file: " + filename);
+                ex.printStackTrace();
+                System.exit(3);
+            }
+
         }
     }
 

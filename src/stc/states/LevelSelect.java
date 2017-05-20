@@ -56,7 +56,7 @@ public class LevelSelect {
             tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
         }
         if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-            tm.transitionFade(m, new Model("0.txt", 0.6f, 0f), GameState.State.MENU, 0.4f);
+            tm.transitionFade(m, new Model("user_levels/test_save.txt", 0.6f, 0f), GameState.State.MENU, 0.4f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
