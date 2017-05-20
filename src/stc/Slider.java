@@ -23,6 +23,8 @@ public class Slider extends Renderable {
     public Slider(int x, int y) {
         this.x = x;
         this.y = y;
+        this.destX = x;
+        this.destY = y;
     }
 
     public void update(float delta) {

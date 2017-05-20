@@ -5,9 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
 
-import java.io.BufferedReader;
-import java.io.File;
-import java.io.FileReader;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -547,7 +545,7 @@ public class Model extends Renderable {
     }
 
     private void loadFromFile(String path) {
-        File file = new File("res/config/" + path);
+        File file = new File("res/levels/" + path);
         if(!file.exists()) {
             System.out.println("File not found: " + path);
             System.exit(1);
@@ -578,7 +576,8 @@ public class Model extends Renderable {
                 }
                 y++;
             }
-            processPropertyLine(line);
+            if(line.length() != 1)
+                processPropertyLine(line);
 
             //Process modifiers
             while((line = br.readLine()) != null) {
@@ -633,6 +632,68 @@ public class Model extends Renderable {
                 }
             default:
                 properties.put(type, data);
+        }
+    }
+
+    public void saveToFile(String filename) {
+        FileWriter fw = null;
+        BufferedWriter bw = null;
+        try {
+            fw = new FileWriter("res/levels/user_levels/" + filename + ".txt");
+            bw = new BufferedWriter(fw);
+
+            StringBuilder data = new StringBuilder();
+
+            for(int y = 1; y < tiles.length-1; y++) {
+                data.append("{");
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    data.append(tiles[x][y].type.ordinal() + ((x < tiles.length-2) ? "," : ""));
+                }
+                data.append("}\n");
+            }
+            data.append("name=test_save\n");
+            data.append("next=null.txt\n");
+            data.append("prev=null.txt\n");
+            data.append("score=999\n");
+
+            for(int y = 1; y < tiles.length-1; y++) {
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    for(Tile to : tiles[x][y].links) {
+                        data.append("link=" + x + "," + y + "->" + to.x + "," + to.y + "\n");
+                    }
+                }
+            }
+
+            Tile t;
+            for(int y = 1; y < tiles.length-1; y++) {
+                for (int x = 1; x < tiles.length - 1; x++) {
+                    t = tiles[x][y];
+                    if(t.isRail) {
+                        data.append("rail=" + x + "," + y + "->" + x + "," + y + "\n");
+                    }
+                }
+            }
+
+            bw.write(data.toString());
+
+        } catch (IOException e) {
+            System.err.println("Error writing file: " + filename);
+            e.printStackTrace();
+            System.exit(3);
+        } finally {
+            try {
+                if (bw != null)
+                    bw.close();
+
+                if (fw != null)
+                    fw.close();
+
+            } catch (IOException ex) {
+                System.err.println("Error writing file: " + filename);
+                ex.printStackTrace();
+                System.exit(3);
+            }
+
         }
     }
 

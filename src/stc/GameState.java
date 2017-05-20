@@ -37,7 +37,7 @@ public class GameState extends BasicGameState {
     private PlayLevel playLevel;
 
     public GameState() {
-        m = new Model("0.txt", 0.6f);
+        m = new Model("user_levels/test_save.txt", 0.6f);
         tm = new TransitionManager(this);
     }
 

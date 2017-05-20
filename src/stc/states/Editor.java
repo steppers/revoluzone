@@ -85,6 +85,9 @@ public class Editor {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
+            if(gc.getInput().isKeyPressed(Input.KEY_S)) {
+                m.saveToFile("test_save");
+            }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
@@ -111,6 +114,8 @@ public class Editor {
                             t.isRail = false;
                     }
                     m.reset();
+                    m.recalcBall();
+                    m.recalcSlider();
                 }
                 //Set current tile type if on toolbar
                 for (Rectangle r : toolbar) {
