@@ -50,7 +50,7 @@ public class Editor {
                 m.reset();
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-                tm.transitionShrink(m, GameState.State.MENU, 0.5f, 0.3f);
+                tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
                 tm.transitionRotate(m, gs.currentState, 90, 0.2f);
@@ -134,7 +134,6 @@ public class Editor {
     public void render(GameContainer gc, Graphics g) {
         m = gs.m;
         m.render(gc, g);
-        renderText(gc, g);
         renderToolbar(gc, g);
         g.setColor(Color.orange);
         g.setLineWidth(3);
@@ -151,6 +150,7 @@ public class Editor {
             }
         }
         g.setLineWidth(1);
+        renderText(g, m);
     }
 
     public void renderTransition(GameContainer gc, Graphics g) {
@@ -167,7 +167,7 @@ public class Editor {
         }
     }
 
-    private void renderText(GameContainer gc, Graphics g) {
+    public void renderText(Graphics g, Model m) {
 
     }
 
