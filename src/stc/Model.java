@@ -251,6 +251,20 @@ public class Model extends Renderable {
         Circle circleLarge = new Circle(0,0, SCALE*0.5f*0.8f);
         Circle circleSmall = new Circle(0,0, SCALE*0.5f*0.7f);
 
+        //Rails
+        Rectangle rail = new Rectangle(-SCALE/2f, -SCALE/10, SCALE, SCALE/5);
+        Shape railX = rail.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railY = rail.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+
+        Rectangle railStop = new Rectangle(0, -SCALE/10, SCALE/2, SCALE/5);
+        Shape railStopX1 = railStop.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+        Shape railStopY1 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
+        Shape railStopX2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI)));
+        Shape railStopY2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+3*Math.PI/2)));
+
+        Circle dot = new Circle(0, 0, SCALE / 6f);
+        Shape railDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
+
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < gridSize; x++) {
@@ -259,6 +273,15 @@ public class Model extends Renderable {
                 pos.sub(-rotation);
                 pos.scale(SCALE);
                 pos.add(screenOffset);
+
+                railX.setLocation(pos.x, pos.y);
+                railY.setLocation(pos.x, pos.y);
+                railStopX1.setLocation(pos.x, pos.y);
+                railStopX2.setLocation(pos.x, pos.y);
+                railStopY1.setLocation(pos.x, pos.y);
+                railStopY2.setLocation(pos.x, pos.y);
+                railDot.setLocation(pos.x, pos.y);
+
                 t = tiles[x][y];
                 switch(t.type) {
                     case KILL:
@@ -327,6 +350,28 @@ public class Model extends Renderable {
                         g.fill(circleSmall);
                         break;
                 }
+                if(tiles[x][y].isRail){
+                    g.setColor(Color.black.multiply(opCol));
+                    if(tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railX);
+                    }if(tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railY);
+                    }if(tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
+                        g.fill(railStopX1);
+                        g.fill(railDot);
+                    }if(!tiles[x+1][y].isRail && tiles[x-1][y].isRail){
+                        g.fill(railStopX2);
+                        g.fill(railDot);
+                    }if(tiles[x][y+1].isRail && !tiles[x][y-1].isRail){
+                        g.fill(railStopY1);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
+                        g.fill(railStopY2);
+                        g.fill(railDot);
+                    }if(!tiles[x][y+1].isRail && !tiles[x][y-1].isRail && !tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
+                        g.fill(railDot);
+                    }
+                }
             }
         }
 
@@ -374,19 +419,6 @@ public class Model extends Renderable {
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
 
-        Rectangle rail = new Rectangle(-SCALE/2f, -SCALE/10, SCALE, SCALE/5);
-        Shape railX = rail.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-        Shape railY = rail.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
-
-        Rectangle railStop = new Rectangle(0, -SCALE/10, SCALE/2, SCALE/5);
-        Shape railStopX1 = railStop.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-        Shape railStopY1 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI/2)));
-        Shape railStopX2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+Math.PI)));
-        Shape railStopY2 = railStop.transform(Transform.createRotateTransform((float)(((rotation*Math.PI)/180)+3*Math.PI/2)));
-
-        Circle dot = new Circle(0, 0, SCALE / 6f);
-        Shape railDot = dot.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
 
         for(int x = 0; x < gridSize; x++) {
@@ -396,13 +428,6 @@ public class Model extends Renderable {
                 pos.scale(SCALE);
                 pos.add(screenOffset);
                 tile.setLocation(pos.x, pos.y);
-                railX.setLocation(pos.x, pos.y);
-                railY.setLocation(pos.x, pos.y);
-                railStopX1.setLocation(pos.x, pos.y);
-                railStopX2.setLocation(pos.x, pos.y);
-                railStopY1.setLocation(pos.x, pos.y);
-                railStopY2.setLocation(pos.x, pos.y);
-                railDot.setLocation(pos.x, pos.y);
 
                 switch (tiles[x][y].type) {
                     case FIXED:
@@ -423,28 +448,6 @@ public class Model extends Renderable {
                         break;
                     default:
                         break;
-                }
-                if(tiles[x][y].isRail){
-                    g.setColor(Color.black.multiply(opCol));
-                    if(tiles[x+1][y].isRail && tiles[x-1][y].isRail){
-                        g.fill(railX);
-                    }if(tiles[x][y+1].isRail && tiles[x][y-1].isRail){
-                        g.fill(railY);
-                    }if(tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
-                        g.fill(railStopX1);
-                        g.fill(railDot);
-                    }if(!tiles[x+1][y].isRail && tiles[x-1][y].isRail){
-                        g.fill(railStopX2);
-                        g.fill(railDot);
-                    }if(tiles[x][y+1].isRail && !tiles[x][y-1].isRail){
-                        g.fill(railStopY1);
-                        g.fill(railDot);
-                    }if(!tiles[x][y+1].isRail && tiles[x][y-1].isRail){
-                        g.fill(railStopY2);
-                        g.fill(railDot);
-                    }if(!tiles[x][y+1].isRail && !tiles[x][y-1].isRail && !tiles[x+1][y].isRail && !tiles[x-1][y].isRail){
-                        g.fill(railDot);
-                    }
                 }
             }
         }

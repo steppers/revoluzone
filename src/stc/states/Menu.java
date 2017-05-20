@@ -79,6 +79,10 @@ public class Menu {
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
         }
+
+        //Update the tiles under the ball
+        Tile t = m.getTileUnderBall();
+        t.activate();
     }
 
     public void render(GameContainer gc, Graphics g) {
