@@ -7,10 +7,7 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
-import stc.GameState;
-import stc.Model;
-import stc.Tile;
-import stc.TransitionManager;
+import stc.*;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
 
@@ -247,7 +244,7 @@ public class Editor {
         for(int i = 0; i < toolbar.size(); i++) {
             graphics.setColor(Color.darkGray);
             graphics.draw(toolbar.get(i));
-            new Tile(i).render(11, (int)((gc.getHeight()*0.125f) + toolbar.get(i).getWidth()*i+1), (int)(toolbar.get(i).getWidth()-1), graphics, m.getOpacity());
+            new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + toolbar.get(i).getWidth() * i + 1), (int) (toolbar.get(i).getWidth() - 1), graphics, m.getOpacity());
         }
     }
 

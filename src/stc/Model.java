@@ -70,10 +70,14 @@ public class Model extends Renderable {
     }
 
     public Tile getTileUnderBall(Slider s){return tiles[(int)s.x][(int)s.y];}
-
+    
     public void reset() {
+        sliders.clear();
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
+                if(tiles[x][y].type == Tile.Type.SLIDER) {
+                    sliders.add(new Slider(x,y));
+                }
                 tiles[x][y].reset();
             }
         }

@@ -43,7 +43,7 @@ public class Tile {
 
     public Type type = Type.FIXED;
     public Type resetType = Type.FIXED;
-    public boolean active = true;
+    public boolean active = false;
     public ArrayList<Tile> links;
     public boolean isRail = false;
     public int x,y;
@@ -116,7 +116,7 @@ public class Tile {
             case SLIDER:
                 return hasSlider(m);
             default:
-                return true;
+                return hasSlider(m);
         }
     }
 
@@ -124,8 +124,8 @@ public class Tile {
         int counter = 0;
         for(int i = 0; i < m.sliders.size(); i++){
             if(this.x == m.sliders.get(i).destX && this.y == m.sliders.get(i).destY){
-                    counter++;
-                    break;
+                counter++;
+                break;
             }
         }
         if(counter == 0){
@@ -207,6 +207,8 @@ public class Tile {
             case RED_FINISH:
                 break;
             case SLIDER:
+                g.setColor(Color.magenta.multiply(new Color(0.9f,0.9f,0.9f,1.0f)));
+                g.fill(rect);
                 break;
             default:
                 break;
