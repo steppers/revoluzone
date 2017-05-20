@@ -6,6 +6,7 @@ import org.newdawn.slick.Input;
 import stc.GameState;
 import stc.Model;
 import stc.Tile;
+import stc.Slider;
 import stc.TransitionManager;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
@@ -67,6 +68,10 @@ public class PlayLevel {
         }
         Tile t = m.getTileUnderBall();
         t.activate();
+        for(Slider s: m.sliders){
+            Tile ts = m.getTileUnderSlider(s);
+            ts.activate();
+        }
     }
 
     public void render(GameContainer gc, Graphics g) {

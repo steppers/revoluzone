@@ -69,7 +69,7 @@ public class Model extends Renderable {
         return tiles[(int)ball.x][(int)ball.y];
     }
 
-    public Tile getTileUnderBall(Slider s){return tiles[(int)s.x][(int)s.y];}
+    public Tile getTileUnderSlider(Slider s){return tiles[(int)s.x][(int)s.y];}
 
     public void reset() {
         for(int x = 0; x < gridSize; x++) {
