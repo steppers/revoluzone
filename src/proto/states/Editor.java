@@ -1,4 +1,4 @@
-package proto;
+package proto.states;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
@@ -7,6 +7,10 @@ import org.newdawn.slick.Input;
 import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
+import proto.GameState;
+import proto.Model;
+import proto.Tile;
+import proto.TransitionManager;
 
 import java.util.ArrayList;
 
@@ -39,17 +43,14 @@ public class Editor {
         }
     }
 
-    public void setModel(Model model) {
-        m = model;
-    }
-
     public void update(GameContainer gc) {
+        m = gs.m;
         if(!linking) {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-                tm.transitionShrink(m, GameState.State.MENU, 0.5f, 0.3f);
+                tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
                 tm.transitionRotate(m, gs.currentState, 90, 0.2f);
@@ -131,8 +132,8 @@ public class Editor {
     }
 
     public void render(GameContainer gc, Graphics g) {
+        m = gs.m;
         m.render(gc, g);
-        renderText(gc, g);
         renderToolbar(gc, g);
         g.setColor(Color.orange);
         g.setLineWidth(3);
@@ -149,6 +150,7 @@ public class Editor {
             }
         }
         g.setLineWidth(1);
+        renderText(g, m);
     }
 
     public void renderTransition(GameContainer gc, Graphics g) {
@@ -165,7 +167,7 @@ public class Editor {
         }
     }
 
-    private void renderText(GameContainer gc, Graphics g) {
+    public void renderText(Graphics g, Model m) {
 
     }
 

@@ -52,18 +52,7 @@ public class FontLoader {
 
     public static void loadFont(GameContainer gc) {
 
-        if(gc.getWidth() >= 2300) {
-            fontSize = 48f;
-        }
-        else if(gc.getWidth() < 2300 && gc.getWidth() >= 1900){
-            fontSize = 36f;
-        }
-        else if(gc.getWidth() < 1900 && gc.getWidth() >= 1600){
-            fontSize = 24f;
-        }
-        else{
-            fontSize = 18f;
-        }
+        fontSize = 48f;
 
         try {
 

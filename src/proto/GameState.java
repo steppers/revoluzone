@@ -2,11 +2,11 @@ package proto;
 
 import graphics.FontLoader;
 import org.newdawn.slick.*;
-import org.newdawn.slick.geom.Line;
-import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
+import proto.UI.TextRenderer;
+import proto.states.*;
 
 import java.util.ArrayList;
 
@@ -21,23 +21,27 @@ public class GameState extends BasicGameState {
         CREDITS,
         LEVEL,
         TRANSITION,
-        EDITOR
+        EDITOR,
+        QUIT
     }
-    Model m;
-    Model m2;
-    TransitionManager tm;
-    State currentState = State.MENU;
-    State previousState = State.MENU;
+    public Model m;
+    public TransitionManager tm;
+    public State currentState = State.MENU;
+    public State previousState = State.MENU;
+    public TextRenderer textRenderer;
 
+    //State stuff
     ArrayList<BackgroundBox> bgBoxes;
     Editor editor;
+    Menu menu;
+    Credits credits;
+    LevelSelect levelSelect;
+    PlayLevel playLevel;
 
     public GameState() {
-        m = new Model("0.txt", 0.5f);
+        m = new Model("0.txt", 0.6f);
         tm = new TransitionManager(this);
         bgBoxes = new ArrayList<>();
-        editor = new Editor(this, tm);
-        editor.setModel(m);
     }
 
     @Override
@@ -51,8 +55,13 @@ public class GameState extends BasicGameState {
             bgBoxes.add(new BackgroundBox(gc));
         }
 
+        editor = new Editor(this, tm);
         editor.init(gc);
-        graphics.FontLoader.loadFont(gc);
+        textRenderer = new TextRenderer(gc);
+        menu = new Menu(this, tm);
+        credits = new Credits(this, tm);
+        levelSelect = new LevelSelect(this, tm);
+        playLevel = new PlayLevel(this, tm);
     }
 
     @Override
@@ -62,16 +71,13 @@ public class GameState extends BasicGameState {
         renderBackground(gc, g);
         switch(currentState) {
             case MENU:
-                m.render(gc, g);
-                renderStateText(gc, g, currentState, m);
+                menu.render(gc, g);
                 break;
             case LEVEL_SELECT:
-                m.render(gc, g);
-                renderStateText(gc, g, State.LEVEL_SELECT, m);
+                levelSelect.render(gc, g);
                 break;
             case LEVEL:
-                m.render(gc, g);
-                renderStateText(gc, g, State.LEVEL, m);
+                playLevel.render(gc, g);
                 break;
             case EDITOR:
                 editor.render(gc, g);
@@ -83,10 +89,20 @@ public class GameState extends BasicGameState {
                 if(previousState == State.EDITOR && tm.getNewState() != State.MENU) {
                     editor.renderTransition(gc, g);
                 }
+                if(tm.getNewState() == State.QUIT) {
+                    Color fill = Color.black;
+                    fill.a =  1-(m.getScale()*1.6666f);
+                    g.setColor(fill);
+                    g.resetTransform();
+                    g.fillRect(0, 0, gc.getWidth(), gc.getHeight());
+                }
                 break;
             case CREDITS:
-                m.render(gc, g);
-                renderStateText(gc, g, State.CREDITS, m);
+                credits.render(gc, g);
+                break;
+            case QUIT:
+                System.exit(0);
+                break;
             default:
                 break;
         }
@@ -111,16 +127,15 @@ public class GameState extends BasicGameState {
             if (!m.isWaiting()) {
                 switch (currentState) {
                     case MENU:
-                        updateMenu(gc);
+                        menu.update(gc);
                         break;
                     case LEVEL_SELECT:
-                        updateLevelSelect(gc);
+                        levelSelect.update(gc);
                         break;
                     case LEVEL:
-                        updateLevel(gc);
+                        playLevel.update(gc);
                         break;
                     case EDITOR:
-                        editor.setModel(m);
                         editor.update(gc);
                         break;
                     case TRANSITION:
@@ -132,7 +147,10 @@ public class GameState extends BasicGameState {
                         }
                         break;
                     case CREDITS:
-                        updateCREDITS(gc);
+                        credits.update(gc, delta);
+                        break;
+                    case QUIT:
+                        System.exit(0);
                         break;
                     default:
                         break;
@@ -150,135 +168,25 @@ public class GameState extends BasicGameState {
         }
     }
 
-    private void updateLevel(GameContainer gc) {
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-            tm.transitionShrink(m, State.LEVEL_SELECT, 0.5f, 0.3f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            m.score += 1;
-            tm.transitionRotate(m, currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            m.score += 1;
-            tm.transitionRotate(m, currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
-                m.toggleRedBlue();
-        }
-        if(m.hasCompleted()) {
-            if(m.score < Integer.parseInt(m.getProperty("score"))) {
-                m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
-            }
-            tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
-        }
-        Tile t = m.getTileUnderBall();
-        t.activate();
-    }
-
-    private void updateMenu(GameContainer gc) {
-        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
-            int r = (int)m.getRotation();
-            while(r < 0)
-                r += 360;
-            switch(r % 360) {
-                case 0:
-                    tm.transitionFade(m, new Model("Level 1.txt", 0.5f, 0f), State.LEVEL_SELECT, 0.6f);
-                    break;
-                case 90:
-                    System.exit(-1);
-                    break;
-                case 180:
-                    tm.transitionGrow(m, State.EDITOR, 1.0f, 0.3f);
-                    break;
-                case 270:
-                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.5f, 1f), State.CREDITS, 1f);
-                    break;
-            }
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
-    }
-
-    private void updateLevelSelect(GameContainer gc) {
-        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
-            tm.transitionGrow(m, State.LEVEL, 1.0f, 0.3f);
-        }
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-            tm.transitionFade(m, new Model("0.txt", 0.5f, 0f), State.MENU, 0.4f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.5f, 0f), currentState, 90, 0.3f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.5f, 0f), currentState, -90, 0.3f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
-    }
-    private void updateCREDITS(GameContainer gc){
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, currentState, 90, 0.2f);
-        }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, currentState, -90, 0.2f);
-        }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
-        }
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
-            tm.transitionFade(m, new Model("0.txt", 0.5f, 0f), State.MENU, 0.4f);
-        }
-    }
-
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {
         switch(state) {
             case MENU:
-//                renderText(gc, g, m.getOpacity(), m.getScale(), "Squaring the Circle", 0, -135, 0.8f, m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Level Select", 0, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Credits", 90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Quit", -90, -graphics.FontLoader.getFontSize(), 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Editor", 180, -graphics.FontLoader.getFontSize()*(float)(5/4), 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use arrow", 0, -graphics.FontLoader.getFontSize()*2.5f, 0.16f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "keys to turn", 0, -graphics.FontLoader.getFontSize()*3, 0.10f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Use space to", 0, -graphics.FontLoader.getFontSize()*3, 0.0f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "toggle", 0, -graphics.FontLoader.getFontSize()*2.5f, -0.06f*((float)gc.getHeight()/1440), m);
+                menu.renderText(g, m);
                 break;
             case LEVEL_SELECT:
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("name"), 0, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("prev").split("\\.")[0], 90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), m.getProperty("next").split("\\.")[0], -90, -graphics.FontLoader.getFontSize()*2, 0.6f*((float)gc.getHeight()/1440), m);
+                levelSelect.renderText(g, m);
                 break;
             case LEVEL:
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Best move count: " + m.getProperty("score"), 0, -graphics.FontLoader.getFontSize()*4.5f, 0.48f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Your move count: " + m.score, 0, -graphics.FontLoader.getFontSize()*4.5f, -0.43f*((float)gc.getHeight()/1440), m);
+                playLevel.renderText(g, m);
+                break;
             case TRANSITION:
-
                 break;
             case CREDITS:
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Ollie Steptoe", 0, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Alistair Brewin", 90, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
-                renderText(gc, g, m.getOpacity(), m.getScale(), "Anton Nikitin", -90, -graphics.FontLoader.getFontSize()*3, 0.6f*((float)gc.getHeight()/1440), m);
+                credits.renderText(g, m);
+                break;
             default:
                 break;
         }
-    }
-
-    private void renderText(GameContainer gc, Graphics g, float opacity, float scale, String text, float rotation, float xOffset, float yOffset, Model m) {
-        float SCALE = Math.min(gc.getHeight(), gc.getWidth());
-        g.setColor(new Color(1,1,1,opacity));
-        g.resetTransform();
-        g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, m.getRotation());
-        g.rotate(gc.getWidth() / 2, gc.getHeight() / 2, rotation);
-        g.drawString(text, ( gc.getWidth() / 2) + xOffset, (gc.getHeight()/2) - (yOffset*scale*SCALE));
     }
 
     private class BackgroundBox {
