@@ -30,6 +30,7 @@ public class Model extends Renderable {
     private float scale = 1;
     private float opacity = 1;
     private float textOpacity = 1;
+    private boolean redEnabled = false;
 
     private Color opCol = new Color(1,1,1,1);
 
@@ -75,7 +76,7 @@ public class Model extends Renderable {
                 if(tiles[x][y].type == Tile.Type.SLIDER) {
                     sliders.add(new Slider(x,y));
                 }
-                tiles[x][y].reset();
+                tiles[x][y].reset(redEnabled);
             }
         }
     }
@@ -88,6 +89,7 @@ public class Model extends Renderable {
                 }
             }
         }
+        redEnabled = !redEnabled;
         recalcBall();
         recalcSlider();
     }
@@ -657,11 +659,11 @@ public class Model extends Renderable {
         }
     }
 
-    public void saveToFile(String filename) {
+    public void saveToFile(String filename, String name) {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter("res/levels/user_levels/" + filename + ".txt");
+            fw = new FileWriter("res/levels/" + filename + ".txt");
             bw = new BufferedWriter(fw);
 
             StringBuilder data = new StringBuilder();
@@ -673,10 +675,10 @@ public class Model extends Renderable {
                 }
                 data.append("}\n");
             }
-            data.append("name=test_save\n");
-            data.append("next=null.txt\n");
-            data.append("prev=null.txt\n");
-            data.append("score=999\n");
+            data.append("name=" + name + "\n");
+            data.append("next=" + (getProperty("next") == null ? "user_levels/test_save.txt" : getProperty("next")) + "\n");
+            data.append("prev=" + (getProperty("prev") == null ? "user_levels/test_save.txt" : getProperty("prev")) + "\n");
+            data.append("score=" + (getProperty("score") == null ? "999" : getProperty("score")) + "\n");
 
             for(int y = 1; y < tiles.length-1; y++) {
                 for (int x = 1; x < tiles.length - 1; x++) {

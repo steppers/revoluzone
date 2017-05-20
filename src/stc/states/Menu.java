@@ -77,7 +77,8 @@ public class Menu {
             tm.transitionRotate(m, gs.currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            m.toggleRedBlue();
+            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
+                m.toggleRedBlue();
         }
 
         //Update the tiles under the ball

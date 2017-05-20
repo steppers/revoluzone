@@ -90,8 +90,10 @@ public class Editor {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_S)) {
-                m.saveToFile("test_save");
+            if(gc.getInput().isKeyDown(Input.KEY_LCONTROL)) {
+                if (gc.getInput().isKeyPressed(Input.KEY_S)) {
+                    m.saveToFile("user_levels/test_save", "test_save");
+                }
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
@@ -103,7 +105,8 @@ public class Editor {
                 tm.transitionRotate(m, gs.currentState, -90, 0.2f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-                m.toggleRedBlue();
+                if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
+                    m.toggleRedBlue();
             }
             if(gc.getInput().isKeyPressed(Input.KEY_COMMA)) {
                 if(m.gridSize > 4) {
@@ -123,18 +126,20 @@ public class Editor {
             if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
                 Tile t = m.getTileFromMousePos(gc);
                 //Set a tile if on the level
-                if (t != null) {
-                    if(drawTileType == Tile.Type.RAIL) {
-                        t.isRail = true;
-                    } else {
-                        t.type = drawTileType;
-                        t.resetType = drawTileType;
-                        if(drawTileType != Tile.Type.SLIDER)
-                            t.isRail = false;
+                if (t != null && t.x != 0 && t.x != m.gridSize-1 && t.y != 0 && t.y != m.gridSize-1) {
+                    if(t != m.getTileUnderBall()) {
+                        if (drawTileType == Tile.Type.RAIL) {
+                            t.isRail = true;
+                        } else {
+                            t.type = drawTileType;
+                            t.resetType = drawTileType;
+                            if (drawTileType != Tile.Type.SLIDER)
+                                t.isRail = false;
+                        }
+                        m.reset();
+                        m.recalcBall();
+                        m.recalcSlider();
                     }
-                    m.reset();
-                    m.recalcBall();
-                    m.recalcSlider();
                 }
                 //Set current tile type if on toolbar
                 for (Rectangle r : toolbar) {

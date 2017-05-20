@@ -54,15 +54,21 @@ public class Tile {
         links = new ArrayList<>();
     }
 
-    public void reset() {
+    public void reset(boolean redEnabled) {
         this.type = resetType;
         active = false;
         switch(type) {
             case RED:
-                active = true;
+                if(redEnabled)
+                    active = true;
+                else
+                    active = false;
                 break;
             case BLUE:
-                active = false;
+                if(redEnabled)
+                    active = false;
+                else
+                    active = true;
                 break;
             default:
                 break;
