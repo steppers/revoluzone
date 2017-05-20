@@ -651,7 +651,7 @@ public class Model extends Renderable {
             for(int y = 1; y < tiles.length-1; y++) {
                 data.append("{");
                 for (int x = 1; x < tiles.length - 1; x++) {
-                    data.append(tiles[x][y].type.ordinal() + ((x < tiles.length-2) ? "," : ""));
+                    data.append(tiles[x][y].resetType.ordinal() + ((x < tiles.length-2) ? "," : ""));
                 }
                 data.append("}\n");
             }
