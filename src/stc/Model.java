@@ -593,8 +593,11 @@ public class Model extends Renderable {
     }
 
     private void processPropertyLine(String line) {
-        String type = line.split("=")[0].trim();
-        String data = line.split("=")[1].trim();
+        String[] parts = line.split("=");
+        if(parts.length == 1)
+            return;
+        String type = parts[0].trim();
+        String data = parts[1].trim();
         StringBuilder s = new StringBuilder();
         String[] lines = data.split("\\\\n");
         switch (type) {

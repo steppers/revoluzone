@@ -8,5 +8,5 @@ next=Level 4.txt
 prev=Level 2.txt
 score=999
 name=Level 3
-message_left=
+message_left= 
 message_right=
