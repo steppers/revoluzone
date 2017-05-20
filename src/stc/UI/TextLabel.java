@@ -1,7 +1,11 @@
 package stc.UI;
 
 import org.newdawn.slick.Color;
+import org.newdawn.slick.Font;
+import org.newdawn.slick.GameContainer;
+import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.Vector2f;
+import stc.Model;
 
 /**
  * Created by Ollie on 19/05/2017.
@@ -9,7 +13,6 @@ import org.newdawn.slick.geom.Vector2f;
 public class TextLabel {
 
     public String text = "";
-    public Vector2f position = new Vector2f();
     public Vector2f anchor = new Vector2f(0,0);
     public Vector2f offset = new Vector2f(0,0);
     public float scale = 1f;
@@ -28,9 +31,11 @@ public class TextLabel {
         this.text = text;
     }
 
-    public TextLabel(String text, Vector2f position) {
+    public TextLabel(String text, float posX, float posY, float offsetX, float offsetY) {
         this.text = text;
-        this.position = position;
+        this.anchor.set(posX, posY);
+        this.offset.set(offsetX, offsetY);
+        this.color = Color.green.darker(0.4f);
     }
 
     public void offsetRotation(float rotationOffset) {
@@ -41,10 +46,38 @@ public class TextLabel {
         this.offsetScale = scale;
     }
 
+    public int getWidth(Font font) {
+        String[] lines = text.split("\n");
+        int width = 0, tmp;
+        for (String l : lines) {
+            tmp = font.getWidth(l);
+            if(tmp > width)
+                width = tmp;
+        }
+        return width;
+    }
+
+    public int getHeight(Font font) {
+        String[] lines = text.split("\n");
+        int totalHeight = 0;
+        for (String l : lines) {
+            if(totalHeight != 0)
+                totalHeight += 3;
+            totalHeight += font.getHeight(l);
+        }
+        return totalHeight;
+    }
+
+    public void render(Graphics g, TextRenderer tr, Model m) {
+        scale = m.getScale();
+        scaleOffset(m.getScale());
+        color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, this);
+    }
+
     @Override
     public TextLabel clone() {
         TextLabel l = new TextLabel(text);
-        l.position.set(position);
         l.anchor.set(anchor);
         l.offset.set(offset);
         l.scale = scale;

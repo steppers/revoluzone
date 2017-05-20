@@ -76,6 +76,8 @@ public class Model extends Renderable {
                 if(tiles[x][y].type == Tile.Type.SLIDER) {
                     sliders.add(new Slider(x,y));
                 }
+                if(tiles[x][y].type == Tile.Type.START)
+                    ball = new Ball(x, y);
                 tiles[x][y].reset(redEnabled);
             }
         }
@@ -592,6 +594,7 @@ public class Model extends Renderable {
             e.printStackTrace();
             System.exit(2);
         }
+        properties.put("filename", path);
     }
 
     private void processPropertyLine(String line) {

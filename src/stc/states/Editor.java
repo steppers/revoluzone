@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import stc.*;
+import stc.UI.Button;
 import stc.UI.ClickBox;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
@@ -34,10 +35,12 @@ public class Editor {
     private TextLabel placeInstructions;
     private TextLabel linkAddInstructions;
     private TextLabel linkRemoveInstructions;
-    private TextLabel sizeInstructions;
 
-    private ClickBox saveClickBox;
-    private TextLabel saveButton;
+    private Button saveButton;
+
+    private TextLabel sizeInstructions;
+    private Button addSizeButton;
+    private Button subSizeButton;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -80,31 +83,38 @@ public class Editor {
         temp.text = "Middle click:\nRemove links";
         temp.anchor.set(1.0f, 0.4166666f);
         linkRemoveInstructions = temp.clone();
-        temp.text = "Save";
-        temp.anchor.set(1.0f, 0.5833333f);
-        saveButton = temp.clone();
-        saveClickBox = new ClickBox(0.9f, 0.5833333f, 0.1f, 0.08f);
         temp.text = "< & > keys\nChange map Size";
         temp.anchor.set(1.0f, 0.75f);
         sizeInstructions = temp.clone();
+
+        saveButton = new Button("Save", 1.0f, 0.583333f, -0.1f, 0.0f, gc);
+        saveButton.setOnMouseClickCallback(() -> m.saveToFile("user_levels/test_save", "test_save"));
+
+        sizeInstructions = new TextLabel("Map size", 1.0f, 0.70f, -0.1f, 0.0f);
+        addSizeButton = new Button("+", 1.0f, 0.75f, -0.12f, 0.0f, gc);
+        subSizeButton = new Button("-", 1.0f, 0.75f, -0.08f, 0.0f, gc);
+        addSizeButton.setOnMouseClickCallback(() -> m.resize(m.gridSize-1));
+        subSizeButton.setOnMouseClickCallback(() -> {
+            if(m.gridSize > 4) {
+                m.resize(m.gridSize - 3);
+                if ((int) m.ball.x == (m.gridSize - 1)) {
+                    m.ball = new Ball(m.gridSize - 2, (int) m.ball.y);
+                }
+                if ((int) m.ball.y == (m.gridSize - 1)) {
+                    m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
+                }
+            }
+        });
     }
 
     public void update(GameContainer gc) {
         m = gs.m;
         if(!linking) {
+            saveButton.update(gc);
+            addSizeButton.update(gc);
+            subSizeButton.update(gc);
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
-            }
-            if(saveClickBox.isMouseInside(gc)) {
-                if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                    m.saveToFile("user_levels/test_save", "test_save");
-                    saveButton.color = Color.red;
-                }
-                if(!gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-                    saveButton.color = Color.yellow;
-                }
-            } else {
-                saveButton.color = Color.green.darker(0.4f);
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
@@ -119,20 +129,20 @@ public class Editor {
                 if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
                     m.toggleRedBlue();
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_COMMA)) {
-                if(m.gridSize > 4) {
-                    m.resize(m.gridSize - 3);
-                    if ((int) m.ball.x == (m.gridSize - 1)) {
-                        m.ball = new Ball(m.gridSize - 2, (int) m.ball.y);
-                    }
-                    if ((int) m.ball.y == (m.gridSize - 1)) {
-                        m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
-                    }
-                }
-            }
-            if(gc.getInput().isKeyPressed(Input.KEY_PERIOD)) {
-                m.resize(m.gridSize-1);
-            }
+//            if(gc.getInput().isKeyPressed(Input.KEY_COMMA)) {
+//                if(m.gridSize > 4) {
+//                    m.resize(m.gridSize - 3);
+//                    if ((int) m.ball.x == (m.gridSize - 1)) {
+//                        m.ball = new Ball(m.gridSize - 2, (int) m.ball.y);
+//                    }
+//                    if ((int) m.ball.y == (m.gridSize - 1)) {
+//                        m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
+//                    }
+//                }
+//            }
+//            if(gc.getInput().isKeyPressed(Input.KEY_PERIOD)) {
+//                m.resize(m.gridSize-1);
+//            }
             //Left mouse clicks
             if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
                 Tile t = m.getTileFromMousePos(gc);
@@ -285,14 +295,12 @@ public class Editor {
         linkRemoveInstructions.scaleOffset(m.getScale());
         linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
         tr.renderText(g, linkRemoveInstructions);
-        saveButton.scale = m.getScale();
-        saveButton.scaleOffset(m.getScale());
-        saveButton.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, saveButton);
-        sizeInstructions.scale = m.getScale();
-        sizeInstructions.scaleOffset(m.getScale());
-        sizeInstructions.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, sizeInstructions);
+
+        saveButton.render(g, tr, m);
+
+        sizeInstructions.render(g, tr, m);
+        addSizeButton.render(g, tr, m);
+        subSizeButton.render(g, tr, m);
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {

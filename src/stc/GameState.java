@@ -108,8 +108,8 @@ public class GameState extends BasicGameState {
         m.update(delta);
         Tile t = m.getTileUnderBall();
         if(t.type == Tile.Type.KILL) {
-            Model n = new Model(m.getProperty("name") + ".txt", m.getScale(), m.getOpacity());
-            m = n;
+            m.reset();
+            m.setRotation(0);
         }
         if(t.type == Tile.Type.FINISH && previousState == State.LEVEL) {
             m.ball.halt();
