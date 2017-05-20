@@ -344,15 +344,13 @@ public class Model extends Renderable {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)
                     continue;
-                if (tiles[x][y].isSolid(this) && !(tiles[x][y].type == Tile.Type.EMPTY)) {
-                    if (tiles[x][y].active) {
-                        Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
-                        pos.sub(-rotation);
-                        pos.scale(SCALE);
-                        pos.add(screenOffset);
-                        tile.setLocation(pos.x, pos.y);
-                        g.fill(tile);
-                    }
+                if (tiles[x][y].isSolid(this) && !(tiles[x][y].hasSlider(this))) {
+                    Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
+                    pos.sub(-rotation);
+                    pos.scale(SCALE);
+                    pos.add(screenOffset);
+                    tile.setLocation(pos.x, pos.y);
+                    g.fill(tile);
                 }
             }
         }

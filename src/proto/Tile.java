@@ -42,7 +42,7 @@ public class Tile {
 
     public Type type = Type.FIXED;
     public Type resetType = Type.FIXED;
-    public boolean active = false;
+    public boolean active = true;
     public ArrayList<Tile> links;
     public boolean isRail = false;
     public int x,y;
@@ -85,7 +85,7 @@ public class Tile {
     public boolean isSolid(Model m) {
         switch(type) {
             case EMPTY:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             case FIXED:
                 return true;
             case RED:
@@ -93,36 +93,36 @@ public class Tile {
                     return active;
                 }
                 else{
-                    return hasSlider(x,y,m);
+                    return hasSlider(m);
                 }
             case BLUE:
                 if(active) {
                     return active;
                 }
                 else{
-                    return hasSlider(x,y,m);
+                    return hasSlider(m);
                 }
             case KILL:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             case START:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             case FINISH:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             case SWITCH:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             case LOCKED_FINISH:
                 return true;
             case SLIDER:
-                return hasSlider(x,y,m);
+                return hasSlider(m);
             default:
                 return true;
         }
     }
 
-    public boolean hasSlider(int x, int y, Model m){
+    public boolean hasSlider(Model m){
         int counter = 0;
         for(int i = 0; i < m.sliders.size(); i++){
-            if(x == m.sliders.get(i).destX && y == m.sliders.get(i).destY){
+            if(this.x == m.sliders.get(i).destX && this.y == m.sliders.get(i).destY){
                     counter++;
                     break;
             }
