@@ -8,6 +8,7 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import stc.*;
+import stc.UI.ClickBox;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
 
@@ -33,7 +34,10 @@ public class Editor {
     private TextLabel placeInstructions;
     private TextLabel linkAddInstructions;
     private TextLabel linkRemoveInstructions;
-    private TextLabel saveInstructions;
+    private TextLabel sizeInstructions;
+
+    private ClickBox saveClickBox;
+    private TextLabel saveButton;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -67,21 +71,22 @@ public class Editor {
         temp.scale = m.getScale()/0.6f;
         temp.color = Color.green.darker(0.4f);
         temp.text = "Left click:\nPlace Tile";
-        temp.anchor.set(1.0f, 0.1f);
+        temp.anchor.set(1.0f, 0.0833333f);
         temp.offset.set(-0.1f, 0.0f);
         placeInstructions = temp.clone();
         temp.text = "Right click:\nStart Link";
-        temp.anchor.set(1.0f, 0.3f);
+        temp.anchor.set(1.0f, 0.25f);
         linkAddInstructions = temp.clone();
         temp.text = "Middle click:\nRemove links";
-        temp.anchor.set(1.0f, 0.5f);
+        temp.anchor.set(1.0f, 0.4166666f);
         linkRemoveInstructions = temp.clone();
-        temp.text = "S Key:\nSave";
-        temp.anchor.set(1.0f, 0.7f);
-        saveInstructions = temp.clone();
+        temp.text = "Save";
+        temp.anchor.set(1.0f, 0.5833333f);
+        saveButton = temp.clone();
+        saveClickBox = new ClickBox(0.9f, 0.5833333f, 0.1f, 0.08f);
         temp.text = "< & > keys\nChange map Size";
-        temp.anchor.set(1.0f, 0.7f);
-        saveInstructions = temp.clone();
+        temp.anchor.set(1.0f, 0.75f);
+        sizeInstructions = temp.clone();
     }
 
     public void update(GameContainer gc) {
@@ -90,10 +95,16 @@ public class Editor {
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
-            if(gc.getInput().isKeyDown(Input.KEY_LCONTROL)) {
-                if (gc.getInput().isKeyPressed(Input.KEY_S)) {
+            if(saveClickBox.isMouseInside(gc)) {
+                if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
                     m.saveToFile("user_levels/test_save", "test_save");
+                    saveButton.color = Color.red;
                 }
+                if(!gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                    saveButton.color = Color.yellow;
+                }
+            } else {
+                saveButton.color = Color.green.darker(0.4f);
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
@@ -274,10 +285,14 @@ public class Editor {
         linkRemoveInstructions.scaleOffset(m.getScale());
         linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
         tr.renderText(g, linkRemoveInstructions);
-        saveInstructions.scale = m.getScale();
-        saveInstructions.scaleOffset(m.getScale());
-        saveInstructions.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, saveInstructions);
+        saveButton.scale = m.getScale();
+        saveButton.scaleOffset(m.getScale());
+        saveButton.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, saveButton);
+        sizeInstructions.scale = m.getScale();
+        sizeInstructions.scaleOffset(m.getScale());
+        sizeInstructions.color.a = (m.getScale()-0.6f)*2f;
+        tr.renderText(g, sizeInstructions);
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {
