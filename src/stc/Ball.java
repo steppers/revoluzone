@@ -20,15 +20,17 @@ public class Ball extends Renderable {
     private boolean moving = false;
     private float velX = 0, velY = 0;
     private float accelX = 0, accelY = 0;
-    private float destX = 1, destY = 1;
+    public float destX = 1, destY = 1;
 
 
     public Ball(int x, int y) {
         this.x = x;
         this.y = y;
+        this.destX = x;
+        this.destY = y;
     }
 
-    public void update(float delta) {
+    public void update(float delta, Model m) {
         if(moving) {
             velX += accelX * delta;
             velY += accelY * delta;
@@ -38,18 +40,22 @@ public class Ball extends Renderable {
             if(velX > 0) {
                 if(x > destX) {
                     stopMoving();
+                    m.recalcMoving();
                 }
             } else if(velX < 0) {
                 if(x < destX) {
                     stopMoving();
+                    m.recalcMoving();
                 }
             } else if(velY > 0) {
                 if(y > destY) {
                     stopMoving();
+                    m.recalcMoving();
                 }
             }else if(velY < 0) {
                 if(y < destY) {
                     stopMoving();
+                    m.recalcMoving();
                 }
             }
         }
@@ -57,19 +63,20 @@ public class Ball extends Renderable {
 
     public void move(int destX, int destY) {
         if(destX != (int)x || destY != (int)y) {
-            if (moving = true) {
-                this.destX = destX;
-                this.destY = destY;
+            moving = true;
+            this.destX = destX;
+            this.destY = destY;
 
-                float dx, dy;
-                dx = destX - x;
-                dy = destY - y;
+            float dx, dy;
+            dx = destX - x;
+            dy = destY - y;
 
-                if(dx != 0)
-                    accelX = (dx / Math.abs(dx))*G;
-                if(dy != 0)
-                    accelY = (dy / Math.abs(dy))*G;
-            }
+            if(dx != 0)
+                accelX = (dx / Math.abs(dx))*G;
+            if(dy != 0)
+                accelY = (dy / Math.abs(dy))*G;
+        } else {
+            halt();
         }
     }
 
@@ -79,16 +86,14 @@ public class Ball extends Renderable {
         velY = 0;
         accelX = 0;
         accelY = 0;
+        x = destX;
+        y = destY;
     }
 
     private void stopMoving() {
         moving = false;
         x = destX;
         y = destY;
-        velX = 0;
-        velY = 0;
-        accelX = 0;
-        accelY = 0;
     }
 
     public boolean isMoving() {

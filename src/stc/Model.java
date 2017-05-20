@@ -52,14 +52,13 @@ public class Model extends Renderable {
         reset();
         recalcSlider();
         recalcBall();
-
     }
 
     public void update(float delta) {
         //Update our rotation here
-        ball.update(delta);
+        ball.update(delta, this);
         for(int i = 0; i < sliders.size(); i++) {
-            sliders.get(i).update(delta);
+            sliders.get(i).update(delta, this);
         }
     }
 
@@ -94,21 +93,15 @@ public class Model extends Renderable {
     }
 
     public boolean isWaiting() {
-        int movingCount = 0;
-
-        for (int i = 0; i < sliders.size(); i++) {
-            if (sliders.get(i).isMoving()) {
-                movingCount++;
-            }
-        }
         if (ball.isMoving()) {
-            movingCount++;
-        }
-        if (movingCount == 0) {
-            return false;
-        } else {
             return true;
         }
+        for (int i = 0; i < sliders.size(); i++) {
+            if (sliders.get(i).isMoving()) {
+                return true;
+            }
+        }
+        return false;
     }
 
     public void recalcBall() {
@@ -153,9 +146,14 @@ public class Model extends Renderable {
         }
     }
 
+    public void recalcMoving() {
+        recalcBall();
+        recalcSlider();
+    }
+
     public void recalcSlider() {
-        int r = (int)rotation % 360;
-        while(r < 0) {
+        int r = (int) rotation % 360;
+        while (r < 0) {
             r += 360;
         }
         for (int i = 0; i < sliders.size(); i++) {
@@ -165,7 +163,7 @@ public class Model extends Renderable {
             switch (r) {
                 case 0:
                     for (y = y + 1; y < gridSize; y++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
                             sliders.get(i).move(x, y - 1);
                             break;
                         }
@@ -173,7 +171,7 @@ public class Model extends Renderable {
                     break;
                 case 90:
                     for (x = x + 1; x < gridSize; x++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
                             sliders.get(i).move(x - 1, y);
                             break;
                         }
@@ -181,7 +179,7 @@ public class Model extends Renderable {
                     break;
                 case 180:
                     for (y = y - 1; y >= 0; y--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
                             sliders.get(i).move(x, y + 1);
                             break;
                         }
@@ -189,7 +187,7 @@ public class Model extends Renderable {
                     break;
                 case 270:
                     for (x = x - 1; x >= 0; x--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.x == x && ball.y == y)) {
+                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
                             sliders.get(i).move(x + 1, y);
                             break;
                         }
@@ -330,7 +328,6 @@ public class Model extends Renderable {
                         g.setColor(Color.darkGray.multiply(opCol));
                         switch1.setLocation(pos.x, pos.y);
                         g.fill(switch1);
-                        System.out.println(opCol);
                         if(t.active)
                             g.setColor(Color.green.multiply(opCol));
                         else
@@ -598,6 +595,8 @@ public class Model extends Renderable {
     private void processPropertyLine(String line) {
         String type = line.split("=")[0].trim();
         String data = line.split("=")[1].trim();
+        StringBuilder s = new StringBuilder();
+        String[] lines = data.split("\\\\n");
         switch (type) {
             case "name":
                 properties.put("name", data);
@@ -610,6 +609,22 @@ public class Model extends Renderable {
                 break;
             case "score":
                 properties.put("score", data);
+                break;
+            case "message_left":
+                for(int i = 0; i < lines.length; i++) {
+                    s.append(lines[i]);
+                    if(i != lines.length-1)
+                        s.append("\n");
+                }
+                properties.put("message_left", s.toString());
+                break;
+            case "message_right":
+                for(int i = 0; i < lines.length; i++) {
+                    s.append(lines[i]);
+                    if(i != lines.length-1)
+                        s.append("\n");
+                }
+                properties.put("message_right", s.toString());
                 break;
             case "link"://Links switches, teleporters and sliders
                 String firstLink = data.split("->")[0];
