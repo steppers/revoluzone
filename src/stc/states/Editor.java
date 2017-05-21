@@ -9,9 +9,12 @@ import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import stc.*;
 import stc.UI.Button;
-import stc.UI.ClickBox;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
+import stc.UI.proto.UIButton;
+import stc.UI.proto.UILabel;
+import stc.UI.proto.UIRect;
+import stc.UI.proto.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -31,16 +34,10 @@ public class Editor {
     private float linkSrcX, linkSrcY;
     private float linkDstX, linkDstY;
 
-    private ArrayList<TextLabel> labels;
-    private TextLabel placeInstructions;
-    private TextLabel linkAddInstructions;
-    private TextLabel linkRemoveInstructions;
-
-    private Button saveButton;
+    private ArrayList<UIRenderable> staticUI;
+    private ArrayList<UIRenderable> rotatingUI;
 
     private TextLabel sizeInstructions;
-    private Button addSizeButton;
-    private Button subSizeButton;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -56,45 +53,44 @@ public class Editor {
             toolbar.add(r);
         }
 
-        //Labels
-        labels = new ArrayList<>();
-        TextLabel temp = new TextLabel("Selected:\n" + drawTileType.getName());
-        temp.anchor.set(0.5f, 0.5f);
-        temp.offset.set(0f, -0.41f);
-        temp.scale = m.getScale()/0.6f;
-        labels.add(temp.clone());
-        temp.rotation = 90f;
-        labels.add(temp.clone());
-        temp.rotation = 180f;
-        labels.add(temp.clone());
-        temp.rotation = -90f;
-        labels.add(temp.clone());
+        //Static UI
+        staticUI = new ArrayList<>();
+        UILabel tmpLabel = new UILabel(gc);
+        tmpLabel.text = "Left click:\nPlace Tile";
+        tmpLabel.scale = m.getScale()/0.6f;
+        tmpLabel.color = new Color(Color.green).darker(0.4f);
+        tmpLabel.anchor.set(1.0f, 0.0833333f);
+        tmpLabel.offset.set(-0.1f, 0.0f);
+        staticUI.add(tmpLabel.clone());
 
-        temp = new TextLabel();
-        temp.scale = m.getScale()/0.6f;
-        temp.color = Color.green.darker(0.4f);
-        temp.text = "Left click:\nPlace Tile";
-        temp.anchor.set(1.0f, 0.0833333f);
-        temp.offset.set(-0.1f, 0.0f);
-        placeInstructions = temp.clone();
-        temp.text = "Right click:\nStart Link";
-        temp.anchor.set(1.0f, 0.25f);
-        linkAddInstructions = temp.clone();
-        temp.text = "Middle click:\nRemove links";
-        temp.anchor.set(1.0f, 0.4166666f);
-        linkRemoveInstructions = temp.clone();
-        temp.text = "< & > keys\nChange map Size";
-        temp.anchor.set(1.0f, 0.75f);
-        sizeInstructions = temp.clone();
+        tmpLabel.text = "Right click:\nStart Link";
+        tmpLabel.anchor.set(1.0f, 0.25f);
+        staticUI.add(tmpLabel.clone());
 
-        saveButton = new Button("Save", 1.0f, 0.583333f, -0.1f, 0.0f, gc);
-        saveButton.setOnMouseClickCallback(() -> m.saveToFile("user_levels/test_save", "test_save"));
+        tmpLabel.text = "Middle click:\nRemove links";
+        tmpLabel.anchor.set(1.0f, 0.4166666f);
+        staticUI.add(tmpLabel.clone());
 
-        sizeInstructions = new TextLabel("Map size", 1.0f, 0.70f, -0.1f, 0.0f);
-        addSizeButton = new Button("+", 1.0f, 0.75f, -0.12f, 0.0f, gc);
-        subSizeButton = new Button("-", 1.0f, 0.75f, -0.08f, 0.0f, gc);
-        addSizeButton.setOnMouseClickCallback(() -> m.resize(m.gridSize-1));
-        subSizeButton.setOnMouseClickCallback(() -> {
+        UIButton tmpButton = new UIButton("save", gc);
+        tmpButton.anchor.set(1.0f, 0.9f);
+        tmpButton.offset.set(-0.1f, 0.0f);
+        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/test_save", "test_save"));
+        staticUI.add(tmpButton.clone());
+
+        tmpLabel.text = "Map size";
+        tmpLabel.anchor.set(1.0f, 0.7f);
+        staticUI.add(tmpLabel.clone());
+
+        tmpButton.setText("+");
+        tmpButton.anchor.set(1.0f, 0.75f);
+        tmpButton.offset.set(-0.12f, 0.0f);
+        tmpButton.setOnClickCallback(() -> m.resize(m.gridSize-1));
+        staticUI.add(tmpButton.clone());
+
+        tmpButton.setText("-");
+        tmpButton.anchor.set(1.0f, 0.75f);
+        tmpButton.offset.set(-0.08f, 0.0f);
+        tmpButton.setOnClickCallback(() -> {
             if(m.gridSize > 4) {
                 m.resize(m.gridSize - 3);
                 if ((int) m.ball.x == (m.gridSize - 1)) {
@@ -105,14 +101,26 @@ public class Editor {
                 }
             }
         });
+        staticUI.add(tmpButton.clone());
+
+        //Rotating UI
+        rotatingUI = new ArrayList<>();
+        tmpLabel = new UILabel("Selected:\n" + drawTileType.getName(), gc);
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, -0.41f);
+        tmpLabel.scale = m.getScale()/0.6f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.rotation = 90f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.rotation = 180f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.rotation = -90f;
+        rotatingUI.add(tmpLabel.clone());
     }
 
     public void update(GameContainer gc) {
         m = gs.m;
         if(!linking) {
-            saveButton.update(gc);
-            addSizeButton.update(gc);
-            subSizeButton.update(gc);
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
@@ -129,20 +137,12 @@ public class Editor {
                 if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
                     m.toggleRedBlue();
             }
-//            if(gc.getInput().isKeyPressed(Input.KEY_COMMA)) {
-//                if(m.gridSize > 4) {
-//                    m.resize(m.gridSize - 3);
-//                    if ((int) m.ball.x == (m.gridSize - 1)) {
-//                        m.ball = new Ball(m.gridSize - 2, (int) m.ball.y);
-//                    }
-//                    if ((int) m.ball.y == (m.gridSize - 1)) {
-//                        m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
-//                    }
-//                }
-//            }
-//            if(gc.getInput().isKeyPressed(Input.KEY_PERIOD)) {
-//                m.resize(m.gridSize-1);
-//            }
+            for(UIRenderable r : staticUI) {
+                r.update();
+            }
+            for(UIRenderable r : rotatingUI) {
+                r.update();
+            }
             //Left mouse clicks
             if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
                 Tile t = m.getTileFromMousePos(gc);
@@ -165,8 +165,8 @@ public class Editor {
                 for (Rectangle r : toolbar) {
                     if (r.contains(gc.getInput().getMouseX(),gc.getInput().getMouseY())) {
                         drawTileType = Tile.Type.values()[toolbar.indexOf(r)];
-                        for(TextLabel l : labels) {
-                            l.text = "Selected:\n" + drawTileType.getName();
+                        for(UIRenderable l : rotatingUI) {
+                            ((UILabel)l).text = "Selected:\n" + drawTileType.getName();
                         }
                     }
                 }
@@ -182,7 +182,7 @@ public class Editor {
                         linkSrcY = p.y;
                         linkDstX = p.x;
                         linkDstY = p.y;
-                        linkAddInstructions.text = "Right click:\nEnd Link";
+                        ((UILabel)staticUI.get(1)).text = "Right click:\nEnd Link";
                     }
                 }
             }
@@ -199,13 +199,6 @@ public class Editor {
             Tile t = m.getTileUnderBall();
             t.activate();
         } else {
-            //Prevent inputs queuing up
-            if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {}
-            if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
-            if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {}
-
             //Update the current link end
             Vector2f p = gs.getMouseTilePos(gc);
             if(p != null) {
@@ -220,11 +213,17 @@ public class Editor {
                         linkSrcY = -100f;
                         linkDstX = -100f;
                         linkDstY = -100f;
-                        linkAddInstructions.text = "Right click:\nStart Link";
+                        ((UILabel)staticUI.get(1)).text = "Right click:\nStart Link";
                     }
                 }
             }
         }
+        //Prevent inputs queuing up
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {}
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {}
+        if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {}
+        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {}
+        if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {}
     }
 
     public void render(GameContainer gc, Graphics g) {
@@ -253,7 +252,7 @@ public class Editor {
         m = gs.m;
         renderToolbar(gc, g);
         Color c = new Color(Color.orange);
-        c.a = (m.getScale()-0.6f)*2f;
+        c.a = (m.getScale()-0.6f)*2.5f;
         g.setColor(c);
         g.setLineWidth(3);
         for(int x = 0; x < m.gridSize; x++) {
@@ -264,48 +263,43 @@ public class Editor {
                 }
             }
         }
+        for(UIRenderable r : staticUI) {
+            r.update();
+        }
+        for(UIRenderable r : rotatingUI) {
+            r.update();
+        }
     }
 
     public void renderText(Graphics g, Model m) {
         if(gs.currentState == GameState.State.TRANSITION) {
-            for(TextLabel l : labels) {
-                l.color.a = (m.getScale()-0.6f)*2f;
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = (m.getScale()-0.6f)*2.5f;
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         } else {
-            for (TextLabel l : labels) {
-                l.color.a = m.getOpacity();
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = m.getOpacity();
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         }
-        placeInstructions.scale = m.getScale();
-        placeInstructions.scaleOffset(m.getScale());
-        placeInstructions.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, placeInstructions);
-        linkAddInstructions.scale = m.getScale();
-        linkAddInstructions.scaleOffset(m.getScale());
-        linkAddInstructions.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, linkAddInstructions);
-        linkRemoveInstructions.scale = m.getScale();
-        linkRemoveInstructions.scaleOffset(m.getScale());
-        linkRemoveInstructions.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, linkRemoveInstructions);
 
-        saveButton.render(g, tr, m);
-
-        sizeInstructions.render(g, tr, m);
-        addSizeButton.render(g, tr, m);
-        subSizeButton.render(g, tr, m);
+        for(UIRenderable r : staticUI) {
+            r.scale = m.getScale();
+            r.scaleOffset(m.getScale());
+            r.color.a = (m.getScale()-0.6f)*2.5f;
+            r.render(g);
+        }
     }
 
     private void renderToolbar(GameContainer gc, Graphics graphics) {
         graphics.resetTransform();
         Color c = new Color(Color.darkGray);
-        c.a = (m.getScale()-0.6f)*2f;
+        c.a = (m.getScale()-0.6f)*2.5f;
         for(int i = 0; i < toolbar.size(); i++) {
             graphics.setColor(c);
             graphics.setLineWidth(3f);

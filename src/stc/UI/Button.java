@@ -51,9 +51,6 @@ public class Button {
         label.scaleOffset(m.getScale());
         label.color.a = (m.getScale()-0.6f)*2f;
         tr.renderText(g, label);
-
-//        g.resetTransform();
-//        g.drawRect();
     }
 
     public void setOnMouseClickCallback(ButtonCallback callback) {

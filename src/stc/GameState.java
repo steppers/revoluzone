@@ -78,11 +78,11 @@ public class GameState extends BasicGameState {
                 break;
             case TRANSITION:
                 tm.render(gc, g);
-                renderStateText(gc, g, previousState, m);
-                renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
                 if(previousState == State.EDITOR || tm.getNewState() == State.EDITOR) {
                     editor.renderTransition(gc, g);
                 }
+                renderStateText(gc, g, previousState, m);
+                renderStateText(gc, g, tm.getNewState(), tm.getNewModel());
                 if(tm.getNewState() == State.QUIT) {
                     Color fill = Color.black;
                     fill.a =  1-(m.getScale()*1.6666f);
