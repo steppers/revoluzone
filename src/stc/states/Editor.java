@@ -8,12 +8,9 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import stc.*;
-import stc.UI.Button;
-import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
 import stc.UI.proto.UIButton;
 import stc.UI.proto.UILabel;
-import stc.UI.proto.UIRect;
 import stc.UI.proto.UIRenderable;
 
 import java.util.ArrayList;
@@ -36,8 +33,6 @@ public class Editor {
 
     private ArrayList<UIRenderable> staticUI;
     private ArrayList<UIRenderable> rotatingUI;
-
-    private TextLabel sizeInstructions;
 
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
@@ -72,24 +67,26 @@ public class Editor {
         staticUI.add(tmpLabel.clone());
 
         UIButton tmpButton = new UIButton("save", gc);
-        tmpButton.anchor.set(1.0f, 0.9f);
-        tmpButton.offset.set(-0.1f, 0.0f);
+        tmpButton.anchor.set(1.0f, 0.95f);
+        tmpButton.offset.set(-0.05f, 0.0f);
+        tmpButton.color = new Color(Color.lightGray).darker(0.3f);
         tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/test_save", "test_save"));
         staticUI.add(tmpButton.clone());
 
         tmpLabel.text = "Map size";
-        tmpLabel.anchor.set(1.0f, 0.7f);
+        tmpLabel.anchor.set(1.0f, 0.88f);
+        tmpLabel.offset.set(-0.14f, 0.0f);
         staticUI.add(tmpLabel.clone());
 
         tmpButton.setText("+");
-        tmpButton.anchor.set(1.0f, 0.75f);
-        tmpButton.offset.set(-0.12f, 0.0f);
+        tmpButton.anchor.set(1.0f, 0.88f);
+        tmpButton.offset.set(-0.071f, 0.0f);
         tmpButton.setOnClickCallback(() -> m.resize(m.gridSize-1));
         staticUI.add(tmpButton.clone());
 
         tmpButton.setText("-");
-        tmpButton.anchor.set(1.0f, 0.75f);
-        tmpButton.offset.set(-0.08f, 0.0f);
+        tmpButton.anchor.set(1.0f, 0.88f);
+        tmpButton.offset.set(-0.03f, 0.0f);
         tmpButton.setOnClickCallback(() -> {
             if(m.gridSize > 4) {
                 m.resize(m.gridSize - 3);

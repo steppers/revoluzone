@@ -9,6 +9,8 @@ import stc.Model;
 import stc.TransitionManager;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
+import stc.UI.proto.UILabel;
+import stc.UI.proto.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -22,32 +24,36 @@ public class LevelSelect {
     private Model m;
     private TextRenderer tr;
 
-    private ArrayList<TextLabel> labels;
-    private TextLabel instructions;
+    private ArrayList<UIRenderable> staticUI;
+    private ArrayList<UIRenderable> rotatingUI;
 
-    public LevelSelect(GameState gameState, TransitionManager tm) {
+    public LevelSelect(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
         tr = gs.textRenderer;
         m = gs.m;
 
-        //Labels
-        labels = new ArrayList<>();
-        TextLabel temp = new TextLabel(m.getProperty("name"));
-        temp.anchor.set(0.5f, 0.5f);
-        temp.offset.set(0f, -0.46f);
-        labels.add(temp.clone());
-        temp.text = m.getProperty("prev").split("\\.")[0];
-        temp.rotation = 90f;
-        labels.add(temp.clone());
-        temp.text = m.getProperty("next").split("\\.")[0];
-        temp.rotation = -90f;
-        labels.add(temp.clone());
+        //Static UI
+        staticUI = new ArrayList<>();
+        UILabel tmpLabel = new UILabel(gc);
+        tmpLabel.text = "Arrow keys to choose level\nEnter to play, Esc to go back";
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, 0.7f);
+        tmpLabel.color = Color.green.darker(0.4f);
+        staticUI.add(tmpLabel.clone());
 
-        instructions = new TextLabel("Arrow keys to choose level\nEnter to play, Esc to go back");
-        instructions.anchor.set(0.5f, 0.5f);
-        instructions.offset.set(0f, 0.7f);
-        instructions.color = Color.green.darker(0.4f);
+        //Rotating UI
+        rotatingUI = new ArrayList<>();
+        tmpLabel = new UILabel(m.getProperty("name"), gc);
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, -0.46f);
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = m.getProperty("prev").split("\\.")[0];
+        tmpLabel.rotation = 90f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = m.getProperty("next").split("\\.")[0];
+        tmpLabel.rotation = -90f;
+        rotatingUI.add(tmpLabel.clone());
     }
 
     public void update(GameContainer gc) {
@@ -67,6 +73,13 @@ public class LevelSelect {
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
         }
+
+        for(UIRenderable r : staticUI) {
+            r.update();
+        }
+        for(UIRenderable r : rotatingUI) {
+            r.update();
+        }
     }
 
     public void render(GameContainer gc, Graphics g) {
@@ -75,40 +88,42 @@ public class LevelSelect {
     }
 
     public void renderText(Graphics g, Model m) {
-        labels.get(0).text = m.getProperty("name");
-        labels.get(1).text = m.getProperty("prev").split("\\.")[0];
-        labels.get(2).text = m.getProperty("next").split("\\.")[0];
+        ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
+        ((UILabel)rotatingUI.get(1)).text = m.getProperty("prev").split("\\.")[0];
+        ((UILabel)rotatingUI.get(2)).text = m.getProperty("next").split("\\.")[0];
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL) {
-                for(TextLabel l : labels) {
-                    l.color.a = 1f-(m.getScale()-0.6f)*2f;
-                    l.scale = m.getScale()/0.6f;
-                    l.offsetRotation(m.getRotation());
-                    l.scaleOffset(m.getScale());
-                    tr.renderText(g, l);
+                for(UIRenderable r : rotatingUI) {
+                    r.color.a = 1f-(m.getScale()-0.6f)*2.5f;
+                    r.scale = m.getScale()/0.6f;
+                    r.offsetRotation(m.getRotation());
+                    r.scaleOffset(m.getScale());
+                    r.render(g);
                 }
             } else {
-                for (TextLabel l : labels) {
-                    l.color.a = m.getOpacity();
-                    l.scale = m.getScale()/0.6f;
-                    l.offsetRotation(m.getRotation());
-                    l.scaleOffset(m.getScale());
-                    tr.renderText(g, l);
+                for(UIRenderable r : rotatingUI) {
+                    r.color.a = m.getOpacity();
+                    r.scale = m.getScale()/0.6f;
+                    r.offsetRotation(m.getRotation());
+                    r.scaleOffset(m.getScale());
+                    r.render(g);
                 }
             }
         } else {
-            for (TextLabel l : labels) {
-                l.color.a = m.getOpacity();
-                l.scale = m.getScale()/0.6f;
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = m.getOpacity();
+                r.scale = m.getScale()/0.6f;
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         }
-        instructions.scale = m.getScale()/0.6f;
-        instructions.scaleOffset(m.getScale());
-        instructions.color.a = m.getOpacity();
-        tr.renderText(g, instructions);
+        for(UIRenderable r : staticUI) {
+            r.scale = m.getScale()/0.6f;
+            r.scaleOffset(m.getScale());
+            r.color.a = m.getOpacity();
+            r.render(g);
+        }
     }
 
 }

@@ -5,8 +5,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import stc.*;
-import stc.UI.TextLabel;
-import stc.UI.TextRenderer;
+import stc.UI.proto.UILabel;
+import stc.UI.proto.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -17,36 +17,40 @@ public class Menu {
     private GameState gs;
     private TransitionManager tm;
     private Model m;
-    private TextRenderer tr;
 
-    private ArrayList<TextLabel> labels;
-    private TextLabel instructions;
+    private ArrayList<UIRenderable> staticUI;
+    private ArrayList<UIRenderable> rotatingUI;
 
-    public Menu(GameState gameState, TransitionManager tm) {
+    public Menu(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
-        tr = gs.textRenderer;
+        this.m = gs.m;
 
-        //Labels
-        labels = new ArrayList<>();
-        TextLabel temp = new TextLabel("Level Select");
-        temp.anchor.set(0.5f, 0.5f);
-        temp.offset.set(0f, -0.46f);
-        labels.add(temp.clone());
-        temp.text = "Quit";
-        temp.rotation = -90f;
-        labels.add(temp.clone());
-        temp.text = "Editor";
-        temp.rotation = -180f;
-        labels.add(temp.clone());
-        temp.text = "Credits";
-        temp.rotation = 90f;
-        labels.add(temp.clone());
+        //Static UI
+        staticUI = new ArrayList<>();
+        UILabel tmpLabel = new UILabel(gc);
+        tmpLabel.text = "Press Space to toggle blocks\nArrows to rotate, Enter & Esc to navigate menus";
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, 0.7f);
+        tmpLabel.color = Color.green.darker(0.4f);
+        staticUI.add(tmpLabel.clone());
 
-        instructions = new TextLabel("Press Space to toggle blocks\nArrows to rotate, Enter & Esc to navigate menus");
-        instructions.anchor.set(0.5f, 0.5f);
-        instructions.offset.set(0f, 0.7f);
-        instructions.color = Color.green.darker(0.4f);
+        //Rotating UI
+        rotatingUI = new ArrayList<>();
+        tmpLabel = new UILabel("Level Select", gc);
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, -0.46f);
+        tmpLabel.scale = m.getScale()/0.6f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = "Quit";
+        tmpLabel.rotation = -90f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = "Editor";
+        tmpLabel.rotation = 180f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = "Credits";
+        tmpLabel.rotation = 90f;
+        rotatingUI.add(tmpLabel.clone());
     }
 
     public void update(GameContainer gc) {
@@ -66,7 +70,7 @@ public class Menu {
                     tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
                     break;
                 case 270:
-                    tm.transitionFade(m, new Model(m.getProperty("name")+".txt", 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+                    tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
                     break;
             }
         }
@@ -79,6 +83,13 @@ public class Menu {
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
                 m.toggleRedBlue();
+        }
+
+        for(UIRenderable r : staticUI) {
+            r.update();
+        }
+        for(UIRenderable r : rotatingUI) {
+            r.update();
         }
 
         //Update the tiles under the ball
@@ -94,34 +105,36 @@ public class Menu {
     public void renderText(Graphics g, Model m) {
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.EDITOR || gs.previousState == GameState.State.EDITOR) {
-                for(TextLabel l : labels) {
-                    l.color.a = 1f-(m.getScale()-0.6f)*2f;
-                    l.scale = m.getScale()/0.6f;
-                    l.offsetRotation(m.getRotation());
-                    l.scaleOffset(m.getScale());
-                    tr.renderText(g, l);
+                for(UIRenderable r : rotatingUI) {
+                    r.color.a = 1f-(m.getScale()-0.6f)*2.5f;
+                    r.scale = m.getScale()/0.6f;
+                    r.offsetRotation(m.getRotation());
+                    r.scaleOffset(m.getScale());
+                    r.render(g);
                 }
             } else {
-                for (TextLabel l : labels) {
-                    l.color.a = m.getOpacity();
-                    l.scale = m.getScale()/0.6f;
-                    l.offsetRotation(m.getRotation());
-                    l.scaleOffset(m.getScale());
-                    tr.renderText(g, l);
+                for(UIRenderable r : rotatingUI) {
+                    r.color.a = m.getOpacity();
+                    r.scale = m.getScale()/0.6f;
+                    r.offsetRotation(m.getRotation());
+                    r.scaleOffset(m.getScale());
+                    r.render(g);
                 }
             }
         } else {
-            for (TextLabel l : labels) {
-                l.color.a = m.getOpacity();
-                l.scale = m.getScale()/0.6f;
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = m.getOpacity();
+                r.scale = m.getScale()/0.6f;
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         }
-        instructions.scale = m.getScale()/0.6f;
-        instructions.scaleOffset(m.getScale());
-        instructions.color.a = m.getOpacity();
-        tr.renderText(g, instructions);
+        for(UIRenderable r : staticUI) {
+            r.scale = m.getScale()/0.6f;
+            r.scaleOffset(m.getScale());
+            r.color.a = m.getOpacity();
+            r.render(g);
+        }
     }
 }

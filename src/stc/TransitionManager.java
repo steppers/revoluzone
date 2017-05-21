@@ -58,10 +58,10 @@ public class TransitionManager {
         to.setOpacity(0);
 
         if(angle > 0) {
-            to.setRotation(-90);
+            to.setRotation((from.getRotation() % 90)-90);
             this.type = Type.FADE_ROTATE_CW;
         } else {
-            to.setRotation(90);
+            to.setRotation((from.getRotation() % 90)+90);
             this.type = Type.FADE_ROTATE_CCW;
         }
 

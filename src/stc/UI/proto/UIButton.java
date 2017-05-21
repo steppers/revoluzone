@@ -17,8 +17,6 @@ public class UIButton extends UIRenderable {
         void callback();
     }
 
-    private static final Color boxColor = new Color(Color.lightGray).darker(0.2f);
-
     private UILabel label;
     private UIRect box;
 
@@ -29,7 +27,7 @@ public class UIButton extends UIRenderable {
         label = new UILabel(text, gc);
         label.color = new Color(Color.white);
         box = new UIRect(0, 0, label.getWidth()+0.02f, label.getHeight(), gc);
-        box.color = boxColor;
+        box.color = color;
         update();
     }
 
@@ -37,46 +35,48 @@ public class UIButton extends UIRenderable {
         label = new UILabel(text, gc);
         label.color = new Color(Color.white);
         box = new UIRect(0, 0, label.getWidth()+0.02f, label.getHeight(), gc);
-        box.color = boxColor;
+        box.color = color;
         update();
     }
 
     @Override
     public void update() {
-        super.update();
+        if(label.text != null) {
+            super.update();
 
-        Transform rotateTrans = Transform.createRotateTransform(rotation + rotationOffset, anchor.x, anchor.y);
+            Transform rotateTrans = Transform.createRotateTransform(rotation + rotationOffset, anchor.x, anchor.y);
 
-        tmp.set(offset);
-        tmp.scale(offsetScale);
-        Transform offsetTrans = Transform.createTranslateTransform(tmp.x, tmp.y);
+            tmp.set(offset);
+            tmp.scale(offsetScale);
+            Transform offsetTrans = Transform.createTranslateTransform(tmp.x, tmp.y);
 
-        Transform anchorTrans = Transform.createTranslateTransform(anchor.x, anchor.y);
-        Transform centerTrans = Transform.createTranslateTransform(-box.width / 2f, -box.height / 2f);
-        Transform scaleTrans = Transform.createScaleTransform(scale * (displayResolution.x/1920f), scale * (displayResolution.y/1080f));
+            Transform anchorTrans = Transform.createTranslateTransform(anchor.x, anchor.y);
+            Transform centerTrans = Transform.createTranslateTransform(-box.width / 2f, -box.height / 2f);
+            Transform scaleTrans = Transform.createScaleTransform(scale * (displayResolution.x / 1920f), scale * (displayResolution.y / 1080f));
 
-        Shape rect = new Rectangle(0, 0, box.width, box.height);
-        rect = rect.transform(centerTrans)
-                .transform(scaleTrans)
-                .transform(anchorTrans)
-                .transform(offsetTrans)
-                .transform(rotateTrans);
+            Shape rect = new Rectangle(0, 0, box.width, box.height);
+            rect = rect.transform(centerTrans)
+                    .transform(scaleTrans)
+                    .transform(anchorTrans)
+                    .transform(offsetTrans)
+                    .transform(rotateTrans);
 
-        float mouseX = (float)gc.getInput().getMouseX() / displayResolution.x;
-        float mouseY = (float)gc.getInput().getMouseY() / displayResolution.y;
+            float mouseX = (float) gc.getInput().getMouseX() / displayResolution.x;
+            float mouseY = (float) gc.getInput().getMouseY() / displayResolution.y;
 
-        if(rect.contains(mouseX, mouseY)) {
-            if(gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                box.color = new Color(67, 219, 206);
-                if (onClickCallback != null) {
-                    onClickCallback.callback();
+            if (rect.contains(mouseX, mouseY)) {
+                if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
+                    box.color = new Color(67, 219, 206);
+                    if (onClickCallback != null) {
+                        onClickCallback.callback();
+                    }
                 }
+                if (!gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                    box.color = new Color(69, 120, 204);
+                }
+            } else {
+                box.color = color;
             }
-            if(!gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
-                box.color = new Color(69, 120, 204);
-            }
-        } else {
-            box.color = boxColor;
         }
     }
 
@@ -94,10 +94,12 @@ public class UIButton extends UIRenderable {
 
     @Override
     protected void drawComponent(Graphics g) {
-        box.color.a = color.a;
-        box.drawComponent(g);
-        label.color.a = color.a;
-        label.drawComponent(g);
+        if(label.text != null) {
+            box.color.a = color.a;
+            box.drawComponent(g);
+            label.color.a = color.a;
+            label.drawComponent(g);
+        }
     }
 
     public float getWidth() {

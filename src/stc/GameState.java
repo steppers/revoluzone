@@ -52,10 +52,10 @@ public class GameState extends BasicGameState {
         textRenderer = new TextRenderer(gc);
 
         editor = new Editor(this, tm, gc);
-        menu = new Menu(this, tm);
-        credits = new Credits(this, tm);
-        levelSelect = new LevelSelect(this, tm);
-        playLevel = new PlayLevel(this, tm);
+        menu = new Menu(this, tm, gc);
+        credits = new Credits(this, tm, gc);
+        levelSelect = new LevelSelect(this, tm, gc);
+        playLevel = new PlayLevel(this, tm, gc);
     }
 
     @Override

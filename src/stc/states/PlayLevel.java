@@ -11,6 +11,8 @@ import stc.Slider;
 import stc.TransitionManager;
 import stc.UI.TextLabel;
 import stc.UI.TextRenderer;
+import stc.UI.proto.UILabel;
+import stc.UI.proto.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -22,44 +24,39 @@ public class PlayLevel {
     private GameState gs;
     private TransitionManager tm;
     private Model m;
-    private TextRenderer tr;
 
-    private ArrayList<TextLabel> labels;
-    private TextLabel messageLeft;
-    private TextLabel messageRight;
+    private ArrayList<UIRenderable> staticUI;
+    private ArrayList<UIRenderable> rotatingUI;
 
-    public PlayLevel(GameState gameState, TransitionManager tm) {
+    public PlayLevel(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
-        tr = gs.textRenderer;
         m = gs.m;
 
-        //Labels
-        labels = new ArrayList<>();
-        TextLabel temp = new TextLabel("Best move count: " + m.getProperty("score"));
-        temp.anchor.set(0.5f, 0.5f);
-        temp.offset.set(0f, -0.4f);
-        temp.scale = m.getScale()/0.6f;
-        labels.add(temp.clone());
-        temp.text = "Your move count: " + m.score;
-        temp.rotation = 180f;
-        labels.add(temp.clone());
+        //Static UI
+        staticUI = new ArrayList<>();
+        UILabel tmpLabel = new UILabel(gc);
+        tmpLabel.text = m.getProperty("message_left");
+        tmpLabel.anchor.set(0.0f, 0.5f);
+        tmpLabel.offset.set(0.11f, 0.0f);
+        tmpLabel.color = Color.green.darker(0.4f);
+        staticUI.add(tmpLabel.clone());
+        tmpLabel.text = m.getProperty("message_right");
+        tmpLabel.anchor.set(1.0f, 0.5f);
+        tmpLabel.offset.set(-0.11f, 0.0f);
+        tmpLabel.color = Color.green.darker(0.4f);
+        staticUI.add(tmpLabel.clone());
 
-        messageLeft = new TextLabel();
-        String msg = m.getProperty("message_left");
-        if(msg != null)
-            messageLeft.text = msg;
-        messageLeft.anchor.set(0.0f, 0.5f);
-        messageLeft.offset.set(0.11f, 0.0f);
-        messageLeft.color = Color.green.darker(0.4f);
-
-        messageRight = new TextLabel();
-        msg = m.getProperty("message_right");
-        if(msg != null)
-            messageRight.text = msg;
-        messageRight.anchor.set(1.0f, 0.5f);
-        messageRight.offset.set(-0.11f, 0.0f);
-        messageRight.color = Color.green.darker(0.4f);
+        //Rotating UI
+        rotatingUI = new ArrayList<>();
+        tmpLabel = new UILabel("Best move count: " + m.getProperty("score"), gc);
+        tmpLabel.anchor.set(0.5f, 0.5f);
+        tmpLabel.offset.set(0f, -0.4f);
+        tmpLabel.scale = m.getScale()/0.6f;
+        rotatingUI.add(tmpLabel.clone());
+        tmpLabel.text = "Your move count: " + m.score;
+        tmpLabel.rotation = 180f;
+        rotatingUI.add(tmpLabel.clone());
     }
 
     public void update(GameContainer gc) {
@@ -91,6 +88,14 @@ public class PlayLevel {
             Tile ts = m.getTileUnderSlider(s);
             ts.activate();
         }
+        for(UIRenderable r : staticUI) {
+            r.update();
+        }
+        for(UIRenderable r : rotatingUI) {
+            r.update();
+        }
+        ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
+        ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
     }
 
     public void render(GameContainer gc, Graphics g) {
@@ -99,43 +104,32 @@ public class PlayLevel {
     }
 
     public void renderText(Graphics g, Model m) {
-        labels.get(0).text = "Best move count: " + m.getProperty("score");
-        labels.get(1).text = "Your move count: " + m.score;
+        ((UILabel)rotatingUI.get(0)).text = "Best move count: " + m.getProperty("score");
+        ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
         if(gs.currentState == GameState.State.TRANSITION) {
-            for(TextLabel l : labels) {
-                l.color.a = (m.getScale()-0.6f)*2f;
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = (m.getScale()-0.6f)*2.5f;
+                r.scale = m.getScale();
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         } else {
-            for (TextLabel l : labels) {
-                l.color.a = m.getOpacity();
-                l.offsetRotation(m.getRotation());
-                l.scaleOffset(m.getScale());
-                tr.renderText(g, l);
+            for(UIRenderable r : rotatingUI) {
+                r.color.a = m.getOpacity();
+                r.scale = m.getScale();
+                r.offsetRotation(m.getRotation());
+                r.scaleOffset(m.getScale());
+                r.render(g);
             }
         }
+        for(UIRenderable r : staticUI) {
+            r.scale = m.getScale();
+            r.scaleOffset(m.getScale());
+            r.color.a = (m.getScale()-0.6f)*2.5f;
+            r.render(g);
+        }
 
-        String msg = m.getProperty("message_left");
-        if(msg != null)
-            messageLeft.text = msg;
-        else
-            messageLeft.text = "";
-        messageLeft.scale = m.getScale();
-        messageLeft.scaleOffset(m.getScale());
-        messageLeft.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, messageLeft);
-
-        msg = m.getProperty("message_right");
-        if(msg != null)
-            messageRight.text = msg;
-        else
-            messageRight.text = "";
-        messageRight.scale = m.getScale();
-        messageRight.scaleOffset(m.getScale());
-        messageRight.color.a = (m.getScale()-0.6f)*2f;
-        tr.renderText(g, messageRight);
     }
 
 }
