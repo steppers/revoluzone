@@ -158,8 +158,7 @@ public class Editor {
                                 t.isRail = false;
                         }
                         m.reset();
-                        m.recalcBall();
-                        m.recalcSlider();
+                        m.recalcAll();
                     }
                 }
                 //Set current tile type if on toolbar

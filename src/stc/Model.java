@@ -40,8 +40,7 @@ public class Model extends Renderable {
         setOpacity(1);
         setScale(scale);
         reset();
-        recalcSlider();
-        recalcBall();
+        recalcAll();
 
     }
 
@@ -51,8 +50,7 @@ public class Model extends Renderable {
         setOpacity(opacity);
         setScale(scale);
         reset();
-        recalcSlider();
-        recalcBall();
+        recalcAll();
     }
 
     public void update(float delta) {
@@ -92,8 +90,7 @@ public class Model extends Renderable {
             }
         }
         redEnabled = !redEnabled;
-        recalcBall();
-        recalcSlider();
+        recalcAll();
     }
 
     public boolean isWaiting() {
@@ -150,54 +147,55 @@ public class Model extends Renderable {
         }
     }
 
-    public void recalcMoving() {
+    public void recalcAll() {
         recalcBall();
-        recalcSlider();
+        for (int i = 0; i < sliders.size(); i++) {
+            recalcSlider(sliders.get(i));
+        }
     }
 
-    public void recalcSlider() {
+    public void recalcSlider(Slider s) {
         int r = (int) rotation % 360;
         while (r < 0) {
             r += 360;
         }
-        for (int i = 0; i < sliders.size(); i++) {
-            int y = (int) (sliders.get(i).y);
-            int x = (int) (sliders.get(i).x);
 
-            switch (r) {
-                case 0:
-                    for (y = y + 1; y < gridSize; y++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
-                            sliders.get(i).move(x, y - 1);
-                            break;
-                        }
+        int y = (int) (s.y);
+        int x = (int) (s.x);
+
+        switch (r) {
+            case 0:
+                for (y = y + 1; y < gridSize; y++) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                        s.move(x, y - 1);
+                        break;
                     }
-                    break;
-                case 90:
-                    for (x = x + 1; x < gridSize; x++) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
-                            sliders.get(i).move(x - 1, y);
-                            break;
-                        }
+                }
+                break;
+            case 90:
+                for (x = x + 1; x < gridSize; x++) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                        s.move(x - 1, y);
+                        break;
                     }
-                    break;
-                case 180:
-                    for (y = y - 1; y >= 0; y--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
-                            sliders.get(i).move(x, y + 1);
-                            break;
-                        }
+                }
+                break;
+            case 180:
+                for (y = y - 1; y >= 0; y--) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                        s.move(x, y + 1);
+                        break;
                     }
-                    break;
-                case 270:
-                    for (x = x - 1; x >= 0; x--) {
-                        if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
-                            sliders.get(i).move(x + 1, y);
-                            break;
-                        }
+                }
+                break;
+            case 270:
+                for (x = x - 1; x >= 0; x--) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                        s.move(x + 1, y);
+                        break;
                     }
-                    break;
-            }
+                }
+                break;
         }
     }
 
@@ -748,8 +746,7 @@ public class Model extends Renderable {
         gridSize = newGridSize;
 
         reset();
-        recalcSlider();
-        recalcBall();
+        recalcAll();
     }
 
     private void initTiles(int size) {

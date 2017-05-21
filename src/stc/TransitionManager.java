@@ -144,8 +144,7 @@ public class TransitionManager {
                     if(from.getRotation() > rotationTarget) {
                         transitioning = false;
                         from.setRotation(rotationTarget);
-                        to.recalcSlider();
-                        to.recalcBall();
+                        to.recalcAll();
                     }
                     break;
                 case ROTATE_CCW:
@@ -153,8 +152,7 @@ public class TransitionManager {
                     if(from.getRotation() < rotationTarget) {
                         transitioning = false;
                         from.setRotation(rotationTarget);
-                        to.recalcSlider();
-                        to.recalcBall();
+                        to.recalcAll();
                     }
                     break;
                 case FADE_ROTATE_CW:
@@ -167,8 +165,7 @@ public class TransitionManager {
                         from.setRotation(rotationTarget);
                         to.setRotation(0);
                         to.setOpacity(1);
-                        to.recalcSlider();
-                        to.recalcBall();
+                        to.recalcAll();
                     }
                     break;
                 case FADE_ROTATE_CCW:
@@ -181,8 +178,7 @@ public class TransitionManager {
                         from.setRotation(rotationTarget);
                         to.setRotation(0);
                         to.setOpacity(1);
-                        to.recalcSlider();
-                        to.recalcBall();
+                        to.recalcAll();
                     }
                     break;
                 default:

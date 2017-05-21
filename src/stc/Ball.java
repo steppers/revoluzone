@@ -40,29 +40,49 @@ public class Ball extends Renderable {
             if(velX > 0) {
                 if(x > destX) {
                     stopMoving();
-                    m.recalcMoving();
+                    m.recalcBall();
+                    for (int i = 0; i < m.sliders.size(); i++) {
+                        if (m.sliders.get(i).y == this.y) {
+                            m.recalcSlider(m.sliders.get(i));
+                        }
+                    }
                 }
             } else if(velX < 0) {
                 if(x < destX) {
                     stopMoving();
-                    m.recalcMoving();
+                    m.recalcBall();
+                    for (int i = 0; i < m.sliders.size(); i++) {
+                        if (m.sliders.get(i).y == this.y) {
+                            m.recalcSlider(m.sliders.get(i));
+                        }
+                    }
                 }
             } else if(velY > 0) {
                 if(y > destY) {
                     stopMoving();
-                    m.recalcMoving();
+                    m.recalcBall();
+                    for (int i = 0; i < m.sliders.size(); i++) {
+                        if (m.sliders.get(i).x == this.x) {
+                            m.recalcSlider(m.sliders.get(i));
+                        }
+                    }
                 }
             }else if(velY < 0) {
                 if(y < destY) {
                     stopMoving();
-                    m.recalcMoving();
+                    m.recalcBall();
+                    for (int i = 0; i < m.sliders.size(); i++) {
+                        if(m.sliders.get(i).x == this.x){
+                            m.recalcSlider(m.sliders.get(i));
+                        }
+                    }
                 }
             }
         }
     }
 
     public void move(int destX, int destY) {
-        if(destX != (int)x || destY != (int)y) {
+        if(destX < x-0.1 || destX > x+0.1 || destY < y-0.1 || destY > y+0.1) {
             moving = true;
             this.destX = destX;
             this.destY = destY;
@@ -71,9 +91,9 @@ public class Ball extends Renderable {
             dx = destX - x;
             dy = destY - y;
 
-            if(dx != 0)
+            if(dx > 0.1 || dx < -0.1)
                 accelX = (dx / Math.abs(dx))*G;
-            if(dy != 0)
+            if(dy > 0.1 || dy < -0.1)
                 accelY = (dy / Math.abs(dy))*G;
         } else {
             halt();
