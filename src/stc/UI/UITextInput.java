@@ -124,10 +124,12 @@ public class UITextInput extends UIRenderable {
                 entryMode = true;
             }
         } else {
-            if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {
-                box.color = color;
-                entryMode = false;
-                shiftHeld = 0;
+            if(entryMode) {
+                if (gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
+                    box.color = color;
+                    entryMode = false;
+                    shiftHeld = 0;
+                }
             }
         }
     }

@@ -122,6 +122,12 @@ public class Editor {
     public void update(GameContainer gc) {
         m = gs.m;
         if(!linking) {
+            for(UIRenderable r : staticUI) {
+                r.update();
+            }
+            for(UIRenderable r : rotatingUI) {
+                r.update();
+            }
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
             }
@@ -140,12 +146,6 @@ public class Editor {
                         m.toggleRedBlue();
                 }
             }
-            for(UIRenderable r : staticUI) {
-                r.update();
-            }
-            for(UIRenderable r : rotatingUI) {
-                r.update();
-            }
             //Left mouse clicks
             if(gc.getInput().isMouseButtonDown(Input.MOUSE_LEFT_BUTTON)) {
                 Tile t = m.getTileFromMousePos(gc);
@@ -160,7 +160,6 @@ public class Editor {
                             if (drawTileType != Tile.Type.SLIDER)
                                 t.isRail = false;
                         }
-                        m.reset();
                         m.recalcAll();
                     }
                 }

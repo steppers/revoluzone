@@ -735,6 +735,8 @@ public class Model extends Renderable {
                 } else {
                     newTiles[x][y] = new Tile(Tile.Type.EMPTY.ordinal());
                 }
+                newTiles[x][y].x = x;
+                newTiles[x][y].y = y;
             }
         }
 
