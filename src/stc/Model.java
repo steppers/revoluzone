@@ -680,6 +680,8 @@ public class Model extends Renderable {
             data.append("next=" + (getProperty("next") == null ? "user_levels/test_save.txt" : getProperty("next")) + "\n");
             data.append("prev=" + (getProperty("prev") == null ? "user_levels/test_save.txt" : getProperty("prev")) + "\n");
             data.append("score=" + (getProperty("score") == null ? "999" : getProperty("score")) + "\n");
+            data.append("message_left=\n");
+            data.append("message_right=\n");
 
             for(int y = 1; y < tiles.length-1; y++) {
                 for (int x = 1; x < tiles.length - 1; x++) {

@@ -31,17 +31,8 @@ public class UIRect extends UIRenderable {
         g.setColor(color);
         g.pushTransform();
 
-        float textCenterX = width / 2;
-        float textCenterY = height / 2;
-        textCenterX *= scale * (displayResolution.x/1920f);
-        textCenterY *= scale * (displayResolution.y/1080f);
-
-        tmp.set(-textCenterX, -textCenterY);
-        tmp.x *= displayResolution.x;
-        tmp.y *= displayResolution.y;
-        g.translate((int)tmp.x, (int)tmp.y);
-
         g.scale(scale * (displayResolution.x/1920f), scale * (displayResolution.y/1080f));
+        g.translate(-width/2 * displayResolution.x, -height / 2 * displayResolution.y);
         g.fillRect(0, 0, width * displayResolution.x, height * displayResolution.y);
         g.setLineWidth(3);
         g.setColor(color.darker(0.1f));

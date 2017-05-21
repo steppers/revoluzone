@@ -44,25 +44,34 @@ public class UIButton extends UIRenderable {
         if(label.text != null) {
             super.update();
 
-            Transform rotateTrans = Transform.createRotateTransform(rotation + rotationOffset, anchor.x, anchor.y);
+            tmp.set(anchor);
+            tmp.x *= displayResolution.x;
+            tmp.y *= displayResolution.y;
+            Transform rotateTrans = Transform.createRotateTransform((float)((rotation + rotationOffset) * Math.PI / 180f), tmp.x, tmp.y);
 
             tmp.set(offset);
+            tmp.x *= displayResolution.x;
+            tmp.y *= displayResolution.y;
             tmp.scale(offsetScale);
             Transform offsetTrans = Transform.createTranslateTransform(tmp.x, tmp.y);
 
-            Transform anchorTrans = Transform.createTranslateTransform(anchor.x, anchor.y);
-            Transform centerTrans = Transform.createTranslateTransform(-box.width / 2f, -box.height / 2f);
-            Transform scaleTrans = Transform.createScaleTransform(scale * (displayResolution.x / 1920f), scale * (displayResolution.y / 1080f));
+            tmp.set(anchor);
+            tmp.x *= displayResolution.x;
+            tmp.y *= displayResolution.y;
+            Transform anchorTrans = Transform.createTranslateTransform(tmp.x, tmp.y);
 
-            Shape rect = new Rectangle(0, 0, box.width, box.height);
+            Transform scaleTrans = Transform.createScaleTransform(scale * (displayResolution.x / 1920f), scale * (displayResolution.y / 1080f));
+            Transform centerTrans = Transform.createTranslateTransform(-box.width / 2f * displayResolution.x, -box.height / 2f * displayResolution.y);
+
+            Shape rect = new Rectangle(0, 0, box.width * displayResolution.x, box.height * displayResolution.y);
             rect = rect.transform(centerTrans)
                     .transform(scaleTrans)
                     .transform(anchorTrans)
                     .transform(offsetTrans)
                     .transform(rotateTrans);
 
-            float mouseX = (float) gc.getInput().getMouseX() / displayResolution.x;
-            float mouseY = (float) gc.getInput().getMouseY() / displayResolution.y;
+            float mouseX = (float) gc.getInput().getMouseX();
+            float mouseY = (float) gc.getInput().getMouseY();
 
             if (rect.contains(mouseX, mouseY)) {
                 if (gc.getInput().isMousePressed(Input.MOUSE_LEFT_BUTTON)) {

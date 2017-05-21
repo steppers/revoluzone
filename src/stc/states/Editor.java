@@ -11,6 +11,7 @@ import stc.*;
 import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
+import stc.UI.UITextInput;
 
 import java.util.ArrayList;
 
@@ -67,8 +68,14 @@ public class Editor {
         tmpButton.anchor.set(1.0f, 0.95f);
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
-        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/test_save", "test_save"));
+        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText(), ((UITextInput)staticUI.get(4)).getText()));
         staticUI.add(tmpButton.clone());
+
+        UITextInput tmpInput = new UITextInput("namehere", gc);
+        tmpInput.anchor.set(1.0f, 0.95f);
+        tmpInput.offset.set(-0.2f, 0.0f);
+        tmpInput.setColor(new Color(Color.lightGray).darker(0.3f));
+        staticUI.add(tmpInput);
 
         tmpLabel.text = "Map size";
         tmpLabel.anchor.set(1.0f, 0.88f);
@@ -128,8 +135,10 @@ public class Editor {
                 tm.transitionRotate(m, gs.currentState, -90, 0.2f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-                if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
-                    m.toggleRedBlue();
+                if(!((UITextInput)staticUI.get(4)).acceptingInput()) {
+                    if (m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
+                        m.toggleRedBlue();
+                }
             }
             for(UIRenderable r : staticUI) {
                 r.update();
