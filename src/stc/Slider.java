@@ -37,7 +37,9 @@ public class Slider extends Renderable {
             if(velX > 0) {
                 if(x > destX + 0.1) {
                     stopMoving();
-                    m.recalcBall();
+                    if(m.ball.y == this.y) {
+                        m.recalcBall();
+                    }
                     for (int i = 0; i < m.sliders.size(); i++) {
                         if (m.sliders.get(i).y == this.y) {
                             m.recalcSlider(m.sliders.get(i));
@@ -47,7 +49,9 @@ public class Slider extends Renderable {
             } else if(velX < 0) {
                 if(x < destX - 0.1) {
                     stopMoving();
-                    m.recalcBall();
+                    if(m.ball.y == this.y) {
+                        m.recalcBall();
+                    }
                     for (int i = 0; i < m.sliders.size(); i++) {
                         if (m.sliders.get(i).y == this.y) {
                             m.recalcSlider(m.sliders.get(i));
@@ -57,7 +61,9 @@ public class Slider extends Renderable {
             } else if(velY > 0) {
                 if(y > destY + 0.1) {
                     stopMoving();
-                    m.recalcBall();
+                    if(m.ball.x == this.x) {
+                        m.recalcBall();
+                    }
                     for (int i = 0; i < m.sliders.size(); i++) {
                         if (m.sliders.get(i).x == this.x) {
                             m.recalcSlider(m.sliders.get(i));
@@ -67,7 +73,9 @@ public class Slider extends Renderable {
             }else if(velY < 0) {
                 if(y < destY - 0.1) {
                     stopMoving();
-                    m.recalcBall();
+                    if(m.ball.x == this.x) {
+                        m.recalcBall();
+                    }
                     for (int i = 0; i < m.sliders.size(); i++) {
                         if (m.sliders.get(i).x == this.x) {
                             m.recalcSlider(m.sliders.get(i));
