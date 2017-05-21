@@ -38,7 +38,7 @@ public class Ball extends Renderable {
             y += velY * delta;
 
             if(velX > 0) {
-                if(x > destX) {
+                if(x > destX + 0.1) {
                     stopMoving();
                     m.recalcBall();
                     for (int i = 0; i < m.sliders.size(); i++) {
@@ -48,7 +48,7 @@ public class Ball extends Renderable {
                     }
                 }
             } else if(velX < 0) {
-                if(x < destX) {
+                if(x < destX - 0.1) {
                     stopMoving();
                     m.recalcBall();
                     for (int i = 0; i < m.sliders.size(); i++) {
@@ -58,7 +58,7 @@ public class Ball extends Renderable {
                     }
                 }
             } else if(velY > 0) {
-                if(y > destY) {
+                if(y > destY + 0.1) {
                     stopMoving();
                     m.recalcBall();
                     for (int i = 0; i < m.sliders.size(); i++) {
@@ -68,7 +68,7 @@ public class Ball extends Renderable {
                     }
                 }
             }else if(velY < 0) {
-                if(y < destY) {
+                if(y < destY - 0.1) {
                     stopMoving();
                     m.recalcBall();
                     for (int i = 0; i < m.sliders.size(); i++) {
