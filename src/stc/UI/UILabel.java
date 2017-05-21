@@ -1,4 +1,4 @@
-package stc.UI.proto;
+package stc.UI;
 
 import org.newdawn.slick.Color;
 import org.newdawn.slick.Font;

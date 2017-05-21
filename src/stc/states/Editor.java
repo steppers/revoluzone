@@ -8,10 +8,9 @@ import org.newdawn.slick.geom.Line;
 import org.newdawn.slick.geom.Rectangle;
 import org.newdawn.slick.geom.Vector2f;
 import stc.*;
-import stc.UI.TextRenderer;
-import stc.UI.proto.UIButton;
-import stc.UI.proto.UILabel;
-import stc.UI.proto.UIRenderable;
+import stc.UI.UIButton;
+import stc.UI.UILabel;
+import stc.UI.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -23,7 +22,6 @@ public class Editor {
     private GameState gs;
     private TransitionManager tm;
     private Model m;
-    private TextRenderer tr;
 
     private Tile.Type drawTileType = Tile.Type.EMPTY;
     private ArrayList<Rectangle> toolbar;
@@ -37,8 +35,7 @@ public class Editor {
     public Editor(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
-        tr = gs.textRenderer;
-        m = gs.m;
+        this.m = gs.m;
         toolbar = new ArrayList<>();
 
         //Initialisation

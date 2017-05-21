@@ -9,10 +9,8 @@ import stc.Model;
 import stc.Tile;
 import stc.Slider;
 import stc.TransitionManager;
-import stc.UI.TextLabel;
-import stc.UI.TextRenderer;
-import stc.UI.proto.UILabel;
-import stc.UI.proto.UIRenderable;
+import stc.UI.UILabel;
+import stc.UI.UIRenderable;
 
 import java.util.ArrayList;
 

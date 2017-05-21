@@ -5,7 +5,6 @@ import org.newdawn.slick.*;
 import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
-import stc.UI.TextRenderer;
 import stc.states.*;
 
 /**
@@ -26,7 +25,6 @@ public class GameState extends BasicGameState {
     public TransitionManager tm;
     public State currentState = State.MENU;
     public State previousState = State.MENU;
-    public TextRenderer textRenderer;
     private Background background;
 
     //State stuff
@@ -48,8 +46,8 @@ public class GameState extends BasicGameState {
 
     @Override
     public void init(GameContainer gc, StateBasedGame sbg) throws SlickException {
+        FontLoader.loadFont(gc);
         background = new Background(gc);
-        textRenderer = new TextRenderer(gc);
 
         editor = new Editor(this, tm, gc);
         menu = new Menu(this, tm, gc);

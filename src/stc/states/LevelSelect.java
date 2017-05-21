@@ -7,10 +7,8 @@ import org.newdawn.slick.Input;
 import stc.GameState;
 import stc.Model;
 import stc.TransitionManager;
-import stc.UI.TextLabel;
-import stc.UI.TextRenderer;
-import stc.UI.proto.UILabel;
-import stc.UI.proto.UIRenderable;
+import stc.UI.UILabel;
+import stc.UI.UIRenderable;
 
 import java.util.ArrayList;
 
@@ -22,7 +20,6 @@ public class LevelSelect {
     private GameState gs;
     private TransitionManager tm;
     private Model m;
-    private TextRenderer tr;
 
     private ArrayList<UIRenderable> staticUI;
     private ArrayList<UIRenderable> rotatingUI;
@@ -30,7 +27,6 @@ public class LevelSelect {
     public LevelSelect(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
-        tr = gs.textRenderer;
         m = gs.m;
 
         //Static UI

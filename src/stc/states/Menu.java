@@ -5,8 +5,8 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import stc.*;
-import stc.UI.proto.UILabel;
-import stc.UI.proto.UIRenderable;
+import stc.UI.UILabel;
+import stc.UI.UIRenderable;
 
 import java.util.ArrayList;
 
