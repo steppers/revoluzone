@@ -94,8 +94,6 @@ public class PlayLevel {
         for(UIRenderable r : rotatingUI) {
             r.update();
         }
-        ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
-        ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
     }
 
     public void render(GameContainer gc, Graphics g) {
@@ -106,6 +104,8 @@ public class PlayLevel {
     public void renderText(Graphics g, Model m) {
         ((UILabel)rotatingUI.get(0)).text = "Best move count: " + m.getProperty("score");
         ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
+        ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
+        ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
         if(gs.currentState == GameState.State.TRANSITION) {
             for(UIRenderable r : rotatingUI) {
                 r.color.a = (m.getScale()-0.6f)*2.5f;
@@ -113,6 +113,21 @@ public class PlayLevel {
                 r.offsetRotation(m.getRotation());
                 r.scaleOffset(m.getScale());
                 r.render(g);
+            }
+            if(tm.getNewState() == GameState.State.LEVEL) {
+                for(UIRenderable r : staticUI) {
+                    r.scale = m.getScale();
+                    r.scaleOffset(m.getScale());
+                    r.color.a = m.getOpacity();
+                    r.render(g);
+                }
+            } else {
+                for(UIRenderable r : staticUI) {
+                    r.scale = m.getScale();
+                    r.scaleOffset(m.getScale());
+                    r.color.a = (m.getScale()-0.6f)*2.5f;
+                    r.render(g);
+                }
             }
         } else {
             for(UIRenderable r : rotatingUI) {
@@ -122,12 +137,12 @@ public class PlayLevel {
                 r.scaleOffset(m.getScale());
                 r.render(g);
             }
-        }
-        for(UIRenderable r : staticUI) {
-            r.scale = m.getScale();
-            r.scaleOffset(m.getScale());
-            r.color.a = (m.getScale()-0.6f)*2.5f;
-            r.render(g);
+            for(UIRenderable r : staticUI) {
+                r.scale = m.getScale();
+                r.scaleOffset(m.getScale());
+                r.color.a = (m.getScale()-0.6f)*2.5f;
+                r.render(g);
+            }
         }
 
     }
