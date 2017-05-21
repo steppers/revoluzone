@@ -82,6 +82,10 @@ public class Model extends Renderable {
     }
 
     public void toggleRedBlue() {
+        for(Slider s : sliders) {
+            if(tiles[(int)s.destX][(int)s.destY].type == Tile.Type.RED || tiles[(int)s.destX][(int)s.destY].type == Tile.Type.BLUE)
+                return;
+        }
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.RED || tiles[x][y].type == Tile.Type.BLUE) {
@@ -91,6 +95,10 @@ public class Model extends Renderable {
         }
         redEnabled = !redEnabled;
         recalcAll();
+    }
+
+    public void addSlider(int x, int y) {
+        sliders.add(new Slider(x,y));
     }
 
     public boolean isWaiting() {
@@ -109,8 +117,8 @@ public class Model extends Renderable {
         int r = (int)rotation % 360;
         while(r < 0)
             r += 360;
-        int y = (int)(ball.y);
-        int x = (int)(ball.x);
+        int y = (int)(ball.destY);
+        int x = (int)(ball.destX);
         switch(r) {
             case 0:
                 for(y = y+1; y < gridSize; y++) {
@@ -160,8 +168,8 @@ public class Model extends Renderable {
             r += 360;
         }
 
-        int y = (int) (s.y);
-        int x = (int) (s.x);
+        int y = (int) (s.destY);
+        int x = (int) (s.destX);
 
         switch (r) {
             case 0:

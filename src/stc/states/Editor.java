@@ -157,8 +157,11 @@ public class Editor {
                         } else {
                             t.type = drawTileType;
                             t.resetType = drawTileType;
-                            if (drawTileType != Tile.Type.SLIDER)
+                            if (drawTileType != Tile.Type.SLIDER) {
                                 t.isRail = false;
+                            } else {
+                                m.addSlider(t.x, t.y);
+                            }
                         }
                         m.recalcAll();
                     }

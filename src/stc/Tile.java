@@ -128,7 +128,7 @@ public class Tile {
 
     public boolean hasSlider(Model m){
         for(int i = 0; i < m.sliders.size(); i++){
-            if(this.x == m.sliders.get(i).destX && this.y == m.sliders.get(i).destY){
+            if(this.x == (int)m.sliders.get(i).destX && this.y == (int)m.sliders.get(i).destY){
                 return true;
             }
         }
