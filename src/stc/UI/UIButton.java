@@ -110,9 +110,11 @@ public class UIButton extends UIRenderable {
         g.pushTransform();
         if(label.text != null) {
             if(!transparentBox) {
+                box.scale = scale;
                 box.color.a = color.a;
                 box.drawComponent(g);
             }
+            label.scale = scale;
             label.color.a = color.a;
             label.drawComponent(g);
         }

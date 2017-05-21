@@ -134,10 +134,10 @@ public class Editor {
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+            if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
                 tm.transitionRotate(m, gs.currentState, 90, 0.2f);
             }
-            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
+            else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
                 tm.transitionRotate(m, gs.currentState, -90, 0.2f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
@@ -202,7 +202,7 @@ public class Editor {
 
             //Update the tiles under the ball
             Tile t = m.getTileUnderBall();
-            t.activate();
+            t.activate(m);
         } else {
             //Update the current link end
             Vector2f p = gs.getMouseTilePos(gc);

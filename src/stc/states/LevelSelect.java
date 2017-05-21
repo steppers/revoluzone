@@ -7,6 +7,7 @@ import org.newdawn.slick.Input;
 import stc.GameState;
 import stc.Model;
 import stc.TransitionManager;
+import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
 
@@ -40,16 +41,26 @@ public class LevelSelect {
 
         //Rotating UI
         rotatingUI = new ArrayList<>();
-        tmpLabel = new UILabel(m.getProperty("name"), gc);
-        tmpLabel.anchor.set(0.5f, 0.5f);
-        tmpLabel.offset.set(0f, -0.46f);
-        rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = m.getProperty("prev").split("\\.")[0];
-        tmpLabel.rotation = 90f;
-        rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = m.getProperty("next").split("\\.")[0];
-        tmpLabel.rotation = -90f;
-        rotatingUI.add(tmpLabel.clone());
+        UIButton tmpButton = new UIButton(m.getProperty("name"), gc);
+        tmpButton.anchor.set(0.5f, 0.5f);
+        tmpButton.offset.set(0f, -0.46f);
+        tmpButton.setTransparentBox(true);
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
+        tmpButton.setText(m.getProperty("prev").split("\\.")[0]);
+        tmpButton.rotation = 90f;
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
+        tmpButton.setText(m.getProperty("next").split("\\.")[0]);
+        tmpButton.rotation = -90f;
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
     }
 
     public void update(GameContainer gc) {
@@ -84,9 +95,9 @@ public class LevelSelect {
     }
 
     public void renderText(Graphics g, Model m) {
-        ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
-        ((UILabel)rotatingUI.get(1)).text = m.getProperty("prev").split("\\.")[0];
-        ((UILabel)rotatingUI.get(2)).text = m.getProperty("next").split("\\.")[0];
+        ((UIButton)rotatingUI.get(0)).setText(m.getProperty("name"));
+        ((UIButton)rotatingUI.get(1)).setText(m.getProperty("prev").split("\\.")[0]);
+        ((UIButton)rotatingUI.get(2)).setText(m.getProperty("next").split("\\.")[0]);
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL) {
                 for(UIRenderable r : rotatingUI) {

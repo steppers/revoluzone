@@ -62,13 +62,13 @@ public class PlayLevel {
         if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionShrink(m, GameState.State.LEVEL_SELECT, 0.6f, 0.3f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
             m.score += 1;
-            tm.transitionRotate(m, gs.currentState, 90, 0.2f);
+            tm.transitionRotate(m, gs.currentState, 90, 0.15f);
         }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
             m.score += 1;
-            tm.transitionRotate(m, gs.currentState, -90, 0.2f);
+            tm.transitionRotate(m, gs.currentState, -90, 0.15f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
@@ -81,10 +81,10 @@ public class PlayLevel {
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), GameState.State.LEVEL, 90, 0.3f);
         }
         Tile t = m.getTileUnderBall();
-        t.activate();
+        t.activate(m);
         for(Slider s: m.sliders){
             Tile ts = m.getTileUnderSlider(s);
-            ts.activate();
+            ts.activate(m);
         }
         for(UIRenderable r : staticUI) {
             r.update();

@@ -75,14 +75,17 @@ public class Tile {
         }
     }
 
-    public void activate() {
-        links.forEach(Tile::activate);
+    public void activate(Model m) {
+        for (Tile t : links) {
+            t.activate(m);
+        }
         switch(type) {
             case SWITCH:
                 active = true;
                 break;
             case LOCKED_FINISH:
                 type = Tile.Type.FINISH;
+                m.recalcAll();
                 break;
             default:
                 break;

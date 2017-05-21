@@ -89,11 +89,11 @@ public class Menu {
                     break;
             }
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, gs.currentState, 90, 0.2f);
+        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+            tm.transitionRotate(m, gs.currentState, 90, 0.15f);
         }
-        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, gs.currentState, -90, 0.2f);
+        else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+            tm.transitionRotate(m, gs.currentState, -90, 0.15f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
@@ -109,7 +109,7 @@ public class Menu {
 
         //Update the tiles under the ball
         Tile t = m.getTileUnderBall();
-        t.activate();
+        t.activate(m);
     }
 
     public void render(GameContainer gc, Graphics g) {
