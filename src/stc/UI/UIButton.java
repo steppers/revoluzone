@@ -19,6 +19,7 @@ public class UIButton extends UIRenderable {
 
     private UILabel label;
     private UIRect box;
+    private boolean transparentBox = false;
 
     private UIButtonCallback onClickCallback;
 
@@ -43,7 +44,6 @@ public class UIButton extends UIRenderable {
     public void update() {
         if(label.text != null) {
             super.update();
-
             tmp.set(anchor);
             tmp.x *= displayResolution.x;
             tmp.y *= displayResolution.y;
@@ -101,14 +101,22 @@ public class UIButton extends UIRenderable {
         label.color = color;
     }
 
+    public void setTransparentBox(boolean val) {
+        transparentBox = val;
+    }
+
     @Override
     protected void drawComponent(Graphics g) {
+        g.pushTransform();
         if(label.text != null) {
-            box.color.a = color.a;
-            box.drawComponent(g);
+            if(!transparentBox) {
+                box.color.a = color.a;
+                box.drawComponent(g);
+            }
             label.color.a = color.a;
             label.drawComponent(g);
         }
+        g.popTransform();
     }
 
     public float getWidth() {
@@ -127,8 +135,10 @@ public class UIButton extends UIRenderable {
         r.scale = scale;
         r.rotation = rotation;
         r.color = new Color(color);
+        r.setText(label.text);
         r.rotationOffset = rotationOffset;
         r.offsetScale = offsetScale;
+        r.transparentBox = transparentBox;
         return r;
     }
 

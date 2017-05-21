@@ -5,6 +5,7 @@ import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.Input;
 import stc.*;
+import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
 
@@ -37,20 +38,34 @@ public class Menu {
 
         //Rotating UI
         rotatingUI = new ArrayList<>();
-        tmpLabel = new UILabel("Level Select", gc);
-        tmpLabel.anchor.set(0.5f, 0.5f);
-        tmpLabel.offset.set(0f, -0.46f);
-        tmpLabel.scale = m.getScale()/0.6f;
-        rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = "Quit";
-        tmpLabel.rotation = -90f;
-        rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = "Editor";
-        tmpLabel.rotation = 180f;
-        rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = "Credits";
-        tmpLabel.rotation = 90f;
-        rotatingUI.add(tmpLabel.clone());
+        UIButton tmpButton = new UIButton("Level Select", gc);
+        tmpButton.setBoxColor(Color.transparent);
+        tmpButton.anchor.set(0.5f, 0.5f);
+        tmpButton.offset.set(0f, -0.46f);
+        tmpButton.scale = m.getScale()/0.6f;
+        tmpButton.setTransparentBox(true);
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
+        tmpButton.setText("Quit");
+        tmpButton.rotation = -90f;
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
+        tmpButton.setText("Editor");
+        tmpButton.rotation = 180f;
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
+        });
+        rotatingUI.add(tmpButton.clone());
+        tmpButton.setText("Credits");
+        tmpButton.rotation = 90f;
+        tmpButton.setOnClickCallback(() -> {
+            tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+        });
+        rotatingUI.add(tmpButton.clone());
     }
 
     public void update(GameContainer gc) {
