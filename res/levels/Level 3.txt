@@ -4,9 +4,9 @@
 {1,0,0,0,0,1}
 {0,0,2,0,0,0}
 {0,0,0,1,0,0}
+name=Level 3
 next=Level 4.txt
 prev=Level 2.txt
-score=999
-name=Level 3
-message_left= 
+score=15
+message_left=
 message_right=

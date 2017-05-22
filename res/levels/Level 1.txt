@@ -4,9 +4,9 @@
 {0,0,0,0,0,0}
 {0,0,0,0,0,1}
 {5,1,6,0,1,1}
+name=Level 1
 next=Level 2.txt
 prev=Level 13.txt
-score=999
-name=Level 1
-message_left=Rotate with\nthe arrow keys\nto guide the\nblue ball into\nthe hole
-message_right=Use space to\ntoggle the\nred blocks\non/off
+score=8
+message_left=
+message_right=

@@ -4,11 +4,16 @@
 {0,0,1,0,0,0}
 {0,0,0,0,0,0}
 {5,0,0,0,0,0}
+name=Level 11
 next=Level 12.txt
 prev=Level 10.txt
-score=999
-name=Level 11
-rail=5,2->4,2
-rail=2,5->4,5
+score=9
+message_left=
+message_right=
+rail=4,2->4,2
+rail=5,2->5,2
+rail=2,5->2,5
+rail=3,5->3,5
+rail=4,5->4,5
 slider=5,2
 slider=2,5

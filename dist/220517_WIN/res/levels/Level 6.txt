@@ -1,0 +1,13 @@
+{1,1,7,0,3,2}
+{0,2,1,1,0,2}
+{3,0,0,3,2,0}
+{1,2,0,0,1,0}
+{1,0,10,1,0,3}
+{3,0,5,0,2,1}
+name=Level 6
+next=Level 7.txt
+prev=Level 5.txt
+score=24
+message_left=
+message_right=
+link=3,1->3,5
