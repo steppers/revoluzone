@@ -68,7 +68,7 @@ public class Editor {
         tmpButton.anchor.set(1.0f, 0.95f);
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
-        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText(), ((UITextInput)staticUI.get(4)).getText()));
+        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText() + ".txt", ((UITextInput)staticUI.get(4)).getText()));
         staticUI.add(tmpButton.clone());
 
         UITextInput tmpInput = new UITextInput("namehere", gc);
@@ -164,6 +164,9 @@ public class Editor {
                                 }
                                 t.type = drawTileType;
                                 t.resetType = drawTileType;
+                                if(drawTileType == Tile.Type.RED || drawTileType == Tile.Type.BLUE) {
+                                    t.reset(m.redEnabled);
+                                }
                             } else {
                                 boolean add = true;
                                 for(Slider s : m.sliders) {
@@ -215,6 +218,10 @@ public class Editor {
             //Update the tiles under the ball
             Tile t = m.getTileUnderBall();
             t.activate(m);
+            for(Slider s: m.sliders){
+                Tile ts = m.getTileUnderSlider(s);
+                ts.activate(m);
+            }
         } else {
             //Update the current link end
             Vector2f p = gs.getMouseTilePos(gc);

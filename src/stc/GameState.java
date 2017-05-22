@@ -113,6 +113,7 @@ public class GameState extends BasicGameState {
             m.ball.halt();
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
+                m.saveToFile(m.getProperty("filename"), m.getProperty("name"));
             }
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
         } else {

@@ -30,7 +30,7 @@ public class Model extends Renderable {
     private float scale = 1;
     private float opacity = 1;
     private float textOpacity = 1;
-    private boolean redEnabled = false;
+    public boolean redEnabled = false;
 
     private Color opCol = new Color(1,1,1,1);
 
@@ -73,7 +73,7 @@ public class Model extends Renderable {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.START)
                     ball = new Ball(x, y);
-                tiles[x][y].reset(redEnabled);
+                tiles[x][y].reset(true);
             }
         }
     }
@@ -583,9 +583,6 @@ public class Model extends Renderable {
                     if(ids[i].equals("5")) {
                         ball = new Ball(i+1, y);
                     }
-//                    if(ids[i].equals("12")) {
-//                        sliders.add(new Slider(i+1, y));
-//                    }
                 }
                 y++;
             }
@@ -682,7 +679,7 @@ public class Model extends Renderable {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter("res/levels/" + filename + ".txt");
+            fw = new FileWriter("res/levels/" + filename);
             bw = new BufferedWriter(fw);
 
             StringBuilder data = new StringBuilder();
@@ -720,7 +717,7 @@ public class Model extends Renderable {
             }
 
             for(Slider s : sliders) {
-                data.append("slider=" + s.resetX + "," + s.resetY + "\n");
+                data.append("slider=" + (int)s.resetX + "," + (int)s.resetY + "\n");
             }
 
             bw.write(data.toString());
