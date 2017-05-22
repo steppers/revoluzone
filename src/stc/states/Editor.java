@@ -165,7 +165,14 @@ public class Editor {
                                 t.type = drawTileType;
                                 t.resetType = drawTileType;
                             } else {
-                                m.addSlider(t.x, t.y);
+                                boolean add = true;
+                                for(Slider s : m.sliders) {
+                                    if(s.resetX == t.x && s.resetY == t.y)
+                                        add = false;
+                                }
+                                if(add) {
+                                    m.addSlider(t.x, t.y);
+                                }
                             }
                         }
                         m.recalcAll();
