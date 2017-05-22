@@ -130,6 +130,7 @@ public class Editor {
             }
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
+                m.recalcAll();
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
@@ -155,10 +156,14 @@ public class Editor {
                         if (drawTileType == Tile.Type.RAIL) {
                             t.isRail = true;
                         } else {
-                            t.type = drawTileType;
-                            t.resetType = drawTileType;
                             if (drawTileType != Tile.Type.SLIDER) {
                                 t.isRail = false;
+                                Slider s;
+                                if((s = t.hasSlider(m)) != null) {
+                                    m.sliders.remove(s);
+                                }
+                                t.type = drawTileType;
+                                t.resetType = drawTileType;
                             } else {
                                 m.addSlider(t.x, t.y);
                             }

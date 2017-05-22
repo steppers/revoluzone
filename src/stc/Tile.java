@@ -95,7 +95,7 @@ public class Tile {
     public boolean isSolid(Model m) {
         switch(type) {
             case EMPTY:
-                return hasSlider(m);
+                return hasSlider(m) != null;
             case FIXED:
                 return true;
             case RED:
@@ -103,39 +103,29 @@ public class Tile {
                     return active;
                 }
                 else{
-                    return hasSlider(m);
+                    return hasSlider(m) != null;
                 }
             case BLUE:
                 if(active) {
                     return active;
                 }
                 else{
-                    return hasSlider(m);
+                    return hasSlider(m) != null;
                 }
-            case KILL:
-                return hasSlider(m);
-            case START:
-                return hasSlider(m);
-            case FINISH:
-                return hasSlider(m);
-            case SWITCH:
-                return hasSlider(m);
             case LOCKED_FINISH:
                 return true;
-            case SLIDER:
-                return hasSlider(m);
             default:
-                return hasSlider(m);
+                return hasSlider(m) != null;
         }
     }
 
-    public boolean hasSlider(Model m){
+    public Slider hasSlider(Model m){
         for(int i = 0; i < m.sliders.size(); i++){
             if(this.x == (int)m.sliders.get(i).destX && this.y == (int)m.sliders.get(i).destY){
-                return true;
+                return m.sliders.get(i);
             }
         }
-        return false;
+        return null;
     }
 
 

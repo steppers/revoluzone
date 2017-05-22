@@ -19,12 +19,24 @@ public class Slider extends Renderable {
     private float accelX = 0, accelY = 0;
     public float destX = 0, destY = 0;
 
+    public float resetX, resetY;
+
 
     public Slider(int x, int y) {
         this.x = x;
         this.y = y;
         this.destX = x;
         this.destY = y;
+        this.resetX = x;
+        this.resetY = y;
+    }
+
+    public void reset() {
+        this.x = resetX;
+        this.y = resetY;
+        this.destX = resetX;
+        this.destY = resetY;
+        halt();
     }
 
     public void update(float delta, Model m) {
