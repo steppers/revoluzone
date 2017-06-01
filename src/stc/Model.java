@@ -247,9 +247,10 @@ public class Model extends Renderable {
         Rectangle rect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
         Rectangle stripeRect = new Rectangle(-SCALE/2, -SCALE/2, SCALE, SCALE);
-        Shape stripe = stripeRect.transform(Transform.createScaleTransform(0.333f, 1f));
-        stripe = stripe.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
-
+        Shape stripe = stripeRect.transform(Transform.createScaleTransform(0.2f, 0.7f));
+        Shape cross1, cross2;
+        cross1 = stripe.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180 + (float)Math.PI/4));
+        cross2 = stripe.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180 - (float)Math.PI/4));
         //Switch rect
         rect = new Rectangle(-(SCALE/2)*0.6f, -(SCALE/2)*0.6f, SCALE*0.6f, SCALE*0.6f);
         Shape switch1 = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
@@ -297,8 +298,10 @@ public class Model extends Renderable {
                         tile.setLocation(pos.x, pos.y);
                         g.fill(tile);
                         g.setColor(Color.black.multiply(opCol));
-                        stripe.setLocation(pos.x, pos.y);
-                        g.fill(stripe);
+                        cross1.setLocation(pos.x, pos.y);
+                        cross2.setLocation(pos.x, pos.y);
+                        g.fill(cross1);
+                        g.fill(cross2);
                         break;
                     case RED:
                         if(t.active)
