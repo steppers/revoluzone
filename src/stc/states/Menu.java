@@ -89,10 +89,10 @@ public class Menu {
                     break;
             }
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionRotate(m, gs.currentState, 90, 0.15f);
         }
-        else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionRotate(m, gs.currentState, -90, 0.15f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {

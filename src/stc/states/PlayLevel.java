@@ -60,13 +60,14 @@ public class PlayLevel {
     public void update(GameContainer gc) {
         m = gs.m;
         if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
+            m.score = 0;
             tm.transitionShrink(m, GameState.State.LEVEL_SELECT, 0.6f, 0.3f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             m.score += 1;
             tm.transitionRotate(m, gs.currentState, 90, 0.15f);
         }
-        else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             m.score += 1;
             tm.transitionRotate(m, gs.currentState, -90, 0.15f);
         }

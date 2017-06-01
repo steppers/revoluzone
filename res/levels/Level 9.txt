@@ -8,7 +8,9 @@
 {0,0,0,0,3,0,0,0,0,0}
 {0,0,0,0,0,0,0,1,0,0}
 {0,0,0,0,0,0,0,0,0,5}
+name=Level 9
 next=Level 10.txt
 prev=Level 8.txt
-score=999
-name=Level 9
+score=82
+message_left=
+message_right=

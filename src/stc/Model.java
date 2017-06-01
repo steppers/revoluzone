@@ -30,7 +30,7 @@ public class Model extends Renderable {
     private float scale = 1;
     private float opacity = 1;
     private float textOpacity = 1;
-    private boolean redEnabled = false;
+    public boolean redEnabled = false;
 
     private Color opCol = new Color(1,1,1,1);
 
@@ -68,15 +68,12 @@ public class Model extends Renderable {
     public Tile getTileUnderSlider(Slider s){return tiles[(int)s.x][(int)s.y];}
 
     public void reset() {
-        sliders.clear();
+        sliders.forEach(Slider::reset);
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
-                if(tiles[x][y].type == Tile.Type.SLIDER) {
-                    sliders.add(new Slider(x,y));
-                }
                 if(tiles[x][y].type == Tile.Type.START)
                     ball = new Ball(x, y);
-                tiles[x][y].reset(redEnabled);
+                tiles[x][y].reset(true);
             }
         }
     }
@@ -160,6 +157,11 @@ public class Model extends Renderable {
         for (int i = 0; i < sliders.size(); i++) {
             recalcSlider(sliders.get(i));
         }
+        //Calculate in reverse as well in case we miss one that can move
+        for (int i = sliders.size()-1; i >= 0; i--) {
+            recalcSlider(sliders.get(i));
+        }
+        recalcBall();
     }
 
     public void recalcSlider(Slider s) {
@@ -403,7 +405,7 @@ public class Model extends Renderable {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)
                     continue;
-                if (tiles[x][y].isSolid(this) && !(tiles[x][y].hasSlider(this))) {
+                if (tiles[x][y].isSolid(this) && (tiles[x][y].hasSlider(this) == null)) {
                     Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
                     pos.sub(-rotation);
                     pos.scale(SCALE);
@@ -584,9 +586,6 @@ public class Model extends Renderable {
                     if(ids[i].equals("5")) {
                         ball = new Ball(i+1, y);
                     }
-                    if(ids[i].equals("12")) {
-                        sliders.add(new Slider(i+1, y));
-                    }
                 }
                 y++;
             }
@@ -653,6 +652,13 @@ public class Model extends Renderable {
                 L2y = Integer.parseInt(secondLink.split(",")[1]);
                 tiles[L1x][L1y].links.add(tiles[L2x][L2y]);
                 break;
+            case "slider"://Slider initial positions
+                String slider = data.trim();
+                int sx, sy;
+                sx = Integer.parseInt(slider.split(",")[0]);
+                sy = Integer.parseInt(slider.split(",")[1]);
+                addSlider(sx, sy);
+                break;
             case "rail":
                 String firstRail = data.split("->")[0];
                 String secondRail = data.split("->")[1];
@@ -666,6 +672,7 @@ public class Model extends Renderable {
                         tiles[x][y].isRail = true;
                     }
                 }
+                break;
             default:
                 properties.put(type, data);
         }
@@ -675,7 +682,7 @@ public class Model extends Renderable {
         FileWriter fw = null;
         BufferedWriter bw = null;
         try {
-            fw = new FileWriter("res/levels/" + filename + ".txt");
+            fw = new FileWriter("res/levels/" + filename);
             bw = new BufferedWriter(fw);
 
             StringBuilder data = new StringBuilder();
@@ -710,6 +717,10 @@ public class Model extends Renderable {
                         data.append("rail=" + x + "," + y + "->" + x + "," + y + "\n");
                     }
                 }
+            }
+
+            for(Slider s : sliders) {
+                data.append("slider=" + (int)s.resetX + "," + (int)s.resetY + "\n");
             }
 
             bw.write(data.toString());

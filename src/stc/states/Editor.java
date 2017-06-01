@@ -68,7 +68,7 @@ public class Editor {
         tmpButton.anchor.set(1.0f, 0.95f);
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
-        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText(), ((UITextInput)staticUI.get(4)).getText()));
+        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText() + ".txt", ((UITextInput)staticUI.get(4)).getText()));
         staticUI.add(tmpButton.clone());
 
         UITextInput tmpInput = new UITextInput("namehere", gc);
@@ -130,14 +130,15 @@ public class Editor {
             }
             if(gc.getInput().isKeyPressed(Input.KEY_R)) {
                 m.reset();
+                m.recalcAll();
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
-            if(gc.getInput().isKeyDown(Input.KEY_RIGHT)) {
+            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
                 tm.transitionRotate(m, gs.currentState, 90, 0.2f);
             }
-            else if(gc.getInput().isKeyDown(Input.KEY_LEFT)) {
+            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
                 tm.transitionRotate(m, gs.currentState, -90, 0.2f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
@@ -155,12 +156,26 @@ public class Editor {
                         if (drawTileType == Tile.Type.RAIL) {
                             t.isRail = true;
                         } else {
-                            t.type = drawTileType;
-                            t.resetType = drawTileType;
                             if (drawTileType != Tile.Type.SLIDER) {
                                 t.isRail = false;
+                                Slider s;
+                                if((s = t.hasSlider(m)) != null) {
+                                    m.sliders.remove(s);
+                                }
+                                t.type = drawTileType;
+                                t.resetType = drawTileType;
+                                if(drawTileType == Tile.Type.RED || drawTileType == Tile.Type.BLUE) {
+                                    t.reset(m.redEnabled);
+                                }
                             } else {
-                                m.addSlider(t.x, t.y);
+                                boolean add = true;
+                                for(Slider s : m.sliders) {
+                                    if(s.resetX == t.x && s.resetY == t.y)
+                                        add = false;
+                                }
+                                if(add) {
+                                    m.addSlider(t.x, t.y);
+                                }
                             }
                         }
                         m.recalcAll();
@@ -203,6 +218,10 @@ public class Editor {
             //Update the tiles under the ball
             Tile t = m.getTileUnderBall();
             t.activate(m);
+            for(Slider s: m.sliders){
+                Tile ts = m.getTileUnderSlider(s);
+                ts.activate(m);
+            }
         } else {
             //Update the current link end
             Vector2f p = gs.getMouseTilePos(gc);
