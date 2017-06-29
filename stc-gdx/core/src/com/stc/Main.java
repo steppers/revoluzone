@@ -7,27 +7,43 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Main extends ApplicationAdapter {
+
+	private Background background;
+
 	SpriteBatch batch;
 	Texture img;
 	
 	@Override
 	public void create () {
-		batch = new SpriteBatch();
-		img = new Texture("badlogic.jpg");
+		background = new Background();
+
+//		batch = new SpriteBatch();
+//		img = new Texture("badlogic.jpg");
 	}
 
 	@Override
 	public void render () {
-		Gdx.gl.glClearColor(1, 0, 0, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-		batch.begin();
-		batch.draw(img, 0, 0);
-		batch.end();
+		float delta = Gdx.graphics.getDeltaTime();
+
+		//Updates
+		background.update(delta);
+
+		//Render
+		background.render();
+//		batch.begin();
+//		batch.draw(img, 0, 0);
+//		batch.end();
+	}
+
+	@Override
+	public void resize (int width, int height) {
+		Globals.display_width = width;
+		Globals.display_height = height;
 	}
 	
 	@Override
 	public void dispose () {
-		batch.dispose();
-		img.dispose();
+//		batch.dispose();
+//		img.dispose();
 	}
 }
