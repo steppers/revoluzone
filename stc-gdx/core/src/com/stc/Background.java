@@ -12,7 +12,7 @@ import java.util.ArrayList;
 
 public class Background {
 
-    ArrayList<BackgroundBox> bgBoxes;
+    private ArrayList<BackgroundBox> bgBoxes;
     private ShapeRenderer renderer;
 
     public Background() {
@@ -20,10 +20,7 @@ public class Background {
         for(int i = 0; i < 5; i++) {
             bgBoxes.add(new BackgroundBox());
         }
-        renderer = new ShapeRenderer();
-
-        Gdx.gl.glEnable(GL20.GL_BLEND);
-        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+        renderer = Main.getShapeRenderer();
     }
 
     public void update(float delta) {
@@ -36,7 +33,8 @@ public class Background {
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.begin(ShapeRenderer.ShapeType.Filled);
+        renderer.identity();
+
         for(BackgroundBox bb : bgBoxes) {
             float op = (float)(Math.sin(bb.opacity)/2)+0.5f;
             renderer.setColor(1.0f,1.0f,1.0f,op*0.5f);
@@ -48,7 +46,10 @@ public class Background {
                 bb.redefinePosition();
             }
         }
-        renderer.end();
+    }
+
+    public void dispose() {
+        renderer.dispose();
     }
 
     private class BackgroundBox {

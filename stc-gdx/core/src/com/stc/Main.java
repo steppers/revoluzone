@@ -3,22 +3,25 @@ package com.stc;
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
+import com.stc.states.Menu;
 
 public class Main extends ApplicationAdapter {
 
 	private Background background;
-
-	SpriteBatch batch;
-	Texture img;
+	private State state;
+    private static ShapeRenderer shapeRenderer;
+    public static Model model;
 	
 	@Override
 	public void create () {
-		background = new Background();
+        shapeRenderer = new ShapeRenderer();
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
 
-//		batch = new SpriteBatch();
-//		img = new Texture("badlogic.jpg");
+        background = new Background();
+        state = new Menu();
+        model = new Model();
 	}
 
 	@Override
@@ -27,12 +30,13 @@ public class Main extends ApplicationAdapter {
 
 		//Updates
 		background.update(delta);
+		state.update(delta);
 
 		//Render
+        shapeRenderer.begin(ShapeRenderer.ShapeType.Filled);
 		background.render();
-//		batch.begin();
-//		batch.draw(img, 0, 0);
-//		batch.end();
+        state.render();
+        shapeRenderer.end();
 	}
 
 	@Override
@@ -43,7 +47,11 @@ public class Main extends ApplicationAdapter {
 	
 	@Override
 	public void dispose () {
-//		batch.dispose();
-//		img.dispose();
+		background.dispose();
+        state.dispose();
 	}
+
+	public static ShapeRenderer getShapeRenderer() {
+        return shapeRenderer;
+    }
 }
