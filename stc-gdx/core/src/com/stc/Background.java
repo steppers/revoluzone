@@ -36,12 +36,14 @@ public class Background {
         Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
-        renderer.begin(ShapeRenderer.ShapeType.Line);
+        renderer.begin(ShapeRenderer.ShapeType.Filled);
         for(BackgroundBox bb : bgBoxes) {
             float op = (float)(Math.sin(bb.opacity)/2)+0.5f;
-//            graphics.setLineWidth(3);
             renderer.setColor(1.0f,1.0f,1.0f,op*0.5f);
-            renderer.rect(bb.x, bb.y, bb.side, bb.side);
+            renderer.rectLine(bb.x, bb.y, bb.x + bb.side, bb.y, 3);
+            renderer.rectLine(bb.x, bb.y+bb.side, bb.x + bb.side, bb.y+bb.side, 3);
+            renderer.rectLine(bb.x+bb.side, bb.y, bb.x+bb.side, bb.y+bb.side, 3);
+            renderer.rectLine(bb.x, bb.y, bb.x, bb.y+bb.side, 3);
             if ((((Math.sin(bb.opacity-0.1f)/2)+0.5f) > op && op < 0.1))  {
                 bb.redefinePosition();
             }
