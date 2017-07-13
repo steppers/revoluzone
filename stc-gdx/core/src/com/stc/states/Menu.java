@@ -1,5 +1,6 @@
 package com.stc.states;
 
+import com.badlogic.gdx.Gdx;
 import com.stc.Main;
 import com.stc.State;
 
@@ -13,6 +14,11 @@ public class Menu implements State {
     public void update(float delta) {
         Main.model.rotation += 120 * delta;
         Main.model.update(delta);
+
+        if(Gdx.input.isTouched()) {
+            System.out.println("Screen touched. Exiting...");
+            Gdx.app.exit();
+        }
     }
 
     @Override
