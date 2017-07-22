@@ -12,6 +12,7 @@ import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
 import stc.UI.UITextInput;
+import sun.security.ssl.Debug;
 
 import java.util.ArrayList;
 
@@ -48,6 +49,7 @@ public class Editor {
 
         //Static UI
         staticUI = new ArrayList<>();
+
         UILabel tmpLabel = new UILabel(gc);
         tmpLabel.text = "Left click:\nPlace Tile";
         tmpLabel.scale = m.getScale()/0.6f;
@@ -68,7 +70,7 @@ public class Editor {
         tmpButton.anchor.set(1.0f, 0.95f);
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
-        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput)staticUI.get(4)).getText() + ".txt", ((UITextInput)staticUI.get(4)).getText()));
+        tmpButton.setOnClickCallback(() -> m.saveToFile("user_levels/" + ((UITextInput) staticUI.get(4)).getText().replaceAll("[\\\\~#%&*{}:<>?/+|\"]","_") + ".txt", ((UITextInput) staticUI.get(4)).getText()));
         staticUI.add(tmpButton.clone());
 
         UITextInput tmpInput = new UITextInput("namehere", gc);

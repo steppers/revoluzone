@@ -133,9 +133,8 @@ public class Tile {
         Rectangle rect = new Rectangle(x, y, size, size);
         Shape stripe = rect.transform(Transform.createTranslateTransform(-x, -y)).transform(Transform.createScaleTransform(0.2f, 0.7f)).transform(Transform.createTranslateTransform(x, y));
         Shape cross1, cross2;
-        stripe = stripe.transform(Transform.createTranslateTransform((float)size/2f, 0));
-        cross1 = stripe.transform(Transform.createTranslateTransform(-x, -y)).transform(Transform.createRotateTransform((float)Math.PI/4)).transform(Transform.createTranslateTransform(x, y));
-        cross2 = cross1.transform(Transform.createTranslateTransform(-x, -y)).transform(Transform.createRotateTransform(-(float)Math.PI/2)).transform(Transform.createTranslateTransform(x, y));
+        cross1 = stripe.transform(Transform.createTranslateTransform(-(x+size*0.1f), -(y+size*0.35f))).transform(Transform.createRotateTransform((float)Math.PI/4)).transform(Transform.createTranslateTransform(x+size*0.5f, y+size*0.5f));
+        cross2 = stripe.transform(Transform.createTranslateTransform(-(x+size*0.1f), -(y+size*0.35f))).transform(Transform.createRotateTransform(-(float)Math.PI/4)).transform(Transform.createTranslateTransform(x+size*0.5f, y+size*0.5f));
 
         Shape railStripe = rect.transform(Transform.createScaleTransform(0.2f, 1f));
         railStripe = railStripe.transform(Transform.createTranslateTransform(((float)size*0.6f)+1, 0));
@@ -169,7 +168,6 @@ public class Tile {
                 g.setColor(Color.yellow.multiply(new Color(1,1,1,opacity)));
                 g.fill(rect);
                 g.setColor(Color.black.multiply(new Color(1,1,1,opacity)));
-                g.fill(stripe);
                 g.fill(cross1);
                 g.fill(cross2);
                 break;
