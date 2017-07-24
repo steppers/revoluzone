@@ -4,6 +4,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
+import java.io.*;
+import sun.audio.*;
 
 /**
  * Created by steppers on 2/12/17.
@@ -103,6 +105,13 @@ public class Slider extends Renderable {
         moving = false;
         x = destX;
         y = destY;
+
+        try {
+            String thudFile = "res/sounds/Thud_Sound.wav";
+            InputStream in = new FileInputStream(thudFile);
+            AudioStream audioStream = new AudioStream(in);
+            AudioPlayer.player.start(audioStream);
+        }catch(Exception e){}
     }
 
     public boolean isMoving() {
