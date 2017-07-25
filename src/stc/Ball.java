@@ -88,8 +88,6 @@ public class Ball extends Renderable {
         velY = 0;
         accelX = 0;
         accelY = 0;
-        x = destX;
-        y = destY;
     }
 
     private void stopMoving() {

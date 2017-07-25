@@ -8,7 +8,8 @@ import org.newdawn.slick.geom.Shape;
 import org.newdawn.slick.geom.Transform;
 
 import java.util.ArrayList;
-
+import java.io.*;
+import sun.audio.*;
 /**
  * Created by steppers on 2/12/17.
  */
@@ -85,11 +86,18 @@ public class Tile {
                 break;
             case LOCKED_FINISH:
                 type = Tile.Type.FINISH;
+                try {
+                    String thudFile = "res/sounds/Open_Lock.wav";
+                    InputStream in = new FileInputStream(thudFile);
+                    AudioStream audioStream = new AudioStream(in);
+                    AudioPlayer.player.start(audioStream);
+                }catch(Exception e){}
                 m.recalcAll();
                 break;
             default:
                 break;
         }
+
     }
 
     public boolean isSolid(Model m) {

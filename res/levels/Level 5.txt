@@ -9,7 +9,7 @@
 name=Level 5
 next=Level 6.txt
 prev=Level 4.txt
-score=28
+score=20
 message_left=
 message_right=
 link=1,5->5,2
