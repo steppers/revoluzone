@@ -12,8 +12,12 @@ import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
 import stc.UI.UITextInput;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 import sun.security.ssl.Debug;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -152,8 +156,15 @@ public class Editor {
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
                 if(!((UITextInput)staticUI.get(4)).acceptingInput()) {
-                    if (m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
+                    if (m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
                         m.toggleRedBlue();
+                        try {
+                            String File = "res/sounds/Red_Blue_Switch.wav";
+                            InputStream in = new FileInputStream(File);
+                            AudioStream audioStream = new AudioStream(in);
+                            AudioPlayer.player.start(audioStream);
+                        } catch (Exception e) {}
+                    }
                 }
             }
             //Left mouse clicks

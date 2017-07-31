@@ -8,7 +8,11 @@ import stc.*;
 import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -79,6 +83,12 @@ public class Menu {
                     tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
                     break;
                 case 90:
+                    try {
+                        String File = "res/sounds/Shut_Down.wav";
+                        InputStream in = new FileInputStream(File);
+                        AudioStream audioStream = new AudioStream(in);
+                        AudioPlayer.player.start(audioStream);
+                    }catch(Exception e){}
                     tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.3f);
                     break;
                 case 180:
@@ -96,8 +106,15 @@ public class Menu {
             tm.transitionRotate(m, gs.currentState, -90, 0.15f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
+            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
                 m.toggleRedBlue();
+                try {
+                    String File = "res/sounds/Red_Blue_Switch.wav";
+                    InputStream in = new FileInputStream(File);
+                    AudioStream audioStream = new AudioStream(in);
+                    AudioPlayer.player.start(audioStream);
+                } catch (Exception e) {}
+            }
         }
 
         for(UIRenderable r : staticUI) {

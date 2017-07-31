@@ -10,7 +10,11 @@ import stc.TransitionManager;
 import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -79,6 +83,12 @@ public class LevelSelect {
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
+            try {
+                String File = "res/sounds/Red_Blue_Switch.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            }catch(Exception e){}
         }
 
         for(UIRenderable r : staticUI) {

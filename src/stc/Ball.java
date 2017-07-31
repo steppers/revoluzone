@@ -88,8 +88,8 @@ public class Ball extends Renderable {
         y = destY;
 
         try {
-            String thudFile = "res/sounds/Thud_Sound.wav";
-            InputStream in = new FileInputStream(thudFile);
+            String File = "res/sounds/Thud_Sound.wav";
+            InputStream in = new FileInputStream(File);
             AudioStream audioStream = new AudioStream(in);
             AudioPlayer.player.start(audioStream);
         }catch(Exception e){}

@@ -6,6 +6,11 @@ import org.newdawn.slick.geom.Vector2f;
 import org.newdawn.slick.state.BasicGameState;
 import org.newdawn.slick.state.StateBasedGame;
 import stc.states.*;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
+
+import java.io.FileInputStream;
+import java.io.InputStream;
 
 /**
  * Created by steppers on 2/12/17.
@@ -108,8 +113,20 @@ public class GameState extends BasicGameState {
         if(t.type == Tile.Type.KILL) {
             m.reset();
             m.setRotation(0);
+            try {
+                String File = "res/sounds/Death_Sound.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            }catch(Exception e){}
         }
         if(t.type == Tile.Type.FINISH && previousState == State.LEVEL) {
+            try {
+                String File = "res/sounds/Next_Level.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            }catch(Exception e){}
             m.ball.halt();
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too

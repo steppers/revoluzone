@@ -11,7 +11,11 @@ import stc.Slider;
 import stc.TransitionManager;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
+import java.io.FileInputStream;
+import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -80,9 +84,14 @@ public class PlayLevel {
             m.score += 1;
             tm.transitionRotate(m, gs.currentState, -90, 0.2f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
-            if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)
-                m.toggleRedBlue();
+        if(gc.getInput().isKeyPressed(Input.KEY_SPACE) && m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
+            m.toggleRedBlue();
+            try {
+                String File = "res/sounds/Red_Blue_Switch.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            }catch(Exception e){}
         }
         if(m.hasCompleted()) {
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
