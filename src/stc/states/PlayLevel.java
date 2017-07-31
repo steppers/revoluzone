@@ -26,6 +26,8 @@ public class PlayLevel {
     private ArrayList<UIRenderable> staticUI;
     private ArrayList<UIRenderable> rotatingUI;
 
+    private boolean escaping = false;
+
     public PlayLevel(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
@@ -59,17 +61,24 @@ public class PlayLevel {
 
     public void update(GameContainer gc) {
         m = gs.m;
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE) || escaping) {
+            escaping = true;
             m.score = 0;
-            tm.transitionShrink(m, GameState.State.LEVEL_SELECT, 0.6f, 0.3f);
+            if(m.getRotation() != 0) {
+                tm.transitionFadeRotate(m, new Model(m.getProperty("filename"), 1.0f, 0f), GameState.State.LEVEL, -m.getRotation(), 0.3f);
+            }
+            if(!tm.isTransitioning()) {
+                tm.transitionShrink(m, GameState.State.LEVEL_SELECT, 0.6f, 0.3f);
+                escaping = false;
+            }
         }
         if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             m.score += 1;
-            tm.transitionRotate(m, gs.currentState, 90, 0.15f);
+            tm.transitionRotate(m, gs.currentState, 90, 0.2f);
         }
         else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             m.score += 1;
-            tm.transitionRotate(m, gs.currentState, -90, 0.15f);
+            tm.transitionRotate(m, gs.currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED)

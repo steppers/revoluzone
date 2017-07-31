@@ -30,7 +30,7 @@ public class Model extends Renderable {
     private float scale = 1;
     private float opacity = 1;
     private float textOpacity = 1;
-    public boolean redEnabled = false;
+    public boolean redEnabled = true;
 
     private Color opCol = new Color(1,1,1,1);
 
@@ -68,6 +68,7 @@ public class Model extends Renderable {
     public Tile getTileUnderSlider(Slider s){return tiles[(int)s.x][(int)s.y];}
 
     public void reset() {
+        redEnabled = true;
         sliders.forEach(Slider::reset);
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
@@ -571,7 +572,7 @@ public class Model extends Renderable {
             BufferedReader br = new BufferedReader(new FileReader(file));
             String line;
 
-            ball = new Ball(3, 3);
+            ball = new Ball(1, 1);
 
             //Finds the tile array
             int y = 1;
@@ -770,7 +771,6 @@ public class Model extends Renderable {
         }
         tiles = newTiles;
         gridSize = newGridSize;
-
         reset();
         recalcAll();
     }

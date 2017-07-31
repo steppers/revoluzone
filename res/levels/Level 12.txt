@@ -7,7 +7,7 @@
 name=Level 12
 next=Level 13.txt
 prev=Level 11.txt
-score=14
+score=12
 message_left=
 message_right=
 rail=2,2->2,2

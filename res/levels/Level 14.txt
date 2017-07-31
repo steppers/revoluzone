@@ -5,7 +5,7 @@
 {0,0,0,0,0,0}
 {0,0,0,0,0,5}
 name=Level 14
-next=Level 1.txt
+next=Level 15.txt
 prev=Level 13.txt
 score=9
 message_left=

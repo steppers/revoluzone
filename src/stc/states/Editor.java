@@ -102,6 +102,13 @@ public class Editor {
                 if ((int) m.ball.y == (m.gridSize - 1)) {
                     m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
                 }
+                for (Slider s : m.sliders) {
+                    if ((int) s.x == (m.gridSize - 2)) {
+                        m.sliders.remove(s);
+                    } else if ((int) s.y == (m.gridSize - 1)) {
+                        m.sliders.remove(s);
+                    }
+                }
             }
         });
         staticUI.add(tmpButton.clone());
