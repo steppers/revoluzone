@@ -4,8 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
 import com.stc.proto.Globals;
 
-import java.io.File;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.HashSet;
 
 /**
  * Created by steppers on 8/2/17.
@@ -43,7 +44,6 @@ public class LevelManager {
             } else {
                 if(!f.extension().equals("lvl"))
                     continue;
-
                 loadFile(f);
             }
         }
@@ -61,7 +61,27 @@ public class LevelManager {
      * and removes references to levels that do not exist.
      */
     private void validate() {
+        // Scan for files that don't exist
+        ArrayList<Level> correctNext = new ArrayList<Level>();
+        ArrayList<Level> correctPrev = new ArrayList<Level>();
+        HashSet<String> references = new HashSet<String>();
+        for (Level l: levels.values()) {
+            if(!levels.containsKey(l.getNextFileName()))
+                correctNext.add(l);
+            if(!levels.containsKey(l.getPrevFileName()))
+                correctPrev.add(l);
 
+            references.add(l.getNextFileName());
+            references.add(l.getPrevFileName());
+        }
+
+        // Scan for unreferenced files
+        for (String l : levels.keySet()) {
+            if(!references.contains(l))
+                levels.remove(l);
+        }
+
+        // Correct levels with invalid links
     }
 
     public boolean addLevel(String levelname) {
