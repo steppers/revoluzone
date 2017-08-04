@@ -77,25 +77,31 @@ public class Tile {
     }
 
     public void activate(Model m) {
-        for (Tile t : links) {
-            t.activate(m);
-        }
-        switch(type) {
-            case SWITCH:
-                active = true;
-                break;
-            case LOCKED_FINISH:
-                type = Tile.Type.FINISH;
-                try {
-                    String thudFile = "res/sounds/Open_Lock.wav";
-                    InputStream in = new FileInputStream(thudFile);
-                    AudioStream audioStream = new AudioStream(in);
-                    AudioPlayer.player.start(audioStream);
-                }catch(Exception e){}
-                m.recalcAll();
-                break;
-            default:
-                break;
+        if(!active) {
+            switch (type) {
+                case SWITCH:
+                    active = true;
+                    break;
+                case LOCKED_FINISH:
+                    type = Tile.Type.FINISH;
+                    try {
+                        String File = "res/sounds/Open_Lock.wav";
+                        InputStream in = new FileInputStream(File);
+                        AudioStream audioStream = new AudioStream(in);
+                        AudioPlayer.player.start(audioStream);
+                    } catch (Exception e) {
+                    }
+                    m.recalcAll();
+                    break;
+                case TELEPORT:
+                    active = true;
+                    break;
+                default:
+                    break;
+            }
+            for (Tile t : links) {
+                t.activate(m);
+            }
         }
 
     }
@@ -201,6 +207,10 @@ public class Tile {
                 g.fill(cicleSwitch);
                 break;
             case TELEPORT:
+                g.setColor(Color.orange.darker());
+                g.fill(circleLarge);
+                g.setColor(Color.orange);
+                g.fill(circleSmall);
                 break;
             case LOCKED_FINISH:
                 g.setColor(Color.darkGray.multiply(new Color(1,1,1,opacity)));

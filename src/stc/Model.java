@@ -4,6 +4,8 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
+import sun.audio.AudioPlayer;
+import sun.audio.AudioStream;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -31,6 +33,9 @@ public class Model extends Renderable {
     private float opacity = 1;
     private float textOpacity = 1;
     public boolean redEnabled = true;
+    public boolean renderStart = false;
+    public boolean teleported = false;
+
 
     private Color opCol = new Color(1,1,1,1);
 
@@ -62,10 +67,20 @@ public class Model extends Renderable {
     }
 
     public Tile getTileUnderBall() {
-        return tiles[(int)ball.x][(int)ball.y];
+        if(ball.destX < ball.x || ball.destY < ball.y) {
+            return tiles[(int)Math.ceil(ball.x)][(int)Math.ceil(ball.y)];
+        }else{
+            return tiles[(int)ball.x][(int)ball.y];
+        }
     }
 
-    public Tile getTileUnderSlider(Slider s){return tiles[(int)s.x][(int)s.y];}
+    public Tile getTileUnderSlider(Slider s){
+        if(Math.round(s.x) > s.x) {
+            return tiles[(int)Math.ceil(s.x)][(int)Math.ceil(s.y)];
+        }else{
+            return tiles[(int)s.x][(int)s.y];
+        }
+    }
 
     public void reset() {
         redEnabled = true;
@@ -92,6 +107,12 @@ public class Model extends Renderable {
             }
         }
         redEnabled = !redEnabled;
+        try {
+            String File = "res/sounds/Red_Blue_Switch.wav";
+            InputStream in = new FileInputStream(File);
+            AudioStream audioStream = new AudioStream(in);
+            AudioPlayer.player.start(audioStream);
+        }catch(Exception e){}
         recalcAll();
     }
 
@@ -241,7 +262,7 @@ public class Model extends Renderable {
     }
 
     @Override
-    public void renderFloorPlane(GameContainer gc, Graphics g) {
+        public void renderFloorPlane(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
         Tile t;
         float offset = - ((float)gridSize / 2) + 0.5f;
@@ -321,14 +342,16 @@ public class Model extends Renderable {
                         g.fill(tile);
                         break;
                     case START:
-                        g.setColor(Color.green.darker().multiply(opCol));
-                        circleLarge.setCenterX(pos.x);
-                        circleLarge.setCenterY(pos.y);
-                        g.fill(circleLarge);
-                        g.setColor(Color.green.multiply(opCol));
-                        circleSmall.setCenterX(pos.x);
-                        circleSmall.setCenterY(pos.y);
-                        g.fill(circleSmall);
+                        if(renderStart) {
+                            g.setColor(Color.green.darker().multiply(opCol));
+                            circleLarge.setCenterX(pos.x);
+                            circleLarge.setCenterY(pos.y);
+                            g.fill(circleLarge);
+                            g.setColor(Color.green.multiply(opCol));
+                            circleSmall.setCenterX(pos.x);
+                            circleSmall.setCenterY(pos.y);
+                            g.fill(circleSmall);
+                        }
                         break;
                     case FINISH:
                         g.setColor(Color.darkGray.multiply(opCol));
@@ -362,6 +385,15 @@ public class Model extends Renderable {
                         circleSmall.setCenterY(pos.y);
                         g.fill(circleSmall);
                         break;
+                    case TELEPORT:
+                        g.setColor(Color.orange.darker());
+                        circleLarge.setCenterX(pos.x);
+                        circleLarge.setCenterY(pos.y);
+                        g.fill(circleLarge);
+                        g.setColor(Color.orange);
+                        circleSmall.setCenterX(pos.x);
+                        circleSmall.setCenterY(pos.y);
+                        g.fill(circleSmall);
                 }
                 if(tiles[x][y].isRail){
                     g.setColor(Color.black.multiply(opCol));

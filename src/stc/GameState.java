@@ -39,6 +39,9 @@ public class GameState extends BasicGameState {
     private LevelSelect levelSelect;
     private PlayLevel playLevel;
 
+    private int teleportX;
+    private int teleportY;
+
     public GameState() {
         m = new Model("menu.txt", 0.6f);
         tm = new TransitionManager(this);
@@ -110,6 +113,21 @@ public class GameState extends BasicGameState {
         float delta = (float)i / 1000;
         m.update(delta);
         Tile t = m.getTileUnderBall();
+        if (t.type == Tile.Type.TELEPORT && !m.teleported && t.links.size() != 0) {
+            teleportX = t.links.get(0).x;
+            teleportY = t.links.get(0).y;
+            m.teleported = true;
+            m.ball = new Ball(t.links.get(0).x, t.links.get(0).y);
+            try {
+                String File = "res/sounds/Teleport_Sound.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            } catch (Exception e) {}
+            m.recalcAll();
+            } else if ((t.x != teleportX || t.y != teleportY) && m.teleported) {
+                m.teleported = false;
+            }
         if(t.type == Tile.Type.KILL) {
             m.reset();
             m.setRotation(0);
@@ -173,6 +191,9 @@ public class GameState extends BasicGameState {
             }
         }
         background.update(delta);
+        if(tm.getNewState() != State.EDITOR){
+            m.renderStart = false;
+        }else{m.renderStart = true;}
     }
 
     private void renderStateText(GameContainer gc, Graphics g, State state, Model m) {

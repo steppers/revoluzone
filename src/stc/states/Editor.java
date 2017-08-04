@@ -158,12 +158,6 @@ public class Editor {
                 if(!((UITextInput)staticUI.get(4)).acceptingInput()) {
                     if (m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
                         m.toggleRedBlue();
-                        try {
-                            String File = "res/sounds/Red_Blue_Switch.wav";
-                            InputStream in = new FileInputStream(File);
-                            AudioStream audioStream = new AudioStream(in);
-                            AudioPlayer.player.start(audioStream);
-                        } catch (Exception e) {}
                     }
                 }
             }

@@ -108,12 +108,6 @@ public class Menu {
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
                 m.toggleRedBlue();
-                try {
-                    String File = "res/sounds/Red_Blue_Switch.wav";
-                    InputStream in = new FileInputStream(File);
-                    AudioStream audioStream = new AudioStream(in);
-                    AudioPlayer.player.start(audioStream);
-                } catch (Exception e) {}
             }
         }
 

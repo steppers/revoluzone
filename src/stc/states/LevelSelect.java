@@ -56,13 +56,17 @@ public class LevelSelect {
         tmpButton.setText(m.getProperty("prev").split("\\.")[0]);
         tmpButton.rotation = 90f;
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
+            if(!tm.isTransitioning()) {
+                tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
         tmpButton.setText(m.getProperty("next").split("\\.")[0]);
         tmpButton.rotation = -90f;
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
+            if(!tm.isTransitioning()) {
+                tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
     }
@@ -83,12 +87,6 @@ public class LevelSelect {
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
-            try {
-                String File = "res/sounds/Red_Blue_Switch.wav";
-                InputStream in = new FileInputStream(File);
-                AudioStream audioStream = new AudioStream(in);
-                AudioPlayer.player.start(audioStream);
-            }catch(Exception e){}
         }
 
         for(UIRenderable r : staticUI) {
