@@ -1,4 +1,4 @@
-package com.stc;
+package com.stc.proto;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -6,6 +6,9 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
 
+import static com.stc.proto.Globals.*;
+
+/**
 /**
  * Created by steppers on 6/29/17.
  */
@@ -20,7 +23,7 @@ public class Background {
         for(int i = 0; i < 5; i++) {
             bgBoxes.add(new BackgroundBox());
         }
-        renderer = Main.getShapeRenderer();
+        renderer = Renderer.shapeRenderer();
     }
 
     public void update(float delta) {
@@ -62,9 +65,9 @@ public class Background {
         }
 
         void redefinePosition() {
-            x = (float) Math.random() * Globals.display_width;
-            y = (float) Math.random() * Globals.display_height;
-            side = (float) (Globals.display_width * (Math.random()+0.5f) * 0.15f);
+            x = (float) Math.random() * display_width;
+            y = (float) Math.random() * display_height;
+            side = (float) (display_width * (Math.random()+0.5f) * 0.15f);
         }
     }
 
