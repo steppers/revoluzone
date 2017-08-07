@@ -19,6 +19,7 @@ import sun.security.ssl.Debug;
 import java.io.FileInputStream;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by Ollie on 19/05/2017.
@@ -106,12 +107,18 @@ public class Editor {
                 if ((int) m.ball.y == (m.gridSize - 1)) {
                     m.ball = new Ball((int) m.ball.x, m.gridSize - 2);
                 }
+                List<Slider> slidersOutOfBounds = new ArrayList<>();
                 for (Slider s : m.sliders) {
-                    if ((int) s.x == (m.gridSize - 2)) {
-                        m.sliders.remove(s);
+                    if ((int) s.x == (m.gridSize - 1)) {
+                        slidersOutOfBounds.add(s);
                     } else if ((int) s.y == (m.gridSize - 1)) {
-                        m.sliders.remove(s);
+                        slidersOutOfBounds.add(s);
                     }
+                }
+                m.sliders.removeAll(slidersOutOfBounds);
+                if(!hasStart()){
+                    m.tiles[m.gridSize - 2][1].type = Tile.Type.START;
+                    m.tiles[m.gridSize - 2][1].resetType = Tile.Type.START;
                 }
             }
         });
@@ -344,6 +351,18 @@ public class Editor {
             graphics.draw(toolbar.get(i));
             new Tile(i).render(11, (int) ((gc.getHeight() * 0.125f) + (toolbar.get(i).getHeight() * i) + 1), (int)toolbar.get(i).getWidth()-1, graphics, (m.getScale()-0.6f)*2f);
         }
+    }
+
+    private boolean hasStart(){
+        boolean hasStart = false;
+        for(int i = 0; i < m.gridSize; i++) {
+            for (int j = 0; j < m.gridSize; j++) {
+                if(m.tiles[i][j].type == Tile.Type.START){
+                    hasStart = true;
+                }
+            }
+        }
+        return hasStart;
     }
 
 }
