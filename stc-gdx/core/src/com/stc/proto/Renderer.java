@@ -19,9 +19,6 @@ public class Renderer {
     private static ShapeRenderer sShapeRenderer;
     private static SpriteBatch sSpriteBatch;
 
-    private static FreeTypeFontGenerator sFontGenerator;
-    private static FreeTypeFontParameter sFontParameter;
-
     private static BitmapFont sFont48;
 
     public static void init() {
@@ -34,8 +31,8 @@ public class Renderer {
         sShapeRenderer = new ShapeRenderer();
         sSpriteBatch = new SpriteBatch();
 
-        sFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/" + kGameFont));
-        sFontParameter = new FreeTypeFontParameter();
+        FreeTypeFontGenerator sFontGenerator = new FreeTypeFontGenerator(Gdx.files.internal("fonts/" + kGameFont));
+        FreeTypeFontParameter sFontParameter = new FreeTypeFontParameter();
 
         sFontParameter.size = 48;
         sFont48 = sFontGenerator.generateFont(sFontParameter);
@@ -52,6 +49,12 @@ public class Renderer {
     }
     public static BitmapFont gameFont() {
         return sFont48;
+    }
+
+    public static void dispose() {
+        sShapeRenderer.dispose();
+        sSpriteBatch.dispose();
+        sFont48.dispose();
     }
 
 }

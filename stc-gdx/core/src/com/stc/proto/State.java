@@ -11,7 +11,8 @@ public abstract class State {
     protected float scale = 1f;
 
     public abstract void update(float delta);
-    public abstract void render();
+    public abstract void render(float alpha, float scale);
+    public abstract void renderText(float alpha, float scale);
     public abstract void dispose();
 
     public void setRotation(float rot) {

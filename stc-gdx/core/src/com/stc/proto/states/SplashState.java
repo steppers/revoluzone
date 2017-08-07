@@ -53,7 +53,11 @@ public class SplashState extends State {
     }
 
     @Override
-    public void render() {
+    public void render(float alpha, float scale) {
+    }
+
+    @Override
+    public void renderText(float alpha, float scale) {
         sb.begin();
         font.draw(sb, "Squaring the Circle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
         sb.end();

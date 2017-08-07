@@ -14,7 +14,6 @@ import com.stc.proto.states.SplashState;
 public class RevGame extends ApplicationAdapter {
 
     private Background bg;
-    private State state;
 
     @Override
     public void create () {
@@ -22,7 +21,6 @@ public class RevGame extends ApplicationAdapter {
         bg = new Background();
 
         LevelManager.instance().getLevel("test");
-        state = new SplashState();
     }
 
     private void update() {
@@ -30,7 +28,7 @@ public class RevGame extends ApplicationAdapter {
         bg.update(Time.delta());
 
         // Update the current state
-        state.update(Time.delta());
+        StateManager.update(Time.delta());
 
         // Break on screen touch for testing
         if(Gdx.input.isTouched()) {
@@ -47,10 +45,8 @@ public class RevGame extends ApplicationAdapter {
         update();
 
         //Render everything ---------------------------------------------------
-        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
         bg.render();
-        state.render();
+        StateManager.render();
     }
 
     @Override
@@ -61,6 +57,6 @@ public class RevGame extends ApplicationAdapter {
 
     @Override
     public void dispose () {
-        Renderer.shapeRenderer().dispose();
+        Renderer.dispose();
     }
 }
