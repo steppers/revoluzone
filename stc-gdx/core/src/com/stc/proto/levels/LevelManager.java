@@ -75,13 +75,15 @@ public class LevelManager {
             references.add(l.getPrevFileName());
         }
 
-        // Scan for unreferenced files
+        // Scan for unreferenced files and delete them
+        // TODO: If files referenced from these are not referenced anywhere else
+        // they'll be left hanging around
         for (String l : levels.keySet()) {
             if(!references.contains(l))
                 levels.remove(l);
         }
 
-        // Correct levels with invalid links
+        //TODO: Correct levels with invalid links
     }
 
     public boolean addLevel(String levelname) {

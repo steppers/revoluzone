@@ -33,8 +33,7 @@ public class Background {
     }
 
     public void render() {
-        Gdx.gl.glClearColor(0.8f, 0.8f, 0.8f, 1.0f);
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Renderer.shapeRenderer().begin(ShapeRenderer.ShapeType.Filled);
 
         renderer.identity();
 
@@ -49,6 +48,8 @@ public class Background {
                 bb.redefinePosition();
             }
         }
+
+        Renderer.shapeRenderer().end();
     }
 
     private class BackgroundBox {
