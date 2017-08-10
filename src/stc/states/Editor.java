@@ -120,6 +120,18 @@ public class Editor {
                     m.tiles[m.gridSize - 2][1].type = Tile.Type.START;
                     m.tiles[m.gridSize - 2][1].resetType = Tile.Type.START;
                 }
+                for(int x = 0; x < m.gridSize; x++){
+                    for(int y = 0; y < m.gridSize; y++){
+                        Tile t = m.tiles[x][y];
+                        List<Tile> linksToRemove = new ArrayList<>();
+                        for(Tile l : t.links){
+                            if(l.x == (m.gridSize - 1) || l.y == (m.gridSize - 1)){
+                                linksToRemove.add(l);
+                            }
+                        }
+                        t.links.removeAll(linksToRemove);
+                    }
+                }
             }
         });
         staticUI.add(tmpButton.clone());
