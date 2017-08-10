@@ -217,7 +217,7 @@ public class Editor {
             if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
                 Vector2f p = gs.getMouseTilePos(gc);
                 if(p != null) {
-                    if (p != null) {
+                    if (p.x < m.gridSize - 1 && p.y < m.gridSize - 1 && p.x > 0 && p.y > 0) {
                         linking = true;
                         linkSrcX = p.x;
                         linkSrcY = p.y;
@@ -252,13 +252,15 @@ public class Editor {
                 //Detect link end
                 if (gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
                     if (p != null) {
-                        linking = false;
-                        m.tiles[(int) linkSrcX][(int) linkSrcY].links.add(m.tiles[(int) p.x][(int) p.y]);
-                        linkSrcX = -100f;
-                        linkSrcY = -100f;
-                        linkDstX = -100f;
-                        linkDstY = -100f;
-                        ((UILabel)staticUI.get(1)).text = "Right click:\nStart Link";
+                        if (p.x < m.gridSize - 1 && p.y < m.gridSize - 1 && p.x > 0 && p.y > 0) {
+                            linking = false;
+                            m.tiles[(int) linkSrcX][(int) linkSrcY].links.add(m.tiles[(int) p.x][(int) p.y]);
+                            linkSrcX = -100f;
+                            linkSrcY = -100f;
+                            linkDstX = -100f;
+                            linkDstY = -100f;
+                            ((UILabel) staticUI.get(1)).text = "Right click:\nStart Link";
+                        }
                     }
                 }
             }

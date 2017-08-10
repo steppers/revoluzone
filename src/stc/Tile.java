@@ -77,7 +77,7 @@ public class Tile {
     }
 
     public void activate(Model m) {
-        if(!active) {
+        if(!active && (type == Type.SWITCH || type == Type.TELEPORT || type == Type.LOCKED_FINISH)) {
             switch (type) {
                 case SWITCH:
                     active = true;
@@ -140,6 +140,13 @@ public class Tile {
             }
         }
         return null;
+    }
+
+    public boolean hasBall(Model m){
+        if(this.x == m.ball.x && this.y == m.ball.y){
+            return true;
+        }
+        return false;
     }
 
 

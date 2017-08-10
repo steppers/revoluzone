@@ -34,7 +34,6 @@ public class Model extends Renderable {
     private float textOpacity = 1;
     public boolean redEnabled = true;
     public boolean renderStart = false;
-    public boolean teleported = false;
 
 
     private Color opCol = new Color(1,1,1,1);
@@ -75,7 +74,7 @@ public class Model extends Renderable {
     }
 
     public Tile getTileUnderSlider(Slider s){
-        if(Math.round(s.x) > s.x) {
+        if(s.destX < s.x || s.destY < s.y) {
             return tiles[(int)Math.ceil(s.x)][(int)Math.ceil(s.y)];
         }else{
             return tiles[(int)s.x][(int)s.y];

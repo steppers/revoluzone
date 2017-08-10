@@ -24,6 +24,10 @@ public class Ball extends Renderable {
     private float accelX = 0, accelY = 0;
     public float destX = 1, destY = 1;
 
+    public boolean teleported = false;
+    public int teleportX;
+    public int teleportY;
+
 
     public Ball(int x, int y) {
         this.x = x;
