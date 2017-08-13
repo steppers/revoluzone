@@ -107,7 +107,7 @@ public class GameState extends BasicGameState {
 
     @Override
     public void update(GameContainer gc, StateBasedGame sbg, int i) throws SlickException {
-        float delta = (float)i / 1000;
+        float delta = (float)i/1000;
         m.update(delta);
         Tile t = m.getTileUnderBall();
         if (t.type == Tile.Type.TELEPORT && !m.ball.teleported && t.links.size() != 0 && t.links.get(0).hasSlider(m) == null && !t.links.get(0).hasBall(m)) {

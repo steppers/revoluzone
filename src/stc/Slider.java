@@ -45,38 +45,30 @@ public class Slider extends Renderable {
     }
 
     public void update(float delta, Model m) {
-        if(moving) {
+        if (moving) {
             velX += accelX * delta;
             velY += accelY * delta;
             x += velX * delta;
             y += velY * delta;
 
-            if(velX > 0) {
-                if(x > destX + 0.1) {
-                    stopMoving();
-                    m.recalcAll();
-                }
-            } else if(velX < 0) {
-                if(x < destX - 0.1) {
-                    stopMoving();
-                    m.recalcAll();
-                }
-            } else if(velY > 0) {
-                if(y > destY + 0.1) {
-                    stopMoving();
-                    m.recalcAll();
-                }
-            }else if(velY < 0) {
-                if(y < destY - 0.1) {
-                    stopMoving();
-                    m.recalcAll();
-                }
+            if (velX > 0 && x > destX) {
+                stopMoving();
+                m.recalcAll();
+            } else if (velX < 0 && x < destX) {
+                stopMoving();
+                m.recalcAll();
+            } else if (velY > 0 && y > destY) {
+                stopMoving();
+                m.recalcAll();
+            } else if (velY < 0 && y < destY) {
+                stopMoving();
+                m.recalcAll();
             }
         }
     }
 
     public void move(int destX, int destY) {
-        if(destX < x-0.1 || destX > x+0.1 || destY < y-0.1 || destY > y+0.1) {
+        if(destX != x || destY != y){
             moving = true;
             this.destX = destX;
             this.destY = destY;
@@ -85,9 +77,9 @@ public class Slider extends Renderable {
             dx = destX - x;
             dy = destY - y;
 
-            if(dx > 0.1 || dx < -0.1)
+            if(dx != 0)
                 accelX = (dx / Math.abs(dx))*G;
-            if(dy > 0.1 || dy < -0.1)
+            if(dy != 0)
                 accelY = (dy / Math.abs(dy))*G;
         } else {
             halt();

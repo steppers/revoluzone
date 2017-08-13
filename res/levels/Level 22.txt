@@ -4,10 +4,10 @@
 {10,0,0,0,1,0}
 {1,0,3,1,1,4}
 {5,0,0,0,1,9}
-name=Teleporters 3
-next=null.txt
-prev=null.txt
-score=999
+name=Level 22
+next=Level 1.txt
+prev=Level 21.txt
+score=23
 message_left=
 message_right=
 link=4,1->6,6

@@ -4,10 +4,10 @@
 {0,1,7,0,0,9}
 {0,10,0,9,0,2}
 {5,0,0,0,0,0}
-name=Teleporters 2
-next=null.txt
-prev=null.txt
-score=999
+name=Level 21
+next=Level 22.txt
+prev=Level 20.txt
+score=15
 message_left=
 message_right=
 link=3,4->2,5

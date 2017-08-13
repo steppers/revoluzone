@@ -174,6 +174,12 @@ public class Model extends Renderable {
     }
 
     public void recalcAll() {
+        ball.destX = (int)ball.x;
+        ball.destY = (int)ball.y;
+        for(Slider s : sliders){
+            s.destX = (int)s.x;
+            s.destY = (int)s.y;
+        }
         recalcBall();
         for (int i = 0; i < sliders.size(); i++) {
             recalcSlider(sliders.get(i));

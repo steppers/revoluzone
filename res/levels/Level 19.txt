@@ -4,10 +4,10 @@
 {0,10,1,1,0,0}
 {0,1,7,1,0,0}
 {9,0,0,1,5,0}
-name=Intro to teleport TBD
-next=null.txt
-prev=null.txt
-score=999
+name=Level 19
+next=Level 20.txt
+prev=Level 18.txt
+score=15
 message_left=
 message_right=
 link=5,2->1,6
