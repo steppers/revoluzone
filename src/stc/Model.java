@@ -391,11 +391,11 @@ public class Model extends Renderable {
                         g.fill(circleSmall);
                         break;
                     case TELEPORT:
-                        g.setColor(Color.orange.darker());
+                        g.setColor(Color.orange.darker().multiply(opCol));
                         circleLarge.setCenterX(pos.x);
                         circleLarge.setCenterY(pos.y);
                         g.fill(circleLarge);
-                        g.setColor(Color.orange);
+                        g.setColor(Color.orange.multiply(opCol));
                         circleSmall.setCenterX(pos.x);
                         circleSmall.setCenterY(pos.y);
                         g.fill(circleSmall);
