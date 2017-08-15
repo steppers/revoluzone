@@ -94,6 +94,7 @@ public class Model extends Renderable {
     }
 
     public void toggleRedBlue() {
+        boolean switched = false;
         for(Slider s : sliders) {
             if(tiles[(int)s.destX][(int)s.destY].type == Tile.Type.RED || tiles[(int)s.destX][(int)s.destY].type == Tile.Type.BLUE)
                 return;
@@ -102,16 +103,20 @@ public class Model extends Renderable {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.RED || tiles[x][y].type == Tile.Type.BLUE) {
                     tiles[x][y].active = !tiles[x][y].active;
+                    switched = true;
                 }
             }
         }
         redEnabled = !redEnabled;
-        try {
-            String File = "res/sounds/Red_Blue_Switch.wav";
-            InputStream in = new FileInputStream(File);
-            AudioStream audioStream = new AudioStream(in);
-            AudioPlayer.player.start(audioStream);
-        }catch(Exception e){}
+        if(switched) {
+            try {
+                String File = "res/sounds/Red_Blue_Switch.wav";
+                InputStream in = new FileInputStream(File);
+                AudioStream audioStream = new AudioStream(in);
+                AudioPlayer.player.start(audioStream);
+            } catch (Exception e) {
+            }
+        }
         recalcAll();
     }
 

@@ -65,7 +65,7 @@ public class PlayLevel {
 
     public void update(GameContainer gc) {
         m = gs.m;
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE) || escaping) {
+        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || escaping) {
             escaping = true;
             m.score = 0;
             if(m.getRotation() != 0) {
@@ -76,7 +76,7 @@ public class PlayLevel {
                 escaping = false;
             }
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             m.score += 1;
             tm.transitionRotate(m, gs.currentState, 90, 0.2f);
         }
@@ -84,7 +84,7 @@ public class PlayLevel {
             m.score += 1;
             tm.transitionRotate(m, gs.currentState, -90, 0.2f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE) && m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_SPACE) && m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
             m.toggleRedBlue();
         }
         if(m.hasCompleted()) {
