@@ -1,0 +1,24 @@
+{1,0,0,0,0,1}
+{0,0,0,0,0,0}
+{0,0,0,0,0,3}
+{0,1,7,0,0,9}
+{0,10,0,9,0,2}
+{5,0,0,0,0,0}
+name=Level 23
+next=Level 24.txt
+prev=Level 22.txt
+score=15
+message_left=
+message_right=
+link=3,4->2,5
+link=6,4->4,5
+link=4,5->6,4
+rail=4,3->4,3
+rail=6,3->6,3
+rail=4,4->4,4
+rail=6,4->6,4
+rail=4,5->4,5
+rail=6,5->6,5
+rail=4,6->4,6
+rail=6,6->6,6
+slider=6,6

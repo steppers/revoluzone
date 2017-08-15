@@ -1,15 +1,17 @@
-{0,0,0,0,0,0}
-{0,0,0,0,9,0}
-{1,1,1,1,0,0}
-{0,10,1,1,0,0}
-{0,1,7,1,0,0}
-{9,0,0,1,5,0}
+{2,0,0}
+{6,0,3}
+{0,2,5}
 name=Level 19
 next=Level 20.txt
 prev=Level 18.txt
-score=15
+score=10
 message_left=
 message_right=
-link=5,2->1,6
-link=3,5->2,4
-link=1,6->5,2
+rail=1,2->1,2
+rail=2,2->2,2
+rail=3,2->3,2
+rail=1,3->1,3
+rail=3,3->3,3
+slider=3,2
+slider=2,2
+slider=1,3
