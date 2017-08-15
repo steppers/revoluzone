@@ -38,8 +38,8 @@ public class Background {
                     op < 0.1))  {
                 bb.redefinePosition(gc);
                 bb.r = (float)Math.random();
-                bb.g = (float)Math.random();
-                bb.b = (float)Math.random();
+                bb.g = 0.5f*(float)Math.random();
+                bb.b = 1- bb.r;
             }
         }
     }
