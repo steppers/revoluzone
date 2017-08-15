@@ -10,11 +10,6 @@ import stc.TransitionManager;
 import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**

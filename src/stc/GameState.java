@@ -193,7 +193,7 @@ public class GameState extends BasicGameState {
                         }
                         break;
                     case CREDITS:
-                        credits.update(gc, delta);
+                        credits.update(gc);
                         break;
                     case QUIT:
                         System.exit(0);
