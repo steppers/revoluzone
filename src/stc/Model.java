@@ -145,7 +145,7 @@ public class Model extends Renderable {
         switch(r) {
             case 0:
                 for(y = y+1; y < gridSize; y++) {
-                    if(tiles[x][y].isSolid(this)) {
+                    if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)ball.y + 1)) {
                         ball.move(x, y-1);
                         return;
                     }
@@ -153,7 +153,7 @@ public class Model extends Renderable {
                 break;
             case 90:
                 for(x = x+1; x < gridSize; x++) {
-                    if(tiles[x][y].isSolid(this)) {
+                    if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)ball.x + 1)) {
                         ball.move(x-1, y);
                         return;
                     }
@@ -161,7 +161,7 @@ public class Model extends Renderable {
                 break;
             case 180:
                 for(y = y-1; y >= 0; y--) {
-                    if(tiles[x][y].isSolid(this)) {
+                    if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)ball.y - 1)) {
                         ball.move(x, y+1);
                         return;
                     }
@@ -169,7 +169,7 @@ public class Model extends Renderable {
                 break;
             case 270:
                 for(x = x-1; x >= 0; x--) {
-                    if(tiles[x][y].isSolid(this)) {
+                    if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)ball.x - 1)) {
                         ball.move(x+1, y);
                         return;
                     }
@@ -179,12 +179,22 @@ public class Model extends Renderable {
     }
 
     public void recalcAll() {
-        ball.destX = (int)ball.x;
-        ball.destY = (int)ball.y;
-        for(Slider s : sliders){
-            s.destX = (int)s.x;
-            s.destY = (int)s.y;
+        /*if(ball.destX < ball.x || ball.destY < ball.y) {
+            ball.destX = (int)Math.ceil(ball.x);
+            ball.destY = (int)Math.ceil(ball.y);
+        }else{
+            ball.destX = (int)ball.x;
+            ball.destY = (int)ball.y;
         }
+        for(Slider s : sliders){
+            if(s.destX < s.x || s.destY < s.y) {
+                s.destX = (int)Math.ceil(s.x);
+                s.destY = (int)Math.ceil(s.y);
+            }else{
+                s.destX = (int)s.x;
+                s.destY = (int)s.y;
+            }
+        }*/
         recalcBall();
         for (int i = 0; i < sliders.size(); i++) {
             recalcSlider(sliders.get(i));
@@ -208,7 +218,10 @@ public class Model extends Renderable {
         switch (r) {
             case 0:
                 for (y = y + 1; y < gridSize; y++) {
-                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail)
+                            || !tiles[x][y].isRail
+                            || (ball.destX == x && ball.destY == y)
+                            || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)s.y + 1 && tiles[x][y].isRail)) {
                         s.move(x, y - 1);
                         break;
                     }
@@ -216,7 +229,10 @@ public class Model extends Renderable {
                 break;
             case 90:
                 for (x = x + 1; x < gridSize; x++) {
-                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail)
+                            || !tiles[x][y].isRail
+                            || (ball.destX == x && ball.destY == y)
+                            || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)s.x + 1 && tiles[x][y].isRail)) {
                         s.move(x - 1, y);
                         break;
                     }
@@ -224,7 +240,10 @@ public class Model extends Renderable {
                 break;
             case 180:
                 for (y = y - 1; y >= 0; y--) {
-                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail)
+                            || !tiles[x][y].isRail
+                            || (ball.destX == x && ball.destY == y)
+                            || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)s.y - 1 && tiles[x][y].isRail)) {
                         s.move(x, y + 1);
                         break;
                     }
@@ -232,7 +251,10 @@ public class Model extends Renderable {
                 break;
             case 270:
                 for (x = x - 1; x >= 0; x--) {
-                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail) || !tiles[x][y].isRail || (ball.destX == x && ball.destY == y)) {
+                    if ((tiles[x][y].isSolid(this) && tiles[x][y].isRail)
+                            || !tiles[x][y].isRail
+                            || (ball.destX == x && ball.destY == y)
+                            || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)s.x - 1 && tiles[x][y].isRail)) {
                         s.move(x + 1, y);
                         break;
                     }

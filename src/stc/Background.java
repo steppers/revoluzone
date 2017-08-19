@@ -47,7 +47,9 @@ public class Background {
     private class BackgroundBox {
         float opacity = 0;
         float x, y, side;
-        float r = 1, g = 1, b = 1;
+        float r = (float)Math.random();
+        float g = 0.5f*(float)Math.random();
+        float b = 1- r;
 
         public BackgroundBox(GameContainer gc) {
             redefinePosition(gc);

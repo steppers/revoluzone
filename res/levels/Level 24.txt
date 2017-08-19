@@ -4,7 +4,7 @@
 {0,3,0,0,10,0}
 {0,0,0,0,0,0}
 {0,0,0,0,0,5}
-name=This might overlap with something, talk to Dan
+name=This might be overlapping talk to Dan
 next=Level 25.txt
 prev=Level 23.txt
 score=12

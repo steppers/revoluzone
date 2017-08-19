@@ -164,6 +164,7 @@ public class GameState extends BasicGameState {
                 AudioPlayer.player.start(audioStream);
             }catch(Exception e){}
             m.ball.halt();
+            for(Slider s : m.sliders){s.halt();}
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
                 m.saveToFile(m.getProperty("filename"), m.getProperty("name"));
