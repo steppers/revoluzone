@@ -24,8 +24,10 @@ public class Slider extends Renderable {
     public float resetX, resetY;
 
     public boolean teleported = false;
-    public int teleportX;
-    public int teleportY;
+    public int tpFromX;
+    public int tpFromY;
+    public int tpToX;
+    public int tpToY;
 
     public Slider(int x, int y) {
         this.x = x;

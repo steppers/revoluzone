@@ -29,7 +29,6 @@ public class TransitionManager {
     private boolean transitioning = false;
     private float transitionSpeed;
 
-    private float opacityDelta;
     private float scaleTarget;
     private float rotationTarget;
 

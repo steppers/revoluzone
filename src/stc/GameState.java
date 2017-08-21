@@ -110,42 +110,6 @@ public class GameState extends BasicGameState {
         float delta = (float)i/1000;
         m.update(delta);
         Tile t = m.getTileUnderBall();
-        if (t.type == Tile.Type.TELEPORT && !m.ball.teleported && t.links.size() != 0 && t.links.get(0).hasSlider(m) == null && !t.links.get(0).hasBall(m)) {
-            m.ball = new Ball(t.links.get(0).x, t.links.get(0).y);
-            m.ball.teleportX = t.links.get(0).x;
-            m.ball.teleportY = t.links.get(0).y;
-            m.ball.teleported = true;
-            try {
-                String File = "res/sounds/Teleport_Sound.wav";
-                InputStream in = new FileInputStream(File);
-                AudioStream audioStream = new AudioStream(in);
-                AudioPlayer.player.start(audioStream);
-            } catch (Exception e) {}
-            m.recalcAll();
-            } else if ((t.x != m.ball.teleportX || t.y != m.ball.teleportY) && m.ball.teleported) {
-                m.ball.teleported = false;
-            }
-        for(Slider s : m.sliders){
-            Tile ts = m.getTileUnderSlider(s);
-            if (ts.type == Tile.Type.TELEPORT && !s.teleported && ts.links.size() != 0 && ts.links.get(0).hasSlider(m) == null && !ts.links.get(0).hasBall(m)) {
-                s.teleportX = ts.links.get(0).x;
-                s.teleportY = ts.links.get(0).y;
-                s.teleported = true;
-                s.x = s.teleportX;
-                s.y = s.teleportY;
-                s.destX = s.x;
-                s.destY = s.y;
-                try {
-                    String File = "res/sounds/Teleport_Sound.wav";
-                    InputStream in = new FileInputStream(File);
-                    AudioStream audioStream = new AudioStream(in);
-                    AudioPlayer.player.start(audioStream);
-                } catch (Exception e) {}
-                m.recalcAll();
-            } else if ((ts.x != s.teleportX || ts.y != s.teleportY) && s.teleported) {
-                s.teleported = false;
-            }
-        }
         if(t.type == Tile.Type.KILL) {
             m.reset();
             m.setRotation(0);

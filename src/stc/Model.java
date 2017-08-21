@@ -60,8 +60,58 @@ public class Model extends Renderable {
     public void update(float delta) {
         //Update our rotation here
         ball.update(delta, this);
-        for(int i = 0; i < sliders.size(); i++) {
+        for (int i = 0; i < sliders.size(); i++) {
             sliders.get(i).update(delta, this);
+        }
+        Tile t = getTileUnderBall();
+        if (!ball.teleported && t.type == Tile.Type.TELEPORT) {
+            ball.teleported = true;
+            ball.tpFromX = t.x;
+            ball.tpFromY = t.y;
+            ball.tpToX = t.links.get(0).x;
+            ball.tpToY = t.links.get(0).y;
+            if (t.links.size() != 0 && t.links.get(0).hasSlider(this) == null) {
+                ball.x = ball.tpToX;
+                ball.y = ball.tpToY;
+                ball.destX = ball.x;
+                ball.destY = ball.y;
+                try {
+                    String File = "res/sounds/Teleport_Sound.wav";
+                    InputStream in = new FileInputStream(File);
+                    AudioStream audioStream = new AudioStream(in);
+                    AudioPlayer.player.start(audioStream);
+                } catch (Exception e) {
+                }
+                recalcAll();
+            }
+        } else if ((t.x != ball.tpFromX || t.y != ball.tpFromY) && (t.x != ball.tpToX || t.y != ball.tpToY)) {
+            ball.teleported = false;
+        }
+        for (Slider s : sliders) {
+            Tile ts = getTileUnderSlider(s);
+            if (ts.type == Tile.Type.TELEPORT && !s.teleported) {
+                s.tpFromX = ts.x;
+                s.tpFromY = ts.y;
+                s.tpToX = ts.links.get(0).x;
+                s.tpToY = ts.links.get(0).y;
+                s.teleported = true;
+                if (ts.links.size() != 0 && ts.links.get(0).hasSlider(this) == null && !ts.links.get(0).hasBall(this)) {
+                    s.x = s.tpToX;
+                    s.y = s.tpToY;
+                    s.destX = s.x;
+                    s.destY = s.y;
+                    try {
+                        String File = "res/sounds/Teleport_Sound.wav";
+                        InputStream in = new FileInputStream(File);
+                        AudioStream audioStream = new AudioStream(in);
+                        AudioPlayer.player.start(audioStream);
+                    } catch (Exception e) {}
+                    recalcAll();
+                }
+            }
+            else if ((ts.x != s.tpFromX || ts.y != s.tpFromY) && (ts.x != s.tpToX || ts.y != s.tpToY)) {
+                s.teleported = false;
+            }
         }
     }
 

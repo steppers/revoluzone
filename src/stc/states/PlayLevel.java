@@ -65,7 +65,7 @@ public class PlayLevel {
 
     public void update(GameContainer gc) {
         m = gs.m;
-        if(gc.getInput().isKeyPressed(Input.KEY_ESCAPE) || escaping) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE) || escaping) {
             escaping = true;
             m.score = 0;
             if(m.getRotation() != 0) {

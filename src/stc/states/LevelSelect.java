@@ -71,16 +71,16 @@ public class LevelSelect {
         if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
             tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
         }
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
+        else if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
             tm.transitionFade(m, new Model("menu.txt", 0.6f, 0f), GameState.State.MENU, 0.4f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
         }
         else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             m.toggleRedBlue();
         }
 
