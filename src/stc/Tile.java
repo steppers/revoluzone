@@ -24,10 +24,8 @@ public class Tile {
         START("Start"),
         FINISH("Finish"),
         SWITCH("Switch"),
-        RED_FINISH("Red Finish"),
         TELEPORT("Teleport"),
         LOCKED_FINISH("Locked Finish"),
-        BLUE_FINISH("Blue Finish"),
         SLIDER("Slider"),
         RAIL("Rail");
 
@@ -224,10 +222,6 @@ public class Tile {
                 g.fill(circleLarge);
                 g.setColor(Color.red.multiply(new Color(1,1,1,opacity)));
                 g.fill(circleSmall);
-                break;
-            case BLUE_FINISH:
-                break;
-            case RED_FINISH:
                 break;
             case RAIL:
                 g.setColor(Color.white.darker(0.2f).multiply(new Color(1,1,1,opacity)));

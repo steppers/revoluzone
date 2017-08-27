@@ -4,6 +4,9 @@ import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
+import stc.UI.UIButton;
+import stc.UI.UIRenderable;
+import stc.UI.UITextInput;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -16,8 +19,6 @@ import java.util.List;
  * Created by steppers on 2/12/17.
  */
 public class Model extends Renderable {
-
-    private static final float ROT_VEL = 360f;
 
     public int gridSize;
     public int score = 0;
@@ -34,8 +35,13 @@ public class Model extends Renderable {
     private float textOpacity = 1;
     public boolean redEnabled = true;
     public boolean renderStart = false;
+    public boolean editable = false;
+    public int[] allowedTileNumber = new int[Tile.Type.values().length];
+    public int[] initTileCount = new int[Tile.Type.values().length];
+    public int[] allowedPlacedTileNumber = new int[Tile.Type.values().length];
+    public int[] remainingTileNumber = new int[Tile.Type.values().length];
 
-
+    private ArrayList<UIRenderable> staticUI;
     private Color opCol = new Color(1,1,1,1);
 
     public Model(String fileName, float scale) {
@@ -45,7 +51,6 @@ public class Model extends Renderable {
         setScale(scale);
         reset();
         recalcAll();
-
     }
 
     public Model(String fileName, float scale, float opacity) {
@@ -55,6 +60,20 @@ public class Model extends Renderable {
         setScale(scale);
         reset();
         recalcAll();
+
+        initTileCount = tileCount();
+
+        if(editable) {
+            String[] tileNumberPairs = getProperty("placeable tiles").split(";");
+            for (String pair : tileNumberPairs) {
+                String[] tileNumber = pair.split(",");
+                allowedPlacedTileNumber[Integer.parseInt(tileNumber[0])] = Integer.parseInt(tileNumber[1]);
+            }
+
+            for (int i = 0; i < Tile.Type.values().length; i++) {
+                allowedTileNumber[i] = initTileCount[i] + allowedPlacedTileNumber[i];
+            }
+        }
     }
 
     public void update(float delta) {
@@ -141,6 +160,7 @@ public class Model extends Renderable {
                 tiles[x][y].reset(true);
             }
         }
+        rotation = 0;
     }
 
     public void toggleRedBlue() {
@@ -229,22 +249,6 @@ public class Model extends Renderable {
     }
 
     public void recalcAll() {
-        /*if(ball.destX < ball.x || ball.destY < ball.y) {
-            ball.destX = (int)Math.ceil(ball.x);
-            ball.destY = (int)Math.ceil(ball.y);
-        }else{
-            ball.destX = (int)ball.x;
-            ball.destY = (int)ball.y;
-        }
-        for(Slider s : sliders){
-            if(s.destX < s.x || s.destY < s.y) {
-                s.destX = (int)Math.ceil(s.x);
-                s.destY = (int)Math.ceil(s.y);
-            }else{
-                s.destX = (int)s.x;
-                s.destY = (int)s.y;
-            }
-        }*/
         recalcBall();
         for (int i = 0; i < sliders.size(); i++) {
             recalcSlider(sliders.get(i));
@@ -788,6 +792,10 @@ public class Model extends Renderable {
                     }
                 }
                 break;
+            case "placeable tiles":
+                properties.put("placeable tiles", data);
+                editable = true;
+                break;
             default:
                 properties.put(type, data);
         }
@@ -942,4 +950,17 @@ public class Model extends Renderable {
         return tileCoord;
     }
 
+    public int[] tileCount (){
+        int[] tileCount = new int[Tile.Type.values().length];
+        for(int i = 0; i < tileCount.length; i++){
+            for(int x = 0; x < gridSize; x++){
+                for(int y = 0; y < gridSize; y++){
+                    if(tiles[x][y].type == Tile.Type.values()[i] || (tiles[x][y].isRail && Tile.Type.values()[i] == Tile.Type.RAIL) || (tiles[x][y].hasSlider(this) != null && Tile.Type.values()[i] == Tile.Type.SLIDER)){
+                        tileCount[i]++;
+                    }
+                }
+            }
+        }
+        return tileCount;
+    }
 }

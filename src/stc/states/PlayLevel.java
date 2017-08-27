@@ -9,13 +9,9 @@ import stc.Model;
 import stc.Tile;
 import stc.Slider;
 import stc.TransitionManager;
+import stc.UI.UIButton;
 import stc.UI.UILabel;
 import stc.UI.UIRenderable;
-import sun.audio.AudioPlayer;
-import sun.audio.AudioStream;
-
-import java.io.FileInputStream;
-import java.io.InputStream;
 import java.util.ArrayList;
 
 /**
@@ -61,6 +57,17 @@ public class PlayLevel {
         tmpLabel.text = "Your move count: " + m.score;
         tmpLabel.rotation = 180f;
         rotatingUI.add(tmpLabel.clone());
+
+        UIButton tmpButton = new UIButton("Editor Mode", gc);
+        tmpButton.anchor.set(0.9f, 0.8f);
+        tmpButton.offset.set(-0.05f, 0.0f);
+        tmpButton.color = new Color(Color.lightGray).darker(0.3f);
+        tmpButton.setOnClickCallback(() -> {
+            gs.initEditableLevel();
+            gs.currentState = GameState.State.EDITABLE_LEVEL;
+            m.reset();
+        });
+        staticUI.add(tmpButton.clone());
     }
 
     public void update(GameContainer gc) {
