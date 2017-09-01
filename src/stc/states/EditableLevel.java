@@ -58,7 +58,7 @@ public class EditableLevel {
         initTiles = m.tiles;
 
         for(int i = 0; i < Tile.Type.values().length; i++) {
-            m.remainingTileNumber[i] = m.allowedTileNumber[i] - m.tileCount()[i];
+            m.remainingTileNumber[i] = m.allowedTileNumber[i] - m.tileCount(m.tiles)[i];
         }
 
         for (Tile.Type t : Tile.Type.values()) {
@@ -124,7 +124,7 @@ public class EditableLevel {
 
     public void update(GameContainer gc) {
         for(int i = 0; i < Tile.Type.values().length; i++) {
-            m.remainingTileNumber[i] = m.allowedTileNumber[i] - m.tileCount()[i];
+            m.remainingTileNumber[i] = m.allowedTileNumber[i] - m.tileCount(m.tiles)[i];
             if(toolbarOrder.contains(i)){
                 UILabel tmpLabel = (UILabel)staticUI.get(3 + toolbarOrder.indexOf(i));
                 tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[i]);
@@ -170,9 +170,10 @@ public class EditableLevel {
                         && t.x != 0 && t.x != m.gridSize-1 && t.y != 0 && t.y != m.gridSize-1
                         && t != m.getTileUnderBall()
                         && t.hasSlider(m) == null
-                        && m.tileCount()[drawTileType.ordinal()] < m.allowedTileNumber[drawTileType.ordinal()]) {
+                        && m.tileCount(m.tiles)[drawTileType.ordinal()] < m.allowedTileNumber[drawTileType.ordinal()]
+                        && m.editableTiles[t.x][t.y] != null) {
 
-                    if (drawTileType == Tile.Type.RAIL && m.tileCount()[Tile.Type.RAIL.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.RAIL.ordinal()]) {
+                    if (drawTileType == Tile.Type.RAIL && m.tileCount(m.tiles)[Tile.Type.RAIL.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.RAIL.ordinal()]) {
                             t.isRail = true;
                         } else {
                             if (drawTileType != Tile.Type.SLIDER) {
@@ -183,7 +184,7 @@ public class EditableLevel {
                                     t.reset(m.redEnabled);
                                 }
 
-                            } else if(m.tileCount()[Tile.Type.SLIDER.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.SLIDER.ordinal()]){
+                            } else if(m.tileCount(m.tiles)[Tile.Type.SLIDER.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.SLIDER.ordinal()]){
                                 boolean add = true;
                                 for(Slider s : m.sliders) {
                                     if(s.resetX == t.x && s.resetY == t.y)
@@ -274,6 +275,7 @@ public class EditableLevel {
     public void render(GameContainer gc, Graphics g) {
         m = gs.m;
         m.render(gc, g);
+        m.renderEditable(gc, g);
         renderToolbar(gc, g);
         g.setColor(Color.orange);
         g.setLineWidth(3);
@@ -295,6 +297,7 @@ public class EditableLevel {
 
     public void renderTransition(GameContainer gc, Graphics g) {
         m = gs.m;
+        m.renderEditable(gc, g);
         renderToolbar(gc, g);
         Color c = new Color(Color.orange);
         c.a = (m.getScale()-0.6f)*2.5f;

@@ -27,12 +27,12 @@ public class PlayLevel {
     private ArrayList<UIRenderable> rotatingUI;
 
     private boolean escaping = false;
+    private boolean loadedNew = false;
 
     public PlayLevel(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;
         this.tm = tm;
         m = gs.m;
-
         //Static UI
         staticUI = new ArrayList<>();
         UILabel tmpLabel = new UILabel(gc);
@@ -63,9 +63,11 @@ public class PlayLevel {
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
         tmpButton.setOnClickCallback(() -> {
-            gs.initEditableLevel();
-            gs.currentState = GameState.State.EDITABLE_LEVEL;
-            m.reset();
+            if(m.editable) {
+                gs.initEditableLevel();
+                gs.currentState = GameState.State.EDITABLE_LEVEL;
+                m.reset();
+            }
         });
         staticUI.add(tmpButton.clone());
     }
@@ -74,13 +76,19 @@ public class PlayLevel {
         m = gs.m;
         if(gc.getInput().isKeyDown(Input.KEY_ESCAPE) || escaping) {
             escaping = true;
-            m.score = 0;
-            if(m.getRotation() != 0) {
-                tm.transitionFadeRotate(m, new Model(m.getProperty("filename"), 1.0f, 0f), GameState.State.LEVEL, -m.getRotation(), 0.3f);
+            if(!loadedNew && m.score != 0) {
+                loadedNew = true;
+                if (m.getRotation() != 0) {
+                    tm.transitionFadeRotate(m, new Model(m.getProperty("filename"), 1.0f, 0f), GameState.State.LEVEL, -m.getRotation(), 0.3f);
+                }else{
+                    tm.transitionFade(m, new Model(m.getProperty("filename"), 1.0f, 0f), GameState.State.LEVEL, 0.3f);
+                }
             }
             if(!tm.isTransitioning()) {
                 tm.transitionShrink(m, GameState.State.LEVEL_SELECT, 0.6f, 0.3f);
                 escaping = false;
+                loadedNew = false;
+                m.score = 0;
             }
         }
         else if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
@@ -134,17 +142,35 @@ public class PlayLevel {
             }
             if(tm.getNewState() == GameState.State.LEVEL) {
                 for(UIRenderable r : staticUI) {
-                    r.scale = m.getScale();
-                    r.scaleOffset(m.getScale());
-                    r.color.a = m.getOpacity();
-                    r.render(g);
+                    if(r.getClass() == UIButton.class) {
+                        if(m.editable){
+                            r.scale = m.getScale();
+                            r.scaleOffset(m.getScale());
+                            r.color.a = (m.getScale()-0.6f)*2.5f;
+                            r.render(g);
+                        }
+                    }else {
+                        r.scale = m.getScale();
+                        r.scaleOffset(m.getScale());
+                        r.color.a = (m.getScale() - 0.6f) * 2.5f;
+                        r.render(g);
+                    }
                 }
             } else {
                 for(UIRenderable r : staticUI) {
-                    r.scale = m.getScale();
-                    r.scaleOffset(m.getScale());
-                    r.color.a = (m.getScale()-0.6f)*2.5f;
-                    r.render(g);
+                    if(r.getClass() == UIButton.class) {
+                        if(m.editable){
+                            r.scale = m.getScale();
+                            r.scaleOffset(m.getScale());
+                            r.color.a = (m.getScale()-0.6f)*2.5f;
+                            r.render(g);
+                        }
+                    }else {
+                        r.scale = m.getScale();
+                        r.scaleOffset(m.getScale());
+                        r.color.a = (m.getScale() - 0.6f) * 2.5f;
+                        r.render(g);
+                    }
                 }
             }
         } else {
@@ -156,13 +182,20 @@ public class PlayLevel {
                 r.render(g);
             }
             for(UIRenderable r : staticUI) {
-                r.scale = m.getScale();
-                r.scaleOffset(m.getScale());
-                r.color.a = (m.getScale()-0.6f)*2.5f;
-                r.render(g);
+                if(r.getClass() == UIButton.class) {
+                    if(m.editable){
+                        r.scale = m.getScale();
+                        r.scaleOffset(m.getScale());
+                        r.color.a = (m.getScale()-0.6f)*2.5f;
+                        r.render(g);
+                    }
+                }else {
+                    r.scale = m.getScale();
+                    r.scaleOffset(m.getScale());
+                    r.color.a = (m.getScale() - 0.6f) * 2.5f;
+                    r.render(g);
+                }
             }
         }
-
     }
-
 }

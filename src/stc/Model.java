@@ -1,12 +1,10 @@
 package stc;
 
+import org.lwjgl.util.vector.Vector4f;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
 import org.newdawn.slick.geom.*;
-import stc.UI.UIButton;
-import stc.UI.UIRenderable;
-import stc.UI.UITextInput;
 import sun.audio.AudioPlayer;
 import sun.audio.AudioStream;
 
@@ -26,6 +24,7 @@ public class Model extends Renderable {
     private HashMap<String, String> properties;
 
     public Tile[][] tiles;
+    public  Tile[][] editableTiles;
     public Ball ball;
     public List<Slider> sliders = new ArrayList<>();
 
@@ -41,7 +40,6 @@ public class Model extends Renderable {
     public int[] allowedPlacedTileNumber = new int[Tile.Type.values().length];
     public int[] remainingTileNumber = new int[Tile.Type.values().length];
 
-    private ArrayList<UIRenderable> staticUI;
     private Color opCol = new Color(1,1,1,1);
 
     public Model(String fileName, float scale) {
@@ -61,7 +59,7 @@ public class Model extends Renderable {
         reset();
         recalcAll();
 
-        initTileCount = tileCount();
+        initTileCount = tileCount(tiles);
 
         if(editable) {
             String[] tileNumberPairs = getProperty("placeable tiles").split(";");
@@ -77,7 +75,7 @@ public class Model extends Renderable {
     }
 
     public void update(float delta) {
-        //Update our rotation here
+        rotation %= 360;
         ball.update(delta, this);
         for (int i = 0; i < sliders.size(); i++) {
             sliders.get(i).update(delta, this);
@@ -322,6 +320,7 @@ public class Model extends Renderable {
         renderFloorPlane(gc, g);
         renderShadow(gc, g);
         renderObject(gc, g);
+        //renderEditable(gc, g);
     }
 
     @Override
@@ -508,8 +507,8 @@ public class Model extends Renderable {
 
     }
 
-    @Override
-    public void renderShadow(GameContainer gc, Graphics g) {
+
+    public void renderEditable(GameContainer gc, Graphics g) {
         float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
         float offset = - ((float)gridSize / 2) + 0.5f;
 
@@ -517,12 +516,51 @@ public class Model extends Renderable {
         Shape tile = rect.transform(Transform.createRotateTransform((float)(rotation*Math.PI)/180));
 
         Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
-        
-        Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(rotation + 25).add(new Vector2f(offset, offset));
-        g.setColor(Color.white.darker(0.8f).multiply(opCol).multiply(new Color(1,1,1,0.7f))); //Shadow color
+
+        g.setColor(Color.green.multiply(opCol).multiply(new Color(1,1,1,0.2f)));
         for (int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
-                if(tiles[x][y].type == Tile.Type.LOCKED_FINISH)
+                if(tiles[x][y] == editableTiles[x][y]) {
+                    Vector2f pos = new Vector2f(offset + x, offset + y);
+                    pos.sub(-rotation);
+                    pos.scale(SCALE);
+                    pos.add(screenOffset);
+                    tile.setLocation(pos.x, pos.y);
+                    g.fill(tile);
+                }
+            }
+        }
+
+        g.setColor(Color.green.multiply(opCol));
+        g.setLineWidth(3);
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
+                if(tiles[x][y] == editableTiles[x][y]) {
+                    Vector2f pos = new Vector2f(offset + x, offset + y);
+                    pos.sub(-rotation);
+                    pos.scale(SCALE);
+                    pos.add(screenOffset);
+                    tile.setLocation(pos.x, pos.y);
+                    g.draw(tile);
+                }
+            }
+        }
+    }
+    @Override
+    public void renderShadow(GameContainer gc, Graphics g) {
+        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
+        float offset = -((float) gridSize / 2) + 0.5f;
+
+        Rectangle rect = new Rectangle(-SCALE / 2, -SCALE / 2, SCALE, SCALE);
+        Shape tile = rect.transform(Transform.createRotateTransform((float) (rotation * Math.PI) / 180));
+
+        Vector2f screenOffset = new Vector2f(gc.getWidth() / 2, gc.getHeight() / 2);
+
+        Vector2f shadow = new Vector2f(0.07f, 0.07f).sub(rotation + 25).add(new Vector2f(offset, offset));
+        g.setColor(Color.white.darker(0.8f).multiply(opCol).multiply(new Color(1, 1, 1, 0.7f))); //Shadow color
+        for (int x = 0; x < gridSize; x++) {
+            for (int y = 0; y < gridSize; y++) {
+                if (tiles[x][y].type == Tile.Type.LOCKED_FINISH)
                     continue;
                 if (tiles[x][y].isSolid(this) && (tiles[x][y].hasSlider(this) == null)) {
                     Vector2f pos = new Vector2f(shadow.x + x, shadow.y + y);
@@ -534,7 +572,6 @@ public class Model extends Renderable {
                 }
             }
         }
-
         //Render Ball shadow
         ball.renderShadow(gc, g, this);
         for (int i = 0; i < sliders.size(); i++) {
@@ -796,6 +833,21 @@ public class Model extends Renderable {
                 properties.put("placeable tiles", data);
                 editable = true;
                 break;
+            case "editable tiles":
+                String firstEditable = data.split("->")[0];
+                String secondEditable = data.split("->")[1];
+                int E1x, E1y, E2x, E2y;
+                E1x = Integer.parseInt(firstEditable.split(",")[0]);
+                E1y = Integer.parseInt(firstEditable.split(",")[1]);
+                E2x = Integer.parseInt(secondEditable.split(",")[0]);
+                E2y = Integer.parseInt(secondEditable.split(",")[1]);
+                for(int x = Math.min(E1x, E2x); x <= Math.max(E1x, E2x); x++) {
+                    for(int y = Math.min(E1y, E2y); y <= Math.max(E1y, E2y); y++) {
+                        editableTiles[x][y] = tiles[x][y];
+                    }
+                }
+                editable = true;
+                break;
             default:
                 properties.put(type, data);
         }
@@ -899,6 +951,7 @@ public class Model extends Renderable {
 
     private void initTiles(int size) {
         tiles = new Tile[size+2][size+2];
+        editableTiles = new Tile[size+2][size+2];
         gridSize = size+2;
 
         for(int x = 0; x < size+2; x++) {
@@ -935,22 +988,7 @@ public class Model extends Renderable {
         return null;
     }
 
-    public Vector2f getWorldCoordOfTile(Vector2f tileCoord, GameContainer gc) {
-        float SCALE = ((Math.min(gc.getHeight(), gc.getWidth()) * 0.70f) / gridSize) * scale;
-
-        float offset = - ((float)gridSize / 2);
-
-        Vector2f screenOffset = new Vector2f(gc.getWidth()/2, gc.getHeight()/2);
-
-        tileCoord = tileCoord.add(new Vector2f(offset, offset));
-        tileCoord = tileCoord.add(rotation);
-        tileCoord = tileCoord.scale(SCALE);
-        tileCoord = tileCoord.add(screenOffset);
-
-        return tileCoord;
-    }
-
-    public int[] tileCount (){
+    public int[] tileCount (Tile[][] tiles){
         int[] tileCount = new int[Tile.Type.values().length];
         for(int i = 0; i < tileCount.length; i++){
             for(int x = 0; x < gridSize; x++){

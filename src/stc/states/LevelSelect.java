@@ -45,13 +45,15 @@ public class LevelSelect {
         tmpButton.offset.set(0f, -0.46f);
         tmpButton.setTransparentBox(true);
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
+            if(!tm.isTransitioning() && m.getRotation() == 0) {
+                tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
         tmpButton.setText(m.getProperty("prev").split("\\.")[0]);
         tmpButton.rotation = 90f;
         tmpButton.setOnClickCallback(() -> {
-            if(!tm.isTransitioning()) {
+            if(!tm.isTransitioning() && m.getRotation() == 0) {
                 tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
             }
         });
@@ -59,7 +61,7 @@ public class LevelSelect {
         tmpButton.setText(m.getProperty("next").split("\\.")[0]);
         tmpButton.rotation = -90f;
         tmpButton.setOnClickCallback(() -> {
-            if(!tm.isTransitioning()) {
+            if(!tm.isTransitioning() && m.getRotation() == 0) {
                 tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 0.6f, 0f), gs.currentState, 90, 0.3f);
             }
         });

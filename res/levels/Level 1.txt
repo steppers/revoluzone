@@ -7,7 +7,9 @@
 name=Level 1
 next=Level 2.txt
 prev=Level 25.txt
-score=9
+score=8
 message_left=
 message_right=
-placeable tiles=0,4;2,1;4,2
+placeable tiles=1,1;2,3;3,2
+editable tiles=1,1->1,6
+editable tiles=1,1->6,1

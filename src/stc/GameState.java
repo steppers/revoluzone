@@ -92,6 +92,8 @@ public class GameState extends BasicGameState {
                 tm.render(gc, g);
                 if (previousState == State.EDITOR || tm.getNewState() == State.EDITOR) {
                     editor.renderTransition(gc, g);
+                }else if(previousState == State.EDITABLE_LEVEL || tm.getNewState() == State.EDITABLE_LEVEL){
+                    editableLevel.renderTransition(gc, g);
                 }
                 renderStateText(g, previousState, m);
                 renderStateText(g, tm.getNewState(), tm.getNewModel());

@@ -49,25 +49,33 @@ public class Menu {
         tmpButton.scale = m.getScale()/0.6f;
         tmpButton.setTransparentBox(true);
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
+            if(!tm.isTransitioning()) {
+                tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
         tmpButton.setText("Quit");
         tmpButton.rotation = -90f;
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.3f);
+            if(!tm.isTransitioning()) {
+                tm.transitionShrink(m, GameState.State.QUIT, 0.0f, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
         tmpButton.setText("Editor");
         tmpButton.rotation = 180f;
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
+            if(!tm.isTransitioning()) {
+                tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
         tmpButton.setText("Credits");
         tmpButton.rotation = 90f;
         tmpButton.setOnClickCallback(() -> {
-            tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+            if(!tm.isTransitioning()) {
+                tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+            }
         });
         rotatingUI.add(tmpButton.clone());
     }
