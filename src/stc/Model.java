@@ -834,6 +834,7 @@ public class Model extends Renderable {
                 editable = true;
                 break;
             case "editable tiles":
+                properties.put("editable tiles", data);
                 String firstEditable = data.split("->")[0];
                 String secondEditable = data.split("->")[1];
                 int E1x, E1y, E2x, E2y;
@@ -875,6 +876,10 @@ public class Model extends Renderable {
             data.append("score=" + (getProperty("score") == null ? "999" : getProperty("score")) + "\n");
             data.append("message_left=\n");
             data.append("message_right=\n");
+            if(editable){
+                data.append("placeable tiles=" + getProperty("placeable tiles") + "\n");
+                data.append("editable tiles=" + getProperty("editable tiles") + "\n");
+            }
 
             for(int y = 1; y < tiles.length-1; y++) {
                 for (int x = 1; x < tiles.length - 1; x++) {
