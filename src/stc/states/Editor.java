@@ -160,17 +160,17 @@ public class Editor {
             for(UIRenderable r : rotatingUI) {
                 r.update();
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_R)) {
+            if(gc.getInput().isKeyPressed(Input.KEY_R) && !((UITextInput)staticUI.get(4)).acceptingInput()) {
                 m.reset();
                 m.recalcAll();
             }
             if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
                 tm.transitionShrink(m, GameState.State.MENU, 0.6f, 0.3f);
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
+            if(gc.getInput().isKeyPressed(Input.KEY_RIGHT) && !((UITextInput)staticUI.get(4)).acceptingInput()) {
                 tm.transitionRotate(m, gs.currentState, 90, 0.2f);
             }
-            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
+            else if(gc.getInput().isKeyPressed(Input.KEY_LEFT) && !((UITextInput)staticUI.get(4)).acceptingInput()) {
                 tm.transitionRotate(m, gs.currentState, -90, 0.2f);
             }
             if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
