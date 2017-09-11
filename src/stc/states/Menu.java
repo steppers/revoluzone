@@ -74,7 +74,7 @@ public class Menu {
         tmpButton.rotation = 90f;
         tmpButton.setOnClickCallback(() -> {
             if(!tm.isTransitioning()) {
-                tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+                tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.3f);
             }
         });
         rotatingUI.add(tmpButton.clone());
@@ -103,15 +103,15 @@ public class Menu {
                     tm.transitionGrow(m, GameState.State.EDITOR, 1.0f, 0.3f);
                     break;
                 case 270:
-                    tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.4f);
+                    tm.transitionFade(m, new Model(m.getProperty("filename"), 0.6f, 0.3f), GameState.State.CREDITS, 0.3f);
                     break;
             }
         }
         if(gc.getInput().isKeyPressed(Input.KEY_RIGHT)) {
-            tm.transitionRotate(m, gs.currentState, 90, 0.15f);
+            tm.transitionRotate(m, gs.currentState, 90, 0.2f);
         }
         else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
-            tm.transitionRotate(m, gs.currentState, -90, 0.15f);
+            tm.transitionRotate(m, gs.currentState, -90, 0.2f);
         }
         if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
             if(m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {

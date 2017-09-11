@@ -125,7 +125,7 @@ public class Tile {
                     return hasSlider(m) != null;
                 }
             case LOCKED_FINISH:
-                return true;
+                return false;
             default:
                 return hasSlider(m) != null;
         }

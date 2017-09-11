@@ -1,0 +1,13 @@
+{3,0,0,2,0,0}
+{2,0,0,0,3,0}
+{0,0,0,0,0,0}
+{0,0,0,7,2,0}
+{0,2,0,0,1,0}
+{5,0,0,3,0,9}
+name=A Level 6 Idea
+next=Level 7.txt
+prev=Level 6.txt
+score=10
+message_left=
+message_right=
+link=4,4->6,6
