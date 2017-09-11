@@ -160,6 +160,7 @@ public class Model extends Renderable {
             }
         }
         rotation = 0;
+        score = 0;
     }
 
     public void toggleRedBlue() {

@@ -102,7 +102,7 @@ public class PlayLevel {
         else if(gc.getInput().isKeyPressed(Input.KEY_SPACE) && m.getTileUnderBall().type != Tile.Type.BLUE && m.getTileUnderBall().type != Tile.Type.RED) {
             m.toggleRedBlue();
         }
-        if(gc.getInput().isKeyPressed(Input.KEY_R)) {
+        else if(gc.getInput().isKeyPressed(Input.KEY_R)){
             m.reset();
             m.recalcAll();
         }
