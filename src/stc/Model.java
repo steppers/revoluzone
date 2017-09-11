@@ -151,6 +151,7 @@ public class Model extends Renderable {
     public void reset() {
         redEnabled = true;
         sliders.forEach(Slider::reset);
+        score = 0;
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.START)
