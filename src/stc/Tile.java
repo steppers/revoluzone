@@ -81,13 +81,15 @@ public class Tile {
                     active = true;
                     break;
                 case LOCKED_FINISH:
-                    type = Tile.Type.FINISH;
-                    try {
-                        String File = "res/sounds/Open_Lock.wav";
-                        InputStream in = new FileInputStream(File);
-                        AudioStream audioStream = new AudioStream(in);
-                        AudioPlayer.player.start(audioStream);
-                    } catch (Exception e) {
+                    if(m.getTileUnderBall() != this) {
+                        type = Tile.Type.FINISH;
+                        try {
+                            String File = "res/sounds/Open_Lock.wav";
+                            InputStream in = new FileInputStream(File);
+                            AudioStream audioStream = new AudioStream(in);
+                            AudioPlayer.player.start(audioStream);
+                        } catch (Exception e) {
+                        }
                     }
                     m.recalcAll();
                     break;
