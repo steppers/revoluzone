@@ -5,7 +5,7 @@
 {3,0,0,0,3,0}
 {0,2,3,3,2,5}
 name=Level 6
-next=A level 6 idea.txt
+next=Level 7.txt
 prev=Level 5.txt
 score=18
 message_left=
