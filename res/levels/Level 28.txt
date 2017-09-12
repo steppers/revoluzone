@@ -1,0 +1,14 @@
+{0,0,0,0,0,0}
+{1,0,1,1,1,0}
+{0,0,1,6,1,0}
+{0,0,1,1,1,0}
+{0,0,0,0,0,0}
+{5,0,0,0,0,0}
+name=Level 28
+next=Level 1.txt
+prev=Level 27.txt
+score=3
+message_left=
+message_right=
+placeable tiles=0,1;1,1
+editable tiles=5,3->5,3

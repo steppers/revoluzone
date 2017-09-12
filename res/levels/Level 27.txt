@@ -5,9 +5,9 @@
 {0,0,6,1,0,0}
 {5,0,0,0,2,2}
 name=Level 27
-next=Level 1.txt
+next=Level 28.txt
 prev=Level 26.txt
-score=999
+score=14
 message_left=
 message_right=
 link=1,1->4,3
