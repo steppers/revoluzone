@@ -17,3 +17,4 @@ rail=2,1->4,1
 rail=1,2->1,6
 rail=2,5->2,5
 slider=1,6
+locked=true

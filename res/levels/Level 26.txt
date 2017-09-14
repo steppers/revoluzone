@@ -38,3 +38,4 @@ slider=5,1
 slider=2,6
 slider=2,1
 slider=2,3
+locked=true

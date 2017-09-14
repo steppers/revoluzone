@@ -188,24 +188,12 @@ public class TransitionManager {
 
     public void render(GameContainer gc, Graphics g) {
         if(type == Type.FADE_ROTATE_CCW || type == Type.FADE_ROTATE_CW) {
-            to.renderBackPlane(gc, g);
-            to.renderFloorPlane(gc, g);
-            to.renderShadow(gc, g);
-            to.renderObject(gc, g);
-            from.renderBackPlane(gc, g);
-            from.renderFloorPlane(gc, g);
-            from.renderShadow(gc, g);
-            from.renderObject(gc, g);
+            to.render(gc, g);
+            from.render(gc, g);
         } else {
-            from.renderBackPlane(gc, g);
-            from.renderFloorPlane(gc, g);
-            from.renderShadow(gc, g);
-            from.renderObject(gc, g);
+            from.render(gc, g);
             if (to != from) {
-                to.renderBackPlane(gc, g);
-                to.renderFloorPlane(gc, g);
-                to.renderShadow(gc, g);
-                to.renderObject(gc, g);
+                to.render(gc, g);
             }
         }
     }

@@ -11,3 +11,4 @@ score=10
 message_left=
 message_right=
 link=4,4->6,6
+locked=true

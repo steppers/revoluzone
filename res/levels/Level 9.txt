@@ -14,3 +14,4 @@ prev=Level 8.txt
 score=18
 message_left=
 message_right=
+locked=true

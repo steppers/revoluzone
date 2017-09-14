@@ -15,3 +15,4 @@ score=21
 message_left=
 message_right=
 link=7,1->9,2
+locked=true

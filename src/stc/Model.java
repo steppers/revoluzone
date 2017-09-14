@@ -28,6 +28,10 @@ public class Model extends Renderable {
     public Ball ball;
     public List<Slider> sliders = new ArrayList<>();
 
+    private Tile[][] initTiles;
+    private Ball initBall;
+    private List<Slider> initSliders = new ArrayList<>();
+
     private float rotation = 0;
     private float scale = 1;
     private float opacity = 1;
@@ -35,21 +39,13 @@ public class Model extends Renderable {
     public boolean redEnabled = true;
     public boolean renderStart = false;
     public boolean editable = false;
+    public boolean locked = false;
     public int[] allowedTileNumber = new int[Tile.Type.values().length];
     public int[] initTileCount = new int[Tile.Type.values().length];
     public int[] allowedPlacedTileNumber = new int[Tile.Type.values().length];
     public int[] remainingTileNumber = new int[Tile.Type.values().length];
 
     private Color opCol = new Color(1,1,1,1);
-
-    public Model(String fileName, float scale) {
-        properties = new HashMap<>();
-        loadFromFile(fileName);
-        setOpacity(1);
-        setScale(scale);
-        reset();
-        recalcAll();
-    }
 
     public Model(String fileName, float scale, float opacity) {
         properties = new HashMap<>();
@@ -60,6 +56,9 @@ public class Model extends Renderable {
         recalcAll();
 
         initTileCount = tileCount(tiles);
+        initTiles = tiles;
+        initBall = ball;
+        initSliders = sliders;
 
         if(editable) {
             String[] tileNumberPairs = getProperty("placeable tiles").split(";");
@@ -71,6 +70,15 @@ public class Model extends Renderable {
             for (int i = 0; i < Tile.Type.values().length; i++) {
                 allowedTileNumber[i] = initTileCount[i] + allowedPlacedTileNumber[i];
             }
+        }
+
+        if(locked && getProperty("filename") != "locked.txt") {
+            gridSize = 13;
+            tiles = null;
+            tiles = new Tile[13][13];
+            tiles = new Model("locked.txt", 1f, 1f).tiles;
+            sliders.removeAll(sliders);
+            ball = new Ball(6, 9);
         }
     }
 
@@ -151,7 +159,6 @@ public class Model extends Renderable {
     public void reset() {
         redEnabled = true;
         sliders.forEach(Slider::reset);
-        score = 0;
         for(int x = 0; x < gridSize; x++) {
             for (int y = 0; y < gridSize; y++) {
                 if(tiles[x][y].type == Tile.Type.START)
@@ -322,7 +329,6 @@ public class Model extends Renderable {
         renderFloorPlane(gc, g);
         renderShadow(gc, g);
         renderObject(gc, g);
-        //renderEditable(gc, g);
     }
 
     @Override
@@ -851,6 +857,9 @@ public class Model extends Renderable {
                 }
                 editable = true;
                 break;
+            case "locked":
+                locked = Boolean.parseBoolean(data);
+                break;
             default:
                 properties.put(type, data);
         }
@@ -882,6 +891,7 @@ public class Model extends Renderable {
                 data.append("placeable tiles=" + getProperty("placeable tiles") + "\n");
                 data.append("editable tiles=" + getProperty("editable tiles") + "\n");
             }
+            data.append("locked="+locked);
 
             for(int y = 1; y < tiles.length-1; y++) {
                 for (int x = 1; x < tiles.length - 1; x++) {
@@ -957,13 +967,13 @@ public class Model extends Renderable {
     }
 
     private void initTiles(int size) {
-        tiles = new Tile[size+2][size+2];
-        editableTiles = new Tile[size+2][size+2];
-        gridSize = size+2;
+        gridSize = size + 2;
+        tiles = new Tile[gridSize][gridSize];
+        editableTiles = new Tile[gridSize][gridSize];
 
-        for(int x = 0; x < size+2; x++) {
-            for(int y = 0; y < size+2; y++) {
-                if(x == 0 || y == 0 || x == size+1 || y == size+1) {
+        for (int x = 0; x < size + 2; x++) {
+            for (int y = 0; y < size + 2; y++) {
+                if (x == 0 || y == 0 || x == size + 1 || y == size + 1) {
                     tiles[x][y] = new Tile(Tile.Type.FIXED.ordinal());
                 } else {
                     tiles[x][y] = new Tile(Tile.Type.EMPTY.ordinal());
@@ -1007,5 +1017,15 @@ public class Model extends Renderable {
             }
         }
         return tileCount;
+    }
+
+    public void unlock(){
+        if(locked){
+            locked = false;
+            tiles = initTiles;
+            ball = initBall;
+            sliders = initSliders;
+            saveToFile(getProperty("filename"), getProperty("name"));
+        }
     }
 }

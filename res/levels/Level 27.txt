@@ -22,3 +22,4 @@ rail=6,3->6,3
 rail=6,4->6,4
 slider=6,2
 slider=6,1
+locked=true
