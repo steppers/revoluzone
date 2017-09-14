@@ -44,7 +44,7 @@ public class GameState extends BasicGameState {
     private EditableLevel editableLevel;
 
     public GameState() {
-        m = new Model("menu.txt", 0.6f);
+        m = new Model("menu.txt", 0.6f, 1f);
         tm = new TransitionManager(this);
     }
 
@@ -133,6 +133,10 @@ public class GameState extends BasicGameState {
             }
         }
         if (t.type == Tile.Type.FINISH && previousState == State.LEVEL) {
+            Model tempM = new Model(m.getProperty("next"), 1f, 1f);
+            if(tempM.locked) {
+                tempM.unlock();
+            }
             try {
                 String File = "res/sounds/Next_Level.wav";
                 InputStream in = new FileInputStream(File);
@@ -145,7 +149,7 @@ public class GameState extends BasicGameState {
                 s.halt();
             }
             if (m.score < Integer.parseInt(m.getProperty("score"))) {
-                Model tempM = new Model(m.getProperty("filename"), 1f, 1f);
+                tempM = new Model(m.getProperty("filename"), 1f, 1f);
                 tempM.setProperty("score", String.valueOf(m.score));
                 tempM.saveToFile(m.getProperty("filename"), m.getProperty("name"));
             }

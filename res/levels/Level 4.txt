@@ -14,3 +14,4 @@ prev=Level 3.txt
 score=14
 message_left=
 message_right=
+locked=true

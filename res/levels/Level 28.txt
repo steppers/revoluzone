@@ -7,8 +7,12 @@
 name=Level 28
 next=Level 1.txt
 prev=Level 27.txt
-score=3
+score=8
 message_left=
 message_right=
 placeable tiles=0,1;1,1
+editable tiles=3,2->3,4
+editable tiles=4,2->5,2
+editable tiles=4,4->5,4
 editable tiles=5,3->5,3
+locked=true

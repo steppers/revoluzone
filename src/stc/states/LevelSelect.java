@@ -45,7 +45,7 @@ public class LevelSelect {
         tmpButton.offset.set(0f, -0.46f);
         tmpButton.setTransparentBox(true);
         tmpButton.setOnClickCallback(() -> {
-            if(!tm.isTransitioning() && m.getRotation() == 0) {
+            if(!tm.isTransitioning() && m.getRotation() == 0 && !m.locked) {
                 tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
             }
         });
@@ -70,7 +70,7 @@ public class LevelSelect {
 
     public void update(GameContainer gc) {
         m = gs.m;
-        if(gc.getInput().isKeyDown(Input.KEY_ENTER)) {
+        if(gc.getInput().isKeyDown(Input.KEY_ENTER) && !m.locked) {
             tm.transitionGrow(m, GameState.State.LEVEL, 1.0f, 0.3f);
         }
         else if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)) {
@@ -82,7 +82,7 @@ public class LevelSelect {
         else if(gc.getInput().isKeyPressed(Input.KEY_LEFT)) {
             tm.transitionFadeRotate(m, new Model(m.getProperty("prev"), 0.6f, 0f), gs.currentState, -90, 0.3f);
         }
-        else if(gc.getInput().isKeyPressed(Input.KEY_SPACE)) {
+    else if(gc.getInput().isKeyPressed(Input.KEY_SPACE) && !m.locked) {
             m.toggleRedBlue();
         }
 

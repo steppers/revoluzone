@@ -19,3 +19,4 @@ rail=4,5->4,5
 slider=4,5
 slider=4,4
 slider=4,3
+locked=true
