@@ -1,6 +1,6 @@
-package com.stc.proto;
+package com.stc.core;
 
-import com.stc.proto.states.SplashState;
+import com.stc.core.states.SplashState;
 
 /**
  * Created by steppers on 8/7/17.

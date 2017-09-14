@@ -1,11 +1,11 @@
-package com.stc.proto;
+package com.stc.core;
 
 import com.badlogic.gdx.ApplicationAdapter;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
-import com.stc.proto.levels.LevelManager;
-import com.stc.proto.states.SplashState;
+import com.stc.core.levels.LevelManager;
+import com.stc.core.states.SplashState;
 
 /**
  * Created by steppers on 8/2/17.

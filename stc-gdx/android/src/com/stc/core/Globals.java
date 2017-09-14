@@ -1,4 +1,4 @@
-package com.stc.proto;
+package com.stc.core;
 
 /**
  * Created by steppers on 6/29/17.

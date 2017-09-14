@@ -1,4 +1,4 @@
-package com.stc.proto;
+package com.stc.core;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.GL20;
@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
 
-import static com.stc.proto.Globals.*;
+import static com.stc.core.Globals.*;
 
 /**
 /**

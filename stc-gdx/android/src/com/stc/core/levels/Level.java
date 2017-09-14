@@ -1,4 +1,4 @@
-package com.stc.proto.levels;
+package com.stc.core.levels;
 
 import org.json.JSONObject;
 

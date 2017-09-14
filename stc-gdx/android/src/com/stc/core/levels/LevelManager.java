@@ -1,8 +1,8 @@
-package com.stc.proto.levels;
+package com.stc.core.levels;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
-import com.stc.proto.Globals;
+import com.stc.core.Globals;
 
 import java.util.ArrayList;
 import java.util.HashMap;

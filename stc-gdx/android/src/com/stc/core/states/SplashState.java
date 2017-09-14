@@ -1,4 +1,4 @@
-package com.stc.proto.states;
+package com.stc.core.states;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -7,8 +7,8 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.GlyphLayout;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
-import com.stc.proto.Renderer;
-import com.stc.proto.State;
+import com.stc.core.Renderer;
+import com.stc.core.State;
 
 /**
  * Created by steppers on 8/4/17.

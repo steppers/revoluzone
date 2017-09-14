@@ -4,8 +4,7 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.stc.Main;
-import com.stc.proto.RevGame;
+import com.stc.core.RevGame;
 
 public class AndroidLauncher extends AndroidApplication {
 	@Override
