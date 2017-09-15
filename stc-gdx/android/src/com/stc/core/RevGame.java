@@ -14,11 +14,13 @@ import com.stc.core.states.SplashState;
 public class RevGame extends ApplicationAdapter {
 
     private Background bg;
+	private World world;
 
     @Override
     public void create () {
         Renderer.init(); // Sets GL Blend modes and creates the shape renderer we use
         bg = new Background();
+		world = new World();
 
         LevelManager.instance().getLevel("test");
     }
@@ -29,6 +31,8 @@ public class RevGame extends ApplicationAdapter {
 
         // Update the current state
         StateManager.update(Time.delta());
+		
+		world.rotate(Time.delta() * 60.0f);
 
         // Break on screen touch for testing
         if(Gdx.input.isTouched()) {
@@ -46,6 +50,7 @@ public class RevGame extends ApplicationAdapter {
 
         //Render everything ---------------------------------------------------
         bg.render();
+		world.renderFloor(6);
         StateManager.render();
     }
 
