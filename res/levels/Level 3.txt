@@ -10,4 +10,4 @@ prev=Level 2.txt
 score=11
 message_left=
 message_right=
-locked=true
+locked=false

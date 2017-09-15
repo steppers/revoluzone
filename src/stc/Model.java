@@ -77,7 +77,7 @@ public class Model extends Renderable {
             tiles = null;
             tiles = new Tile[13][13];
             tiles = new Model("locked.txt", 1f, 1f).tiles;
-            sliders.removeAll(sliders);
+            sliders = new ArrayList<>();
             ball = new Ball(6, 9);
         }
     }

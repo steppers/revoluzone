@@ -14,4 +14,4 @@ message_left=
 message_right=
 link=2,2->6,6
 link=6,6->2,2
-locked=true
+locked=false

@@ -37,4 +37,4 @@ rail=8,4->8,4
 rail=9,4->9,4
 rail=10,4->10,4
 slider=7,4
-locked=true
+locked=false

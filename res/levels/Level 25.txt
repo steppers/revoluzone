@@ -7,7 +7,7 @@
 name=Level 25
 next=Level 26.txt
 prev=Level 24.txt
-score=23
+score=25
 message_left=
 message_right=
 link=4,1->6,6
@@ -33,4 +33,4 @@ rail=6,6->6,6
 slider=2,2
 slider=1,2
 slider=1,1
-locked=true
+locked=false

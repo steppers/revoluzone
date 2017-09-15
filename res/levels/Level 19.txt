@@ -15,4 +15,4 @@ rail=3,3->3,3
 slider=3,2
 slider=2,2
 slider=1,3
-locked=true
+locked=false
