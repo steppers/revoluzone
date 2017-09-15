@@ -5,14 +5,18 @@
 {0,0,0,0,0,0}
 {5,0,0,0,0,0}
 name=Level 28
-next=Level 1.txt
+next=Level 29.txt
 prev=Level 27.txt
-score=8
+score=3
 message_left=
 message_right=
 placeable tiles=0,1;1,1
-editable tiles=3,2->3,4
-editable tiles=4,2->5,2
-editable tiles=4,4->5,4
+editable tiles=3,2->3,2
+editable tiles=4,2->4,2
+editable tiles=5,2->5,2
+editable tiles=3,3->3,3
 editable tiles=5,3->5,3
-locked=true
+editable tiles=3,4->3,4
+editable tiles=4,4->4,4
+editable tiles=5,4->5,4
+locked=false

@@ -889,9 +889,7 @@ public class Model extends Renderable {
             data.append("message_right=\n");
             if(editable){
                 data.append("placeable tiles=" + getProperty("placeable tiles") + "\n");
-                data.append("editable tiles=" + getProperty("editable tiles") + "\n");
             }
-            data.append("locked="+locked);
 
             for(int y = 1; y < tiles.length-1; y++) {
                 for (int x = 1; x < tiles.length - 1; x++) {
@@ -908,12 +906,17 @@ public class Model extends Renderable {
                     if(t.isRail) {
                         data.append("rail=" + x + "," + y + "->" + x + "," + y + "\n");
                     }
+                    if(t == editableTiles[x][y]){
+                        data.append("editable tiles=" + x + "," + y + "->" + x + "," + y + "\n");
+                    }
                 }
             }
 
             for(Slider s : sliders) {
                 data.append("slider=" + (int)s.resetX + "," + (int)s.resetY + "\n");
             }
+
+            data.append("locked="+locked+"\n");
 
             bw.write(data.toString());
 
