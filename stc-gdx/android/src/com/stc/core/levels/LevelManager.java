@@ -28,7 +28,7 @@ public class LevelManager {
         levels = new HashMap<String, Level>();
 
         // Load all level files in root directory
-        FileHandle root = Gdx.files.local(Globals.LEVEL_DIR);
+        FileHandle root = Gdx.files.internal(Globals.LEVEL_DIR);
         loadDirectory(root);
         validate();
     }
@@ -53,7 +53,7 @@ public class LevelManager {
      * Creates a Level entry in the current level map.
      */
     private void loadFile(FileHandle file) {
-        levels.put(file.nameWithoutExtension(), new Level(file.file()));
+        levels.put(file.nameWithoutExtension(), new Level(file));
     }
 
     /*

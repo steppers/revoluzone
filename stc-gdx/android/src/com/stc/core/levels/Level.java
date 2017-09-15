@@ -5,6 +5,8 @@ import org.json.JSONObject;
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileReader;
+import com.badlogic.gdx.files.*;
+import org.json.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -13,13 +15,14 @@ import java.io.FileReader;
 public class Level {
 
     private boolean loaded;
-    private String data = "";
+    private String raw = "";
 
     // Level info
     private String fileName;
     private String levelName;
     private String prevLevelFileName;
     private String nextLevelFileName;
+	private int[] levelData;
     private int size;
 
     /*
@@ -27,35 +30,32 @@ public class Level {
      * This will not lead to a usable object yet. Use load()
      * before the level is required.
      */
-    public Level(File file) {
+    public Level(FileHandle file) {
         this.loaded = false;
-        this.fileName = file.getName();
+        this.fileName = file.name();
 
-        try {
-            BufferedReader r = new BufferedReader(new FileReader(file));
-
-            String line;
-            while((line = r.readLine()) != null) {
-                data += line.trim();
-            }
-
-            r.close();
-        } catch (java.io.IOException e) {
-            System.err.println("[X] Error: Problem reading level file '" + file.getName() + "'. Something went wrong!");
-            e.printStackTrace();
-            System.exit(1);
-        }
+        raw = file.readString();
 
         parseData();
     }
 
+	/*
+	 * Loads member variables from the raw JSON
+	 */
     private void parseData() {
-        JSONObject obj = new JSONObject(data);
+        JSONObject obj = new JSONObject(raw);
+		
         JSONObject info = obj.getJSONObject("info");
         this.levelName = info.getString("levelName");
         this.nextLevelFileName = info.getString("nextLevelFileName");
         this.prevLevelFileName = info.getString("prevLevelFileName");
         this.size = info.getInt("size");
+		
+		levelData = new int[this.size*this.size];
+		JSONArray data = obj.getJSONArray("data");
+		for(int i = 0; i < data.length(); i++) {
+			levelData[i] = data.get(i);
+		}
     }
 
     /*
@@ -76,6 +76,10 @@ public class Level {
 
         return loaded;
     }
+	
+	public void unload() {
+		
+	}
 
     public String getNextFileName() {
         return nextLevelFileName;
@@ -85,4 +89,8 @@ public class Level {
         return prevLevelFileName;
     }
 
+	public String getLevelName() {
+		return levelName;
+	}
+	
 }
