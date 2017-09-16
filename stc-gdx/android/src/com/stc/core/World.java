@@ -4,6 +4,7 @@ import com.stc.core.levels.Tile;
 import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.*;
+import com.badlogic.gdx.math.*;
 
 public class World
 {
@@ -33,8 +34,44 @@ public class World
 		this.opacity = opacity;
 	}
 	
-	public void renderTiles(Tile[] tiles, int size) {
+	
+	public void render(Tile[] tiles, int size) {
+		renderer.begin(ShapeRenderer.ShapeType.Filled);
+		renderer.identity();
 		
+		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
+
+		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+		renderer.rotate(0,0,1,rotation);
+		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
+		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
+		
+		renderFloor(size);
+		renderShadows(tiles, size);
+		renderTiles(tiles, size);
+		
+		renderer.end();
+	}
+	
+	public void renderTiles(Tile[] tiles, int size) {
+		Color c;
+		float x = 0, y = 0;
+		for(int i = 0; i < size*size; i++) {
+			x = i % size;
+			y = i / size;
+			switch(tiles[i].getType()) {
+				case EMPTY:
+					break;
+				case WALL:
+					c = new Color(Globals.COLOR_WALL);
+					c.a *= opacity;
+					renderer.setColor(c);
+					renderer.rect(x, y, 1, 1);
+					break;
+				default:
+					break;
+			}
+		}
 	}
 	
 	/*
@@ -49,21 +86,10 @@ public class World
 		
 	}
 	
-	public void renderFloor(int size) {
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
-
-        renderer.identity();
-		
+	private void renderFloor(int size) {
 		Color floorColor = new Color(Globals.COLOR_FLOOR);
-		floorColor.a = opacity;
+		floorColor.a *= opacity;
 		renderer.setColor(floorColor);
-		
-		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
-		
-		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		renderer.rotate(0,0,1,rotation);
-		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
-		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
 		
 		float x = 0, y = 0;
 		for(int i = 0; i < size*size; i++) {
@@ -71,8 +97,33 @@ public class World
 			y = i / size;
 			renderer.rect(x, y, 1, 1);
 		}
-
-        renderer.end();
+	}
+	
+	public void renderShadows(Tile[] tiles, int size) {
+		Color shadowColor = new Color(Globals.COLOR_SHADOW);
+		shadowColor.a *= opacity;
+		renderer.setColor(shadowColor);
+		
+		Vector2 t = new Vector2(0.1f, 0.1f);
+		t.rotate(-rotation);
+		renderer.translate(t.x, t.y, 0.0f);
+		
+		float x = 0, y = 0;
+		for(int i = 0; i < size*size; i++) {
+			x = i % size;
+			y = i / size;
+			switch(tiles[i].getType()) {
+				case EMPTY:
+					break;
+				case WALL:
+					renderer.rect(x, y, 1, 1);
+					break;
+				default:
+					break;
+			}
+		}
+		
+		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
 	public void rotate(float degrees) {

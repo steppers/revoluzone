@@ -80,6 +80,23 @@ public class Level {
 	public void unload() {
 		
 	}
+	
+	public LevelInstance getInstance() {
+		LevelInstance instance = new LevelInstance();
+		
+		Tile[] tiles = new Tile[size*size];
+		for(int i = 0; i < size*size; i++) {
+			int id = levelData[i];
+			switch(id) {
+				case 0: tiles[i] = new Tile(TileType.EMPTY); break;
+				default:
+				case 1: tiles[i] = new Tile(TileType.WALL); break;
+			}
+		}
+		
+		instance.setTiles(tiles, size);
+		return instance;
+	}
 
     public String getNextFileName() {
         return nextLevelFileName;

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.stc.core.levels.LevelManager;
 import com.stc.core.states.SplashState;
+import com.stc.core.levels.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -15,6 +16,7 @@ public class RevGame extends ApplicationAdapter {
 
     private Background bg;
 	private World world;
+	private LevelInstance testLevel;
 
     @Override
     public void create () {
@@ -22,7 +24,7 @@ public class RevGame extends ApplicationAdapter {
         bg = new Background();
 		world = new World();
 
-        LevelManager.instance().getLevel("test");
+        testLevel = LevelManager.instance().getLevelInstance("test");
     }
 
     private void update() {
@@ -50,7 +52,7 @@ public class RevGame extends ApplicationAdapter {
 
         //Render everything ---------------------------------------------------
         bg.render();
-		world.renderFloor(6);
+		testLevel.render(world);
         StateManager.render();
     }
 
