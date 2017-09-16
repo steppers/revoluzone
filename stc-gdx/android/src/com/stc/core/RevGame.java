@@ -16,15 +16,12 @@ public class RevGame extends ApplicationAdapter {
 
     private Background bg;
 	private World world;
-	private LevelInstance testLevel;
 
     @Override
     public void create () {
         Renderer.init(); // Sets GL Blend modes and creates the shape renderer we use
         bg = new Background();
 		world = new World();
-
-        testLevel = LevelManager.instance().getLevelInstance("test");
     }
 
     private void update() {
@@ -33,14 +30,6 @@ public class RevGame extends ApplicationAdapter {
 
         // Update the current state
         StateManager.update(Time.delta());
-		
-		world.rotate(Time.delta() * 60.0f);
-
-        // Break on screen touch for testing
-        if(Gdx.input.isTouched()) {
-            System.out.println("Screen touched. Exiting...");
-            Gdx.app.exit();
-        }
     }
 
     @Override
@@ -52,7 +41,6 @@ public class RevGame extends ApplicationAdapter {
 
         //Render everything ---------------------------------------------------
         bg.render();
-		testLevel.render(world);
         StateManager.render();
     }
 

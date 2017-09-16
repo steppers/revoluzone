@@ -1,6 +1,7 @@
 package com.stc.core;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.utils.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -17,5 +18,9 @@ public class Time {
     public static float delta() {
         return delta;
     }
+	
+	public static long current() {
+		return TimeUtils.millis();
+	}
 
 }

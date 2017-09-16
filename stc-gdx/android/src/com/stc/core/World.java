@@ -15,6 +15,10 @@ public class World
 	
 	private ShapeRenderer renderer;
 	
+	private Interpolator scaleLerp = new Interpolator(1.0f, 1.0f, 0.0f);
+	private Interpolator rotationLerp = new Interpolator(0.0f, 0.0f, 0.0f);
+	private Interpolator opacityLerp = new Interpolator(1.0f, 1.0f, 0.0f);
+	
 	public World() {
 		renderer = Renderer.shapeRenderer();
 	}
@@ -34,6 +38,15 @@ public class World
 		this.opacity = opacity;
 	}
 	
+	public void update(float delta) {
+		scaleLerp.update(delta);
+		rotationLerp.update(delta);
+		opacityLerp.update(delta);
+		
+		scale = scaleLerp.lerp();
+		rotation = rotationLerp.lerp();
+		opacity = opacityLerp.lerp();
+	}
 	
 	public void render(Tile[] tiles, int size) {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
@@ -126,8 +139,13 @@ public class World
 		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
+	public void rotate(float degrees, float duration) {
+		rotationLerp.begin(rotation, rotation + degrees, duration);
+	}
+	
 	public void rotate(float degrees) {
 		rotation += degrees;
+		rotationLerp.clear(rotation);
 	}
 	
 	public void modifyScale(float delta) {
@@ -160,6 +178,10 @@ public class World
 	
 	public float getOpacity() {
 		return opacity;
+	}
+	
+	public boolean changing() {
+		return scaleLerp.active() || rotationLerp.active() || opacityLerp.active();
 	}
 	
 }
