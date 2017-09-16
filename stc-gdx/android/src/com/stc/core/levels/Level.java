@@ -59,27 +59,11 @@ public class Level {
     }
 
     /*
-     * Scans the file for errors but doesn't load the data in.
+     * Scans the data for errors
      */
     public boolean verify() {
         return true;
     }
-
-    /*
-     * Fully loads the file so it's ready to be presented and used
-     */
-    public boolean load() {
-        if(loaded) // Early return
-            return true;
-
-        //Fully load the level here
-
-        return loaded;
-    }
-	
-	public void unload() {
-		
-	}
 	
 	public LevelInstance getInstance() {
 		LevelInstance instance = new LevelInstance();
