@@ -5,6 +5,8 @@ import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.graphics.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.*;
+import com.badlogic.gdx.graphics.g2d.*;
+import com.badlogic.gdx.utils.*;
 
 public class World
 {
@@ -14,6 +16,9 @@ public class World
 	private float opacity = 1.0f;
 	
 	private ShapeRenderer renderer;
+	private SpriteBatch sb;
+    private BitmapFont font;
+    private GlyphLayout layout;
 	
 	private Interpolator scaleLerp = new Interpolator(1.0f, 1.0f, 0.0f);
 	private Interpolator rotationLerp = new Interpolator(0.0f, 0.0f, 0.0f);
@@ -21,6 +26,8 @@ public class World
 	
 	public World() {
 		renderer = Renderer.shapeRenderer();
+		sb = Renderer.spriteBatch();
+        font = Renderer.gameFont();
 	}
 	
 	public World(float scale) {
@@ -139,6 +146,29 @@ public class World
 		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
+	public void drawString(float x, float y, String text, float rotation) {
+		layout = new GlyphLayout(font, text);
+		
+		sb.begin();
+		Matrix4 m = new Matrix4().idt();
+		
+		m.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+		m.rotate(0, 0, 1, rotation);
+		m.scale(scale, scale, 1);
+		
+		//sb.setTransformMatrix(m);
+        font.draw(sb, text, 0, layout.height/2.0f, Integer.MAX_VALUE, Align.center, false);
+        sb.end();
+
+        // Fix the blend state back (sb.end() resets it)
+        Gdx.gl.glEnable(GL20.GL_BLEND);
+        Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
+	}
+	
+	public void scale(float target, float duration) {
+		scaleLerp.begin(scale, target, duration);
+	}
+	
 	public void rotate(float degrees, float duration) {
 		rotationLerp.begin(rotation, rotation + degrees, duration);
 	}
@@ -148,12 +178,20 @@ public class World
 		rotationLerp.clear(rotation);
 	}
 	
-	public void modifyScale(float delta) {
-		scale += delta;
+	public void fade(float target, float duration) {
+		opacityLerp.begin(opacity, target, duration);
 	}
 	
-	public void modifyOpacity(float delta) {
-		opacity += delta;
+	public void setupScaleLerp(float from, float to, float duration) {
+		scaleLerp.begin(from, to, duration);
+	}
+	
+	public void setupRotationLerp(float from, float to, float duration) {
+		rotationLerp.begin(from, to, duration);
+	}
+	
+	public void setupOpacityLerp(float from, float to, float duration) {
+		opacityLerp.begin(from, to, duration);
 	}
 	
 	public void setRotation(float rotation) {

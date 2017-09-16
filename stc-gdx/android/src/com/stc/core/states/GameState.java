@@ -13,6 +13,9 @@ public class GameState extends State implements InputProcessor
 		world = new World();
         level = LevelManager.instance().getLevelInstance("test");
 		Gdx.input.setInputProcessor(this);
+		
+		world.setScale(0.0f);
+		world.setupScaleLerp(0.0f, 1.0f, 1.0f);
 	}
 	
 	@Override
@@ -23,13 +26,11 @@ public class GameState extends State implements InputProcessor
     @Override
     public void render() {
 		level.render(world);
+		world.drawString(0, 15, "Level Select", 0);
     }
 
 	@Override
-	public void renderText()
-	{
-		
-	}
+	public void renderText() {}
 	
 	@Override
 	public boolean mouseMoved (int screenX, int screenY) {
