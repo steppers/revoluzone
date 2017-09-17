@@ -33,7 +33,7 @@ public class SplashState extends State {
         sb = Renderer.spriteBatch();
         font = Renderer.gameFont();
         color = Color.WHITE.cpy();
-        layout = new GlyphLayout(font, "Squaring the Circle");
+        layout = new GlyphLayout(font, "Squaring\nthe\nCircle");
     }
 
     @Override
@@ -62,7 +62,7 @@ public class SplashState extends State {
 	public void renderText()
 	{
 		sb.begin();
-        font.draw(sb, "Squaring the Circle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
+        font.draw(sb, "Squaring\nthe\nCircle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)

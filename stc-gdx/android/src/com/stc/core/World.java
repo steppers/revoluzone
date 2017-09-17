@@ -64,7 +64,9 @@ public class World
 		renderer.identity();
 		
 		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
-
+		if(Globals.orientation.equals("portrait"))
+			scaleFactor = Gdx.graphics.getWidth() / (1.414f * size);
+		
 		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		renderer.rotate(0,0,1,rotation);
 		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
@@ -154,10 +156,12 @@ public class World
 		layout = new GlyphLayout(font, text);
 		
 		float scaleFactor = Gdx.graphics.getHeight() / 2.828f;
+		if(Globals.orientation.equals("portrait"))
+			scaleFactor = Gdx.graphics.getWidth() / 2.828f;
 		
 		sb.begin();
-		Matrix4 m = new Matrix4().idt();
 		
+		Matrix4 m = new Matrix4().idt();
 		m.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		m.rotate(0, 0, 1, rotation);
 		m.scale(scale, scale, 1);
