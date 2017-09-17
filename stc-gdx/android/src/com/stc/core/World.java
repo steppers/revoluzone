@@ -166,7 +166,7 @@ public class World
 		m.rotate(0, 0, 1, rotation);
 		m.scale(scale, scale, 1);
 		m.rotate(0, 0, 1, inRotation);
-		m.translate(x, y * scale * scaleFactor, 0);
+		m.translate(x, y * scaleFactor, 0);
 		
 		sb.setTransformMatrix(m);
 		font.setColor(Globals.COLOR_TEXT);
