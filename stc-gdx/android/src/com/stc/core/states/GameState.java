@@ -26,7 +26,10 @@ public class GameState extends State implements InputProcessor
     @Override
     public void render() {
 		level.render(world);
-		world.drawString(0, 15, "Level Select", 0);
+		world.drawString(0, 1.2f, "Level Select", 0);
+		world.drawString(0, 1.2f, "Credits", -90);
+		world.drawString(0, 1.2f, "Quit", 90);
+		world.drawString(0, 1.2f, "Achievements", 180);
     }
 
 	@Override

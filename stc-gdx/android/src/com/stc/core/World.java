@@ -28,11 +28,15 @@ public class World
 		renderer = Renderer.shapeRenderer();
 		sb = Renderer.spriteBatch();
         font = Renderer.gameFont();
+		font.setColor(Globals.COLOR_TEXT);
 	}
 	
 	public World(float scale) {
 		this.scale = scale;
 		renderer = Renderer.shapeRenderer();
+		sb = Renderer.spriteBatch();
+        font = Renderer.gameFont();
+		font.setColor(Globals.COLOR_TEXT);
 	}
 	
 	public World(float scale, float rotation) {
@@ -146,8 +150,10 @@ public class World
 		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
-	public void drawString(float x, float y, String text, float rotation) {
+	public void drawString(float x, float y, String text, float inRotation) {
 		layout = new GlyphLayout(font, text);
+		
+		float scaleFactor = Gdx.graphics.getHeight() / 2.828f;
 		
 		sb.begin();
 		Matrix4 m = new Matrix4().idt();
@@ -155,9 +161,12 @@ public class World
 		m.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		m.rotate(0, 0, 1, rotation);
 		m.scale(scale, scale, 1);
+		m.rotate(0, 0, 1, inRotation);
+		m.translate(x, y * scale * scaleFactor, 0);
 		
-		//sb.setTransformMatrix(m);
-        font.draw(sb, text, 0, layout.height/2.0f, Integer.MAX_VALUE, Align.center, false);
+		sb.setTransformMatrix(m);
+		font.setColor(Globals.COLOR_TEXT);
+        font.draw(sb, text, -layout.width/2, layout.height/2.0f, layout.width, Align.center, false);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)
