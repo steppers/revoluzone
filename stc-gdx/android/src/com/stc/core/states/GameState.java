@@ -12,6 +12,7 @@ public class GameState extends State implements InputProcessor
 	private LevelInstance level;
 	
 	private UIButton leftButton;
+	private UIButton rightButton;
 	
 	public GameState() {
 		world = new World();
@@ -21,7 +22,8 @@ public class GameState extends State implements InputProcessor
 		world.setScale(0.0f);
 		world.setupScaleLerp(0.0f, 1.0f, 1.0f);
 		
-		leftButton = new UIButton(Gdx.graphics.getWidth()/2, 120, "left");
+		leftButton = new UIButton(130, 130, 200, 200, "rotate_left.png");
+		rightButton = new UIButton(Gdx.graphics.getWidth() - 130, 130, 200, 200, "rotate_right.png");
 	}
 	
 	@Override
@@ -37,7 +39,8 @@ public class GameState extends State implements InputProcessor
 		world.drawString(0, 1.2f, "Quit", 90);
 		world.drawString(0, 1.2f, "Achievements", 180);
 		
-		leftButton.drawStatic(world);
+		leftButton.render(world);
+		rightButton.render(world);
     }
 
 	@Override

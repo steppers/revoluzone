@@ -10,28 +10,24 @@ import com.stc.core.*;
 public class UIButton
 {
 	private Rectangle rect;
-	private String text;
+	private Texture texture;
 	
 	private ShapeRenderer renderer;
 	private SpriteBatch sb;
-    private BitmapFont font;
-    private GlyphLayout layout;
 	
-	public UIButton(float x, float y, String text) {
-		this.text = text;
+	public UIButton(float x, float y, float width, float height, String texture) {
+		this.texture = new Texture(Gdx.files.internal(texture));
 		
 		renderer = Renderer.shapeRenderer();
 		sb = Renderer.spriteBatch();
-		font = Renderer.gameFont();
 		
-		layout = new GlyphLayout(font, text);
-		rect = new Rectangle(x, y, layout.width, layout.height);
+		rect = new Rectangle(x, y, width, height);
 	}
 	
 	/*
 	 * Draws the button in a static location, using only the scale and opacity from the world
 	 */
-	public void drawStatic(World world) {
+	public void render(World world) {
 		sb.begin();
 
 		Matrix4 m = new Matrix4().idt();
@@ -39,8 +35,7 @@ public class UIButton
 		m.scale(world.getScale(), world.getScale(), 1);
 		sb.setTransformMatrix(m);
 		
-		font.setColor(Globals.COLOR_TEXT);
-        font.draw(sb, text, -rect.width/2, rect.height/2, rect.width, Align.center, false);
+		sb.draw(texture, -rect.width/2, -rect.height/2, rect.width, rect.height);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)
