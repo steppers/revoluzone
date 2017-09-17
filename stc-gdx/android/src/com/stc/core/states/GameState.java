@@ -3,6 +3,7 @@ import com.stc.core.*;
 import com.stc.core.levels.*;
 import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.*;
+import com.stc.core.ui.*;
 
 public class GameState extends State implements InputProcessor
 {
@@ -10,9 +11,7 @@ public class GameState extends State implements InputProcessor
 	private World world;
 	private LevelInstance level;
 	
-	private Rectangle rotateLeftZone;
-	private Rectangle rotateRightZone;
-	private Rectangle selectZone;
+	private UIButton leftButton;
 	
 	public GameState() {
 		world = new World();
@@ -21,6 +20,8 @@ public class GameState extends State implements InputProcessor
 		
 		world.setScale(0.0f);
 		world.setupScaleLerp(0.0f, 1.0f, 1.0f);
+		
+		leftButton = new UIButton(Gdx.graphics.getWidth()/2, 120, "left");
 	}
 	
 	@Override
@@ -35,6 +36,8 @@ public class GameState extends State implements InputProcessor
 		world.drawString(0, 1.2f, "Credits", -90);
 		world.drawString(0, 1.2f, "Quit", 90);
 		world.drawString(0, 1.2f, "Achievements", 180);
+		
+		leftButton.drawStatic(world);
     }
 
 	@Override

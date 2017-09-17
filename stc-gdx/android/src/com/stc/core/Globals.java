@@ -15,6 +15,8 @@ public class Globals {
     public static final String LEVEL_DIR = "levels/";
 	
 	public static final Color COLOR_TEXT = new Color(1.0f, 1.0f, 1.0f, 1.0f);
+	public static final Color COLOR_BUTTON_BG_UP = new Color(0.5f, 0.5f, 0.9f, 1.0f);
+	public static final Color COLOR_BUTTON_BORDER = new Color(0.7f, 0.7f, 0.9f, 1.0f);
 	
 	public static final Color COLOR_FLOOR = new Color(0.7f, 0.7f, 0.7f, 1.0f);
 	public static final Color COLOR_SHADOW = new Color(0.4f, 0.4f, 0.4f, 0.5f);
