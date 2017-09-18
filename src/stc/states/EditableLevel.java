@@ -111,7 +111,7 @@ public class EditableLevel {
         rotatingUI.add(tmpLabel.clone());
         tmpLabel.rotation = -90f;
         rotatingUI.add(tmpLabel.clone());
-        
+
         UIButton tmpButton = new UIButton("Play Mode", gc);
         tmpButton.anchor.set(0.9f, 0.8f);
         tmpButton.offset.set(-0.05f, 0.0f);

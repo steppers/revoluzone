@@ -89,7 +89,7 @@ public class Model extends Renderable {
             sliders.get(i).update(delta, this);
         }
         Tile t = getTileUnderBall();
-        if (!ball.teleported && t.type == Tile.Type.TELEPORT) {
+        if (!ball.teleported && t.type == Tile.Type.TELEPORT && t.links.size() != 0) {
             ball.teleported = true;
             ball.tpFromX = t.x;
             ball.tpFromY = t.y;
@@ -114,7 +114,7 @@ public class Model extends Renderable {
         }
         for (Slider s : sliders) {
             Tile ts = getTileUnderSlider(s);
-            if (ts.type == Tile.Type.TELEPORT && !s.teleported) {
+            if (ts.type == Tile.Type.TELEPORT && !s.teleported && ts.links.size() != 0) {
                 s.tpFromX = ts.x;
                 s.tpFromY = ts.y;
                 s.tpToX = ts.links.get(0).x;
