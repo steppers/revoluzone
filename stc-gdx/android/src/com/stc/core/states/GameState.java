@@ -19,9 +19,11 @@ public class GameState extends State implements InputProcessor
         level = LevelManager.instance().getLevelInstance("test");
 		Gdx.input.setInputProcessor(this);
 		
+		// Scale world in
 		world.setScale(0.0f);
 		world.setupScaleLerp(0.0f, 1.0f, 1.0f);
 		
+		// Buttons
 		leftButton = new UIButton(130, 130, 200, 200, "rotate_left.png");
 		rightButton = new UIButton(Gdx.graphics.getWidth() - 130, 130, 200, 200, "rotate_right.png");
 	}
@@ -63,13 +65,14 @@ public class GameState extends State implements InputProcessor
 	
 	@Override
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
+		screenY = Gdx.graphics.getHeight() - screenY;
+		
 		if (button != Input.Buttons.LEFT || pointer > 0 || world.changing()) return false;
 		
-		if(screenX > Gdx.graphics.getWidth()/2)
-			world.rotate(-90, 0.3f);
-			
-		if(screenX < Gdx.graphics.getWidth()/2)
+		if(leftButton.contains(screenX, screenY))
 			world.rotate(90, 0.3f);
+		else if(rightButton.contains(screenX, screenY))
+			world.rotate(-90, 0.3f);
 			
 		return true;
 	}
