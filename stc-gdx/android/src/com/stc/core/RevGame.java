@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.stc.core.levels.LevelManager;
 import com.stc.core.states.SplashState;
+import com.stc.core.levels.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -14,15 +15,11 @@ import com.stc.core.states.SplashState;
 public class RevGame extends ApplicationAdapter {
 
     private Background bg;
-	private World world;
 
     @Override
     public void create () {
         Renderer.init(); // Sets GL Blend modes and creates the shape renderer we use
         bg = new Background();
-		world = new World();
-
-        LevelManager.instance().getLevel("test");
     }
 
     private void update() {
@@ -31,14 +28,6 @@ public class RevGame extends ApplicationAdapter {
 
         // Update the current state
         StateManager.update(Time.delta());
-		
-		world.rotate(Time.delta() * 60.0f);
-
-        // Break on screen touch for testing
-        if(Gdx.input.isTouched()) {
-            System.out.println("Screen touched. Exiting...");
-            Gdx.app.exit();
-        }
     }
 
     @Override
@@ -50,7 +39,6 @@ public class RevGame extends ApplicationAdapter {
 
         //Render everything ---------------------------------------------------
         bg.render();
-		world.renderFloor(6);
         StateManager.render();
     }
 

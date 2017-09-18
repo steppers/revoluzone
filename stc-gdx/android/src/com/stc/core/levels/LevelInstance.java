@@ -1,7 +1,11 @@
 package com.stc.core.levels;
+import com.stc.core.*;
 
 public class LevelInstance
 {
+	
+	private Tile[] tiles;
+	private int size;
 	
 	public LevelInstance() {
 		
@@ -12,6 +16,15 @@ public class LevelInstance
 	 */
 	public boolean isValid() {
 		return true;
+	}
+	
+	public void setTiles(Tile[] tiles, int size) {
+		this.tiles = tiles;
+		this.size = size;
+	}
+	
+	public void render(World world) {
+		world.render(tiles, size);
 	}
 	
 }

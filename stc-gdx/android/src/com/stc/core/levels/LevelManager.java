@@ -91,8 +91,10 @@ public class LevelManager {
         return true;
     }
 
-    public Level getLevel(String levelname) {
-        return levels.get(levelname);
+    public LevelInstance getLevelInstance(String levelname) {
+		if(!levels.containsKey(levelname))
+			return null;
+        return levels.get(levelname).getInstance();
     }
 
     public boolean exists(String levelname) {

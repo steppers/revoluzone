@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Align;
 import com.stc.core.Renderer;
 import com.stc.core.State;
+import com.stc.core.*;
 
 /**
  * Created by steppers on 8/4/17.
@@ -32,7 +33,7 @@ public class SplashState extends State {
         sb = Renderer.spriteBatch();
         font = Renderer.gameFont();
         color = Color.WHITE.cpy();
-        layout = new GlyphLayout(font, "Squaring the Circle");
+        layout = new GlyphLayout(font, "Squaring\nthe\nCircle");
     }
 
     @Override
@@ -46,29 +47,20 @@ public class SplashState extends State {
         else if(elapsed < fadeOutDuration + logoDuration + fadeInDuration)
             alpha = 1-((elapsed-fadeInDuration-logoDuration) / fadeOutDuration);
         else
-            alpha = 0;
+            StateManager.transitionTo(new GameState());
 
         color.a = alpha;
         font.setColor(color);
     }
 
     @Override
-    public void render(float alpha, float scale) {
-    }
-
-    @Override
-    public void renderText(float alpha, float scale) {
+    public void render() {
         sb.begin();
-        font.draw(sb, "Squaring the Circle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
+        font.draw(sb, "Squaring\nthe\nCircle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-    }
-
-    @Override
-    public void dispose() {
-
     }
 }
