@@ -111,13 +111,16 @@ public class EditableLevel {
         rotatingUI.add(tmpLabel.clone());
         tmpLabel.rotation = -90f;
         rotatingUI.add(tmpLabel.clone());
+        
         UIButton tmpButton = new UIButton("Play Mode", gc);
         tmpButton.anchor.set(0.9f, 0.8f);
         tmpButton.offset.set(-0.05f, 0.0f);
         tmpButton.color = new Color(Color.lightGray).darker(0.3f);
         tmpButton.setOnClickCallback(() -> {
-            gs.currentState = GameState.State.LEVEL;
-            m.reset();
+            if(!tm.isTransitioning()) {
+                gs.currentState = GameState.State.LEVEL;
+                m.reset();
+            }
         });
         staticUI.add(tmpButton.clone());
     }
@@ -166,7 +169,7 @@ public class EditableLevel {
                 Tile t = m.getTileFromMousePos(gc);
                 //Set a tile if on the level
                 if (t != null
-                        && (t.type == Tile.Type.EMPTY || drawTileType == Tile.Type.EMPTY)
+                        /*&& (t.type == Tile.Type.EMPTY || drawTileType == Tile.Type.EMPTY)*/
                         && t.x != 0 && t.x != m.gridSize-1 && t.y != 0 && t.y != m.gridSize-1
                         && t != m.getTileUnderBall()
                         && t.hasSlider(m) == null
