@@ -1,0 +1,19 @@
+{0,0,6,4,0,0}
+{0,1,0,1,0,0}
+{0,0,0,0,0,0}
+{4,0,0,0,0,0}
+{0,0,0,0,4,0}
+{5,0,0,0,0,0}
+name=Level 31
+next=Level 1.txt
+prev=Level 30.txt
+score=7
+message_left=
+message_right=
+placeable tiles=1,1;4,1
+editable tiles=4,1->4,1
+editable tiles=2,2->2,2
+editable tiles=4,2->4,2
+editable tiles=1,4->1,4
+editable tiles=5,5->5,5
+locked=false
