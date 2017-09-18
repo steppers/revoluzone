@@ -15,13 +15,11 @@ import com.stc.core.levels.*;
 public class RevGame extends ApplicationAdapter {
 
     private Background bg;
-	private World world;
 
     @Override
     public void create () {
         Renderer.init(); // Sets GL Blend modes and creates the shape renderer we use
         bg = new Background();
-		world = new World();
     }
 
     private void update() {

@@ -15,7 +15,6 @@ public class StateManager {
 	
 	public static void render() {
 		currentState.render();
-		currentState.renderText();
 	}
 	
 	public static void transitionTo(State state) {

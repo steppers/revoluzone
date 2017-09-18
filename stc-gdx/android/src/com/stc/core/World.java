@@ -169,7 +169,9 @@ public class World
 		m.translate(x, y * scaleFactor, 0);
 		
 		sb.setTransformMatrix(m);
-		font.setColor(Globals.COLOR_TEXT);
+		Color c = Globals.COLOR_TEXT.cpy();
+		c.a *= opacity;
+		font.setColor(c);
         font.draw(sb, text, -layout.width/2, layout.height/2.0f, layout.width, Align.center, false);
         sb.end();
 

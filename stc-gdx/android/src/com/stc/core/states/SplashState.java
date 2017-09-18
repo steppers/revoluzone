@@ -55,18 +55,12 @@ public class SplashState extends State {
 
     @Override
     public void render() {
-        
-    }
-
-	@Override
-	public void renderText()
-	{
-		sb.begin();
+        sb.begin();
         font.draw(sb, "Squaring\nthe\nCircle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)
         Gdx.gl.glEnable(GL20.GL_BLEND);
         Gdx.gl.glBlendFunc(GL20.GL_SRC_ALPHA, GL20.GL_ONE_MINUS_SRC_ALPHA);
-	}
+    }
 }
