@@ -60,6 +60,7 @@ public class World
 		
 		scale = scaleLerp.lerp();
 		rotation = rotationLerp.lerp();
+		rotation = rotation < 0 ? rotation + 360 : rotation;
 		rotation = rotation % 360.0f;
 		opacity = opacityLerp.lerp();
 		textOpacity = textOpacityLerp.lerp();

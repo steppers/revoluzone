@@ -10,6 +10,7 @@ public class GameState extends State implements InputProcessor
 	private UIButton leftButton;
 	private UIButton rightButton;
 	private UIButton selectButton;
+	private UIButton backButton;
 	
 	private enum MenuState {
 		MAIN_MENU,
@@ -32,13 +33,15 @@ public class GameState extends State implements InputProcessor
 		
 		// Scale world in
 		world.setScale(0.0f);
-		world.setupScaleLerp(0.0f, 1.0f, 0.8f);
+		world.setupScaleLerp(0.0f, Globals.SCALE_MENU, 0.5f);
+		worldTo.setScale(Globals.SCALE_MENU);
 		
 		// Buttons
 		float buttonSize = Gdx.graphics.getWidth()/5;
 		leftButton = new UIButton(buttonSize/2 + 30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_left.png");
 		rightButton = new UIButton(Gdx.graphics.getWidth() - buttonSize/2 -30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_right.png");
-		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize, buttonSize, "select.png");
+		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize + buttonSize/2 + 40, buttonSize, buttonSize, "select.png");
+		backButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize, buttonSize, "select.png", 180);
 		
 		// Initial state
 		this.state = MenuState.MAIN_MENU;
@@ -74,21 +77,22 @@ public class GameState extends State implements InputProcessor
 		leftButton.render(world);
 		rightButton.render(world);
 		selectButton.render(world);
+		backButton.render(world);
     }
 	
 	private void renderStrings(World inWorld, MenuState state) {
 		switch(state) {
 			case MAIN_MENU:
-				inWorld.drawString(0, 1.2f, "Levels", 0);
-				inWorld.drawString(0, 1.2f, "Credits", -90);
-				inWorld.drawString(0, 1.2f, "Quit", 90);
-				inWorld.drawString(0, 1.2f, "Achievements", 180);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Levels", 0);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Credits", -90);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Quit", 90);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Achievements", 180);
 				break;
 			case CREDITS:
-				inWorld.drawString(0, 1.2f, "Oliver Steptoe", 0);
-				inWorld.drawString(0, 1.2f, "Ali Brewin", -90);
-				inWorld.drawString(0, 1.2f, "Daniel Bradley", 90);
-				inWorld.drawString(0, 1.2f, "Anton Nikitin", 180);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Oliver Steptoe", -90);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Ali Brewin", 0);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Daniel Bradley", 90);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Anton Nikitin", 180);
 				break;
 		}
 	}
@@ -130,8 +134,16 @@ public class GameState extends State implements InputProcessor
 							worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
 							world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 							transitioning = true;
+							break;
+						case 270:
+							Gdx.app.exit();
+							break;
 					}
 					break;
+			}
+		}
+		else if(backButton.contains(screenX, screenY)) {
+			switch(state) {
 				case CREDITS:
 					levelTo = level;
 					stateTo = MenuState.MAIN_MENU;
