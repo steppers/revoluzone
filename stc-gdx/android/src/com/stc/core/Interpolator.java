@@ -26,18 +26,21 @@ public class Interpolator
 	}
 	
 	public void update(float delta) {
-		elapsed += delta;
-		
 		if (duration != 0) {
+			elapsed += delta;
 			float factor = elapsed / duration;
 			current = (factor * (to - from)) + from;
 		
 			if(to > from) {
-				if(current > to)
+				if(current > to) {
 					current = to;
+					duration = 0;
+				}
 			} else {
-				if(current < to)
+				if(current < to) {
 					current = to;
+					duration = 0;
+				}
 			}
 		}
 	}
@@ -47,7 +50,7 @@ public class Interpolator
 	}
 	
 	public boolean active() {
-		return current != to;
+		return duration > 0;
 	}
 	
 	public void clear(float value) {

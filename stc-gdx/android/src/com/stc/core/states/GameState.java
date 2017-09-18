@@ -76,19 +76,19 @@ public class GameState extends State implements InputProcessor
 		selectButton.render(world);
     }
 	
-	private void renderStrings(World world, MenuState state) {
+	private void renderStrings(World inWorld, MenuState state) {
 		switch(state) {
 			case MAIN_MENU:
-				world.drawString(0, 1.2f, "Levels", 0);
-				world.drawString(0, 1.2f, "Credits", -90);
-				world.drawString(0, 1.2f, "Quit", 90);
-				world.drawString(0, 1.2f, "Achievements", 180);
+				inWorld.drawString(0, 1.2f, "Levels", 0);
+				inWorld.drawString(0, 1.2f, "Credits", -90);
+				inWorld.drawString(0, 1.2f, "Quit", 90);
+				inWorld.drawString(0, 1.2f, "Achievements", 180);
 				break;
 			case CREDITS:
-				world.drawString(0, 1.2f, "Oliver Steptoe", 0);
-				world.drawString(0, 1.2f, "Ali Brewin", -90);
-				world.drawString(0, 1.2f, "Daniel Bradley", 90);
-				world.drawString(0, 1.2f, "Anton Nikitin", 180);
+				inWorld.drawString(0, 1.2f, "Oliver Steptoe", 0);
+				inWorld.drawString(0, 1.2f, "Ali Brewin", -90);
+				inWorld.drawString(0, 1.2f, "Daniel Bradley", 90);
+				inWorld.drawString(0, 1.2f, "Anton Nikitin", 180);
 				break;
 		}
 	}
@@ -119,23 +119,24 @@ public class GameState extends State implements InputProcessor
 		else if(rightButton.contains(screenX, screenY))
 			world.rotate(-90, 0.3f);
 		else if(selectButton.contains(screenX, screenY)) {
+			int rotation = (int)world.getRotation();
 			switch(state) {
 				case MAIN_MENU:
-					int rotation = (int)world.getRotation();
 					switch(rotation) {
-						default:
+						case 90:
 							levelTo = level;
 							stateTo = MenuState.CREDITS;
-							worldTo.setupOpacityLerp(0.0f, 1.0f, 0.7f);
-							world.setupOpacityLerp(1.0f, 0.0f, 0.7f);
+							worldTo.setRotation(rotation);
+							worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+							world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 							transitioning = true;
 					}
 					break;
 				case CREDITS:
 					levelTo = level;
 					stateTo = MenuState.MAIN_MENU;
-					worldTo.setupOpacityLerp(0.0f, 1.0f, 0.7f);
-					world.setupOpacityLerp(1.0f, 0.0f, 0.7f);
+					worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+					world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 					transitioning = true;
 					break;
 			}
