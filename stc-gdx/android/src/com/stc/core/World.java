@@ -7,6 +7,8 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.*;
+import com.stc.core.levels.*;
+import java.util.*;
 
 public class World
 {
@@ -111,8 +113,24 @@ public class World
 	 * Renders moving objects such as sliders and the ball.
 	 * TODO: Make Moveable class to pass in here.
 	 */
-	public void renderMovables() {
+	public void renderMovables(ArrayList<Moveable> moveables, int size) {
+		renderer.begin(ShapeRenderer.ShapeType.Filled);
+		renderer.identity();
+
+		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
+		if(Globals.orientation.equals("portrait"))
+			scaleFactor = Gdx.graphics.getWidth() / (1.414f * size);
+
+		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
+		renderer.rotate(0,0,1,rotation);
+		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
+		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
 		
+		for(Moveable m : moveables) {
+			m.render(this);
+		}
+		
+		renderer.end();
 	}
 	
 	public void renderStatic(float x, float y, Tile tile) {

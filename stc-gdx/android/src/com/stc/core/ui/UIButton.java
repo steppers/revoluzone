@@ -30,12 +30,12 @@ public class UIButton
 	/*
 	 * Draws the button in a static location, using only the scale and opacity from the world
 	 */
-	public void render(World world) {
+	public void render(float scale) {
 		sb.begin();
 
 		Matrix4 m = new Matrix4().idt();
 		m.translate(rect.x, rect.y, 0);
-		m.scale(world.getScale(), world.getScale(), 1);
+		m.scale(scale, scale, 1);
 		m.rotate(0, 0, 1, rotation);
 		sb.setTransformMatrix(m);
 		

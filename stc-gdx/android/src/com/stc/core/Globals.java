@@ -25,4 +25,6 @@ public class Globals {
 	public static final Color COLOR_SHADOW = new Color(0.4f, 0.4f, 0.4f, 0.5f);
 	public static final Color COLOR_WALL = new Color(0.9f, 0.9f, 0.9f, 1.0f);
 
+	public static final float G = 9.81f;
+	
 }

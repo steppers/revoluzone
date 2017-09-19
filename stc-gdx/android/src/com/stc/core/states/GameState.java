@@ -12,6 +12,9 @@ public class GameState extends State implements InputProcessor
 	private UIButton selectButton;
 	private UIButton backButton;
 	
+	private Interpolator selectButtonLerp = new Interpolator(1.0f, 1.0f, 0.0f);
+	private Interpolator backButtonLerp = new Interpolator(0.0f, 0.0f, 0.0f);
+	
 	private enum MenuState {
 		MAIN_MENU,
 		CREDITS,
@@ -24,6 +27,7 @@ public class GameState extends State implements InputProcessor
 	private LevelInstance level, levelTo;
 	private MenuState state, stateTo;
 	private boolean transitioning;
+	private boolean rotating;
 	
 	public GameState() {
 		world = new World();
@@ -33,23 +37,26 @@ public class GameState extends State implements InputProcessor
 		
 		// Scale world in
 		world.setScale(0.0f);
-		world.setupScaleLerp(0.0f, Globals.SCALE_MENU, 0.5f);
+		world.setupScaleLerp(0.0f, Globals.SCALE_MENU, 0.4f);
+		selectButtonLerp.begin(0.0f, 1.0f, 0.4f);
 		worldTo.setScale(Globals.SCALE_MENU);
 		
 		// Buttons
 		float buttonSize = Gdx.graphics.getWidth()/5;
 		leftButton = new UIButton(buttonSize/2 + 30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_left.png");
 		rightButton = new UIButton(Gdx.graphics.getWidth() - buttonSize/2 -30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_right.png");
-		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize + buttonSize/2 + 40, buttonSize, buttonSize, "select.png");
-		backButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize, buttonSize, "select.png", 180);
+		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize, buttonSize, "select.png");
+		backButton = new UIButton(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - buttonSize/2 - 30, buttonSize, buttonSize, "select.png", 180);
 		
 		// Initial state
 		this.state = MenuState.MAIN_MENU;
 		transitioning = false;
+		rotating = false;
 	}
 	
 	@Override
     public void update(float delta) {
+		level.update(world, delta);
         world.update(delta);
 		if(transitioning && !world.changing()) {
 			transitioning = false;
@@ -59,9 +66,16 @@ public class GameState extends State implements InputProcessor
 			state = stateTo;
 			level = levelTo;
 		}
+		if(rotating && !world.changing()) {
+			rotating = false;
+			level.triggerUpdate();
+		}
 		if(transitioning) {
 			worldTo.update(delta);
 		}
+		
+		selectButtonLerp.update(delta);
+		backButtonLerp.update(delta);
     }
 
     @Override
@@ -74,10 +88,11 @@ public class GameState extends State implements InputProcessor
 			renderStrings(worldTo, stateTo);
 		}
 		
-		leftButton.render(world);
-		rightButton.render(world);
-		selectButton.render(world);
-		backButton.render(world);
+		leftButton.render(world.getScale());
+		rightButton.render(world.getScale());
+		
+		selectButton.render(selectButtonLerp.lerp());
+		backButton.render(backButtonLerp.lerp());
     }
 	
 	private void renderStrings(World inWorld, MenuState state) {
@@ -93,6 +108,12 @@ public class GameState extends State implements InputProcessor
 				inWorld.drawString(0, Globals.TEXT_OFFSET, "Ali Brewin", 0);
 				inWorld.drawString(0, Globals.TEXT_OFFSET, "Daniel Bradley", 90);
 				inWorld.drawString(0, Globals.TEXT_OFFSET, "Anton Nikitin", 180);
+				break;
+			case LEVEL_SELECT:
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Level 1", -90);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Level 2", 0);
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Level 3", 90);
+				//inWorld.drawString(0, Globals.TEXT_OFFSET, "", 180);
 				break;
 		}
 	}
@@ -116,22 +137,37 @@ public class GameState extends State implements InputProcessor
 	public boolean touchUp (int screenX, int screenY, int pointer, int button) {
 		screenY = Gdx.graphics.getHeight() - screenY;
 		
-		if (button != Input.Buttons.LEFT || pointer > 0 || world.changing()) return false;
+		if (button != Input.Buttons.LEFT || pointer > 0 || world.changing() || level.isUpdating()) return false;
 		
-		if(leftButton.contains(screenX, screenY))
-			world.rotate(90, 0.3f);
-		else if(rightButton.contains(screenX, screenY))
-			world.rotate(-90, 0.3f);
+		int rotation = (int)world.getRotation();
+		
+		if(leftButton.contains(screenX, screenY)) {
+			world.rotate(90, 0.2f);
+			rotating = true;
+		}
+		else if(rightButton.contains(screenX, screenY)) {
+			world.rotate(-90, 0.2f);
+			rotating = true;
+		}
 		else if(selectButton.contains(screenX, screenY)) {
-			int rotation = (int)world.getRotation();
 			switch(state) {
 				case MAIN_MENU:
 					switch(rotation) {
+						case 0:
+							levelTo = level;
+							stateTo = MenuState.LEVEL_SELECT;
+							worldTo.setRotation(rotation);
+							worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+							backButtonLerp.begin(0.0f, 1.0f, 0.7f);
+							world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
+							transitioning = true;
+							break;
 						case 90:
 							levelTo = level;
 							stateTo = MenuState.CREDITS;
 							worldTo.setRotation(rotation);
 							worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+							backButtonLerp.begin(0.0f, 1.0f, 0.7f);
 							world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 							transitioning = true;
 							break;
@@ -147,7 +183,18 @@ public class GameState extends State implements InputProcessor
 				case CREDITS:
 					levelTo = level;
 					stateTo = MenuState.MAIN_MENU;
+					worldTo.setRotation(rotation);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+					backButtonLerp.begin(1.0f, 0.0f, 0.7f);
+					world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
+					transitioning = true;
+					break;
+				case LEVEL_SELECT:
+					levelTo = level;
+					stateTo = MenuState.MAIN_MENU;
+					worldTo.setRotation(rotation);
+					worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+					backButtonLerp.begin(1.0f, 0.0f, 0.7f);
 					world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 					transitioning = true;
 					break;
