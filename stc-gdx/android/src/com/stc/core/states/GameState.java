@@ -68,7 +68,7 @@ public class GameState extends State implements InputProcessor
 		}
 		if(rotating && !world.changing()) {
 			rotating = false;
-			level.triggerUpdate();
+			level.triggerUpdate((int)world.getRotation());
 		}
 		if(transitioning) {
 			worldTo.update(delta);
@@ -142,11 +142,11 @@ public class GameState extends State implements InputProcessor
 		int rotation = (int)world.getRotation();
 		
 		if(leftButton.contains(screenX, screenY)) {
-			world.rotate(90, 0.2f);
+			world.rotate(90, Globals.SPEED_ROTATION);
 			rotating = true;
 		}
 		else if(rightButton.contains(screenX, screenY)) {
-			world.rotate(-90, 0.2f);
+			world.rotate(-90, Globals.SPEED_ROTATION);
 			rotating = true;
 		}
 		else if(selectButton.contains(screenX, screenY)) {

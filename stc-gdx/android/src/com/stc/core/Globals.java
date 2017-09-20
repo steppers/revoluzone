@@ -24,7 +24,11 @@ public class Globals {
 	public static final Color COLOR_FLOOR = new Color(0.7f, 0.7f, 0.7f, 1.0f);
 	public static final Color COLOR_SHADOW = new Color(0.4f, 0.4f, 0.4f, 0.5f);
 	public static final Color COLOR_WALL = new Color(0.9f, 0.9f, 0.9f, 1.0f);
+	
+	public static final Color COLOR_BALL = new Color(Color.CYAN);
 
-	public static final float G = 9.81f;
+	public static final float G = 5.0f;
+	
+	public static final float SPEED_ROTATION = 0.15f;
 	
 }

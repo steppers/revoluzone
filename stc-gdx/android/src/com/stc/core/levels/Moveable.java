@@ -1,12 +1,13 @@
 package com.stc.core.levels;
 import com.stc.core.*;
+import com.badlogic.gdx.graphics.glutils.*;
 
 public abstract class Moveable
 {
 	
-	protected float x, y;
+	public float x, y;
 	private float ax, ay;
-	private int tx, ty;
+	public int tx, ty;
 	private int dx, dy;
 	
 	public Moveable(float x, float y) {
@@ -14,15 +15,17 @@ public abstract class Moveable
 		this.y = y;
 		ax = 0;
 		ay = 0;
+		ty = (int)y;
+		tx = (int)x;
 	}
 	
 	public void update(float delta) {
 		if(tx != x || ty != y) {
-			ax += Globals.G * delta * dx;
-			ay += Globals.G * delta * dy;
+			ax += Globals.G * delta * (float)dx;
+			ay += Globals.G * delta * (float)dy;
 			
 			x += ax;
-			y += dy;
+			y += ay;
 			
 			if(dx == 1 && x > tx) {
 				x = tx;
@@ -54,13 +57,13 @@ public abstract class Moveable
 		dx = 0;
 		dy = 0;
 		
-		if(tx < x)
+		if(tx < this.x)
 			dx = -1;
-		if(tx > x)
+		if(tx > this.x)
 			dx = 1;
-		if(ty < y)
+		if(ty < this.y)
 			dy = -1;
-		if(ty > y)
+		if(ty > this.y)
 			dy = 1;
 	}
 	
@@ -68,6 +71,15 @@ public abstract class Moveable
 		return tx != x || ty != y;
 	}
 	
-	public abstract void render(World world);
+	public boolean isMovingTo(int x, int y) {
+		return x == tx && y == ty;
+	}
+	
+	public abstract void renderShadow(World world, ShapeRenderer g);
+	public abstract void render(World world, ShapeRenderer g);
+	
+	public boolean canMoveTo(int x, int y, LevelInstance level) {
+		return true;
+	}
 	
 }

@@ -16,7 +16,7 @@ public class LevelInstance
 	public LevelInstance() {
 		updating = false;
 		moveables = new ArrayList<Moveable>();
-		moveables.add(new Ball(3,3));
+		moveables.add(new Ball(1,3));
 	}
 	
 	/*
@@ -32,23 +32,65 @@ public class LevelInstance
 	}
 	
 	public void render(World world) {
-		world.render(tiles, size);
-		world.renderMovables(moveables, size);
+		world.render(tiles, moveables, size);
 	}
 	
-	public void triggerUpdate() {
+	public void triggerUpdate(int rotation) {
 		updating = true;
+		
+		// Movement direction
+		int dx = 0, dy = 0;
+		if(rotation == 0)
+			dy = -1;
+		if(rotation == 90)
+			dx = -1;
+		if(rotation == 180)
+			dy = 1;
+		if(rotation == 270)
+			dx = 1;
+			
+		// Calculate movement targets
+		boolean moved = true;
+		while(moved) {
+			moved = false;
+			for(Moveable m : moveables) {
+				int mx = m.tx;
+				int my = m.ty;
+				mx += dx;
+				my += dy;
+				if(mx >= size || mx < 0 || my >= size || my < 0)
+					continue;
+				if(!tiles[my * size + mx].isSolid()) {
+					if(isMoveableSlotAvailable(mx, my) && m.canMoveTo(mx, my, this)) {
+						moved = true;
+						m.moveTo(mx, my);
+					}
+				}
+			}
+		}
 	}
 	
 	public void update(World world, float delta) {
 		if(updating) {
-			
 			updating = false;
+			for(Moveable m : moveables) {
+				m.update(delta);
+				if(m.isMoving())
+					updating = true;
+			}
 		}
 	}
 	
 	public boolean isUpdating() {
 		return updating;
+	}
+	
+	private boolean isMoveableSlotAvailable(int x, int y) {
+		for (Moveable m : moveables) {
+			if(m.isMovingTo(x, y))
+				return false;
+		}
+		return true;
 	}
 	
 }

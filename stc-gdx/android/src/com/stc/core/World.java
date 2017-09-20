@@ -68,7 +68,7 @@ public class World
 		textOpacity = textOpacityLerp.lerp();
 	}
 	
-	public void render(Tile[] tiles, int size) {
+	public void render(Tile[] tiles, ArrayList<Moveable> moveables, int size) {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.identity();
 		
@@ -81,9 +81,15 @@ public class World
 		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
 		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
 		
+		// Floor
 		renderFloor(size);
-		renderShadows(tiles, size);
+		// Shadows
+		renderShadows(tiles, moveables, size);
+		// Objects
 		renderTiles(tiles, size);
+		for(Moveable m : moveables) {
+			m.render(this, renderer);
+		}
 		
 		renderer.end();
 	}
@@ -109,30 +115,6 @@ public class World
 		}
 	}
 	
-	/*
-	 * Renders moving objects such as sliders and the ball.
-	 * TODO: Make Moveable class to pass in here.
-	 */
-	public void renderMovables(ArrayList<Moveable> moveables, int size) {
-		renderer.begin(ShapeRenderer.ShapeType.Filled);
-		renderer.identity();
-
-		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
-		if(Globals.orientation.equals("portrait"))
-			scaleFactor = Gdx.graphics.getWidth() / (1.414f * size);
-
-		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
-		renderer.rotate(0,0,1,rotation);
-		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
-		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
-		
-		for(Moveable m : moveables) {
-			m.render(this);
-		}
-		
-		renderer.end();
-	}
-	
 	public void renderStatic(float x, float y, Tile tile) {
 		
 	}
@@ -150,7 +132,7 @@ public class World
 		}
 	}
 	
-	public void renderShadows(Tile[] tiles, int size) {
+	public void renderShadows(Tile[] tiles, ArrayList<Moveable> moveables, int size) {
 		Color shadowColor = new Color(Globals.COLOR_SHADOW);
 		shadowColor.a *= opacity;
 		renderer.setColor(shadowColor);
@@ -172,6 +154,10 @@ public class World
 				default:
 					break;
 			}
+		}
+		
+		for(Moveable m : moveables) {
+			m.renderShadow(this, renderer);
 		}
 		
 		renderer.translate(-t.x, -t.y, 0.0f);

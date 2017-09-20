@@ -11,4 +11,8 @@ public class Tile
 	public TileType getType() {
 		return type;
 	}
+	
+	public boolean isSolid() {
+		return type.isSolid();
+	}
 }
