@@ -69,12 +69,15 @@ public class Level {
 		LevelInstance instance = new LevelInstance();
 		
 		Tile[] tiles = new Tile[size*size];
+		int x, y;
 		for(int i = 0; i < size*size; i++) {
 			int id = levelData[i];
+			x = i % size;
+			y = i / size;
 			switch(id) {
-				case 0: tiles[i] = new Tile(TileType.EMPTY); break;
+				case 0: tiles[i] = new Tile(x, y, TileType.EMPTY); break;
 				default:
-				case 1: tiles[i] = new Tile(TileType.WALL); break;
+				case 1: tiles[i] = new Tile(x, y, TileType.WALL); break;
 			}
 		}
 		

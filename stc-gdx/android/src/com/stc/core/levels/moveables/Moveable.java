@@ -1,18 +1,16 @@
-package com.stc.core.levels;
+package com.stc.core.levels.moveables;
 import com.stc.core.*;
 import com.badlogic.gdx.graphics.glutils.*;
+import com.stc.core.levels.*;
 
-public abstract class Moveable
+public abstract class Moveable extends LevelObject
 {
-	
-	public float x, y;
 	private float ax, ay;
 	public int tx, ty;
 	private int dx, dy;
 	
 	public Moveable(float x, float y) {
-		this.x = x;
-		this.y = y;
+		super(x, y);
 		ax = 0;
 		ay = 0;
 		ty = (int)y;
@@ -74,9 +72,6 @@ public abstract class Moveable
 	public boolean isMovingTo(int x, int y) {
 		return x == tx && y == ty;
 	}
-	
-	public abstract void renderShadow(World world, ShapeRenderer g);
-	public abstract void render(World world, ShapeRenderer g);
 	
 	public boolean canMoveTo(int x, int y, LevelInstance level) {
 		return true;

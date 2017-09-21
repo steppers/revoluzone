@@ -1,22 +1,60 @@
 package com.stc.core.levels;
 import com.stc.core.*;
 import java.util.*;
+import com.stc.core.levels.moveables.*;
 
 public class LevelInstance
 {
-	
-	private Tile[] tiles;
 	private int size;
 	
 	private boolean updating;
 	
-	// Ball
+	// Objects
+	private ArrayList<LevelObject> objects;
 	private ArrayList<Moveable> moveables;
+	private ArrayList<LevelObject> statics;
+	private ArrayList<Tile> tiles;
 	
 	public LevelInstance() {
 		updating = false;
+		
+		objects = new ArrayList<LevelObject>();
 		moveables = new ArrayList<Moveable>();
-		moveables.add(new Ball(1,3));
+		statics = new ArrayList<LevelObject>();
+		tiles = new ArrayList<Tile>();
+		
+		addMoveable(new Ball(2,3));
+		addMoveable(new Ball(1,3));
+	}
+	
+	public void addMoveable(Moveable m) {
+		moveables.add(m);
+		objects.add(m);
+	}
+	
+	public void removeMoveable(Moveable m) {
+		moveables.remove(m);
+		objects.remove(m);
+	}
+	
+	public void addStatic(LevelObject s) {
+		statics.add(s);
+		objects.add(s);
+	}
+
+	public void removeStatic(LevelObject s) {
+		statics.remove(s);
+		objects.remove(s);
+	}
+	
+	private void addTile(Tile t) {
+		tiles.add(t);
+		objects.add(t);
+	}
+	
+	private void removeTile(Tile t) {
+		tiles.remove(t);
+		objects.remove(t);
 	}
 	
 	/*
@@ -27,12 +65,19 @@ public class LevelInstance
 	}
 	
 	public void setTiles(Tile[] tiles, int size) {
-		this.tiles = tiles;
+		Iterator<Tile> it = this.tiles.iterator();
+		while(it.hasNext()) {
+			it.next();
+			it.remove();
+		}
+		for(Tile t : tiles) {
+			addTile(t);
+		}
 		this.size = size;
 	}
 	
 	public void render(World world) {
-		world.render(tiles, moveables, size);
+		world.render(this);
 	}
 	
 	public void triggerUpdate(int rotation) {
@@ -60,7 +105,7 @@ public class LevelInstance
 				my += dy;
 				if(mx >= size || mx < 0 || my >= size || my < 0)
 					continue;
-				if(!tiles[my * size + mx].isSolid()) {
+				if(!tiles.get(my * size + mx).isSolid()) {
 					if(isMoveableSlotAvailable(mx, my) && m.canMoveTo(mx, my, this)) {
 						moved = true;
 						m.moveTo(mx, my);
@@ -91,6 +136,14 @@ public class LevelInstance
 				return false;
 		}
 		return true;
+	}
+	
+	public int getSize() {
+		return size;
+	}
+	
+	public ArrayList<LevelObject> getLevelObjects() {
+		return objects;
 	}
 	
 }

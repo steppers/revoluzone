@@ -29,6 +29,7 @@ public class Globals {
 
 	public static final float G = 5.0f;
 	
-	public static final float SPEED_ROTATION = 0.15f;
+	public static final float SPEED_ROTATION = 0.2f;
+	public static final float SHADOW_OFFSET = 0.07f;
 	
 }

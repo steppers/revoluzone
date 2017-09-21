@@ -40,6 +40,7 @@ public class GameState extends State implements InputProcessor
 		world.setupScaleLerp(0.0f, Globals.SCALE_MENU, 0.4f);
 		selectButtonLerp.begin(0.0f, 1.0f, 0.4f);
 		worldTo.setScale(Globals.SCALE_MENU);
+		level.triggerUpdate(0);
 		
 		// Buttons
 		float buttonSize = Gdx.graphics.getWidth()/5;

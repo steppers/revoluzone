@@ -1,7 +1,8 @@
-package com.stc.core.levels;
+package com.stc.core.levels.moveables;
 import com.stc.core.*;
 import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.graphics.*;
+import com.stc.core.levels.*;
 
 public class Ball extends Moveable
 {
@@ -10,18 +11,26 @@ public class Ball extends Moveable
 		super(x, y);
 	}
 	
-	public void render(World world, ShapeRenderer g) {
-		Color c = new Color(0.4f, 0.4f, 1.0f, 1.0f);
-		c.a *= world.getOpacity();
+	@Override
+	public void renderObject(ShapeRenderer g, float opacity) {
+		Color c = new Color(Globals.COLOR_BALL);
+		c.a *= opacity;
 		g.setColor(c);
 		g.ellipse(x + 0.1f, y + 0.1f, 0.8f, 0.8f, 32);
 	}
 	
-	public void renderShadow(World world, ShapeRenderer g) {
+	@Override
+	public void renderShadow(ShapeRenderer g, float opacity) {
 		Color c = new Color(Globals.COLOR_SHADOW);
-		c.a *= world.getOpacity();
+		c.a *= opacity;
 		g.setColor(c);
 		g.ellipse(x + 0.1f, y + 0.1f, 0.8f, 0.8f, 32);
 	}
+
+	@Override
+	protected void onActivate(){}
+
+	@Override
+	protected void onDeactivate(){}
 	
 }

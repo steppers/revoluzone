@@ -9,6 +9,7 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.*;
 import com.stc.core.levels.*;
 import java.util.*;
+import com.stc.core.levels.moveables.*;
 
 public class World
 {
@@ -68,55 +69,38 @@ public class World
 		textOpacity = textOpacityLerp.lerp();
 	}
 	
-	public void render(Tile[] tiles, ArrayList<Moveable> moveables, int size) {
+	public void render(LevelInstance level) {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.identity();
-		
-		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
+
+		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * level.getSize());
 		if(Globals.orientation.equals("portrait"))
-			scaleFactor = Gdx.graphics.getWidth() / (1.414f * size);
-		
+			scaleFactor = Gdx.graphics.getWidth() / (1.414f * level.getSize());
+
 		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		renderer.rotate(0,0,1,rotation);
 		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
-		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
+		renderer.translate(-(float)level.getSize()/2.0f, -(float)level.getSize()/2.0f, 0);
 		
-		// Floor
-		renderFloor(size);
-		// Shadows
-		renderShadows(tiles, moveables, size);
-		// Objects
-		renderTiles(tiles, size);
-		for(Moveable m : moveables) {
-			m.render(this, renderer);
+		renderFloor(level.getSize());
+		
+		ArrayList<LevelObject> objects = level.getLevelObjects();
+		
+		Vector2 t = new Vector2(Globals.SHADOW_OFFSET, Globals.SHADOW_OFFSET);
+		t.rotate(-rotation);
+		renderer.translate(t.x, t.y, 0.0f);
+		
+		for(LevelObject o : objects) {
+			o.renderShadow(renderer, opacity);
+		}
+		
+		renderer.translate(-t.x, -t.y, 0.0f);
+		
+		for(LevelObject o : objects) {
+			o.renderObject(renderer, opacity);
 		}
 		
 		renderer.end();
-	}
-	
-	public void renderTiles(Tile[] tiles, int size) {
-		Color c;
-		float x = 0, y = 0;
-		for(int i = 0; i < size*size; i++) {
-			x = i % size;
-			y = i / size;
-			switch(tiles[i].getType()) {
-				case EMPTY:
-					break;
-				case WALL:
-					c = new Color(Globals.COLOR_WALL);
-					c.a *= opacity;
-					renderer.setColor(c);
-					renderer.rect(x, y, 1, 1);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	
-	public void renderStatic(float x, float y, Tile tile) {
-		
 	}
 	
 	private void renderFloor(int size) {
@@ -130,37 +114,6 @@ public class World
 			y = i / size;
 			renderer.rect(x, y, 1, 1);
 		}
-	}
-	
-	public void renderShadows(Tile[] tiles, ArrayList<Moveable> moveables, int size) {
-		Color shadowColor = new Color(Globals.COLOR_SHADOW);
-		shadowColor.a *= opacity;
-		renderer.setColor(shadowColor);
-		
-		Vector2 t = new Vector2(0.1f, 0.1f);
-		t.rotate(-rotation);
-		renderer.translate(t.x, t.y, 0.0f);
-		
-		float x = 0, y = 0;
-		for(int i = 0; i < size*size; i++) {
-			x = i % size;
-			y = i / size;
-			switch(tiles[i].getType()) {
-				case EMPTY:
-					break;
-				case WALL:
-					renderer.rect(x, y, 1, 1);
-					break;
-				default:
-					break;
-			}
-		}
-		
-		for(Moveable m : moveables) {
-			m.renderShadow(this, renderer);
-		}
-		
-		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
 	public void drawString(float x, float y, String text, float inRotation) {
