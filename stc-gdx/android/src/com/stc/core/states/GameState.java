@@ -158,10 +158,12 @@ public class GameState extends State implements InputProcessor
 				case MAIN_MENU:
 					switch(rotation) {
 						case 0:
-							levelTo = level;
+							levelTo = LevelManager.instance().getLevelInstance("level1");
 							stateTo = MenuState.LEVEL_SELECT;
 							worldTo.setRotation(rotation);
 							worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
+							worldTo.setupScaleLerp(Globals.SCALE_MENU, 1.0f, 0.7f);
+							world.setupScaleLerp(Globals.SCALE_MENU, 1.0f, 0.7f);
 							backButtonLerp.begin(0.0f, 1.0f, 0.7f);
 							world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
 							transitioning = true;
@@ -194,9 +196,11 @@ public class GameState extends State implements InputProcessor
 					transitioning = true;
 					break;
 				case LEVEL_SELECT:
-					levelTo = level;
+					levelTo = LevelManager.instance().getLevelInstance("test");
 					stateTo = MenuState.MAIN_MENU;
 					worldTo.setRotation(rotation);
+					world.setupScaleLerp(1.0f, Globals.SCALE_MENU, 0.7f);
+					worldTo.setupScaleLerp(1.0f, Globals.SCALE_MENU, 0.7f);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, 0.7f);
 					backButtonLerp.begin(1.0f, 0.0f, 0.7f);
 					world.setupTextOpacityLerp(1.0f, 0.0f, 0.7f);
