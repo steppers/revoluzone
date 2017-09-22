@@ -7,6 +7,7 @@ import java.io.File;
 import java.io.FileReader;
 import com.badlogic.gdx.files.*;
 import org.json.*;
+import com.stc.core.levels.moveables.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -74,10 +75,16 @@ public class Level {
 			int id = levelData[i];
 			x = i % size;
 			y = i / size;
+			
+			tiles[i] = new Tile(x, y, TileType.EMPTY); // Default
 			switch(id) {
-				case 0: tiles[i] = new Tile(x, y, TileType.EMPTY); break;
-				default:
-				case 1: tiles[i] = new Tile(x, y, TileType.WALL); break;
+				case 1:
+					tiles[i] = new Tile(x, y, TileType.WALL);
+					break;
+				case 2:
+					instance.addMoveable(new Ball(x, y));
+					break;
+				default: break;
 			}
 		}
 		

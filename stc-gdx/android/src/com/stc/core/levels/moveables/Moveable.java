@@ -11,6 +11,7 @@ public abstract class Moveable extends LevelObject
 	
 	public Moveable(float x, float y) {
 		super(x, y);
+		solid = true;
 		ax = 0;
 		ay = 0;
 		ty = (int)y;

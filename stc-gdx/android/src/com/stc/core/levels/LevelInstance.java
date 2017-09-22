@@ -7,7 +7,7 @@ public class LevelInstance
 {
 	private int size;
 	
-	private boolean updating;
+	private boolean moveablesUpdating = false;
 	
 	// Objects
 	private ArrayList<LevelObject> objects;
@@ -16,15 +16,10 @@ public class LevelInstance
 	private ArrayList<Tile> tiles;
 	
 	public LevelInstance() {
-		updating = false;
-		
 		objects = new ArrayList<LevelObject>();
 		moveables = new ArrayList<Moveable>();
 		statics = new ArrayList<LevelObject>();
 		tiles = new ArrayList<Tile>();
-		
-		addMoveable(new Ball(2,3));
-		addMoveable(new Ball(1,3));
 	}
 	
 	public void addMoveable(Moveable m) {
@@ -52,24 +47,15 @@ public class LevelInstance
 		objects.add(t);
 	}
 	
-	private void removeTile(Tile t) {
-		tiles.remove(t);
-		objects.remove(t);
-	}
-	
-	/*
-	 * Evaluates true if this instance is currently usable
-	 */
-	public boolean isValid() {
-		return true;
-	}
-	
 	public void setTiles(Tile[] tiles, int size) {
+		// Remove old
 		Iterator<Tile> it = this.tiles.iterator();
 		while(it.hasNext()) {
-			it.next();
+			Tile t = it.next();
 			it.remove();
+			objects.remove(t);
 		}
+		// Add new
 		for(Tile t : tiles) {
 			addTile(t);
 		}
@@ -81,7 +67,7 @@ public class LevelInstance
 	}
 	
 	public void triggerUpdate(int rotation) {
-		updating = true;
+		moveablesUpdating = true;
 		
 		// Movement direction
 		int dx = 0, dy = 0;
@@ -106,7 +92,7 @@ public class LevelInstance
 				if(mx >= size || mx < 0 || my >= size || my < 0)
 					continue;
 				if(!tiles.get(my * size + mx).isSolid()) {
-					if(isMoveableSlotAvailable(mx, my) && m.canMoveTo(mx, my, this)) {
+					if(!isSpaceSolid(mx, my) && m.canMoveTo(mx, my, this)) {
 						moved = true;
 						m.moveTo(mx, my);
 					}
@@ -116,26 +102,43 @@ public class LevelInstance
 	}
 	
 	public void update(World world, float delta) {
-		if(updating) {
-			updating = false;
+		// Update all
+		for(LevelObject o : objects) {
+			o.update(delta);
+		}
+		
+		// Refresh updating flag
+		if(moveablesUpdating) {
+			moveablesUpdating = false;
 			for(Moveable m : moveables) {
-				m.update(delta);
 				if(m.isMoving())
-					updating = true;
+					moveablesUpdating = true;
 			}
 		}
+		
 	}
 	
 	public boolean isUpdating() {
-		return updating;
+		return moveablesUpdating;
 	}
 	
-	private boolean isMoveableSlotAvailable(int x, int y) {
+	private boolean isSpaceSolid(int x, int y) {
 		for (Moveable m : moveables) {
-			if(m.isMovingTo(x, y))
-				return false;
+			if(m.isMovingTo(x, y) && m.isSolid())
+				return true;
 		}
-		return true;
+		
+		for (LevelObject o : statics) {
+			if(o.isOver(x, y) && o.isSolid())
+				return true;
+		}
+		
+		for (Tile t : tiles) {
+			if(t.isOver(x, y) && t.isSolid())
+				return true;
+		}
+		
+		return false;
 	}
 	
 	public int getSize() {
