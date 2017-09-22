@@ -8,6 +8,7 @@ import java.io.FileReader;
 import com.badlogic.gdx.files.*;
 import org.json.*;
 import com.stc.core.levels.moveables.*;
+import com.stc.core.levels.statics.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -83,6 +84,16 @@ public class Level {
 					break;
 				case 2:
 					instance.addMoveable(new Ball(x, y));
+					instance.addStatic(new StartPad(x, y));
+					break;
+				case 3:
+					instance.addStatic(new FinishHole(x, y));
+					break;
+				case 4:
+					tiles[i] = new Tile(x, y, TileType.RED);
+					break;
+				case 5:
+					tiles[i] = new Tile(x, y, TileType.BLUE);
 					break;
 				default: break;
 			}

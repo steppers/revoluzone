@@ -17,6 +17,10 @@ public class Tile extends LevelObject
 	}
 	
 	public boolean isSolid() {
+		if(type == TileType.RED)
+			return isActive();
+		if(type == TileType.BLUE)
+			return isActive();
 		return type.isSolid();
 	}
 	
@@ -35,6 +39,40 @@ public class Tile extends LevelObject
 				g.setColor(c);
 				g.rect(x, y, 1, 1);
 				break;
+			case RED:
+				c = Globals.getColor(Globals.COLOR_RED_ACTIVE, opacity);
+				g.setColor(c);
+				if(isActive())
+					g.rect(x, y, 1, 1);
+				break;
+			case BLUE:
+				c = Globals.getColor(Globals.COLOR_BLUE_ACTIVE, opacity);
+				g.setColor(c);
+				if(isActive())
+					g.rect(x, y, 1, 1);
+				break;
+			default:
+				break;
+		}
+	}
+
+	@Override
+	public void renderFloor(ShapeRenderer g, float opacity)
+	{
+		Color c;
+		switch(type) {
+			case RED:
+				c = Globals.getColor(Globals.COLOR_RED_INACTIVE, opacity);
+				g.setColor(c);
+				if(!isActive())
+					g.rect(x, y, 1, 1);
+				break;
+			case BLUE:
+				c = Globals.getColor(Globals.COLOR_BLUE_INACTIVE, opacity);
+				g.setColor(c);
+				if(!isActive())
+					g.rect(x, y, 1, 1);
+				break;
 			default:
 				break;
 		}
@@ -50,6 +88,14 @@ public class Tile extends LevelObject
 				break;
 			case WALL:
 				g.rect(x, y, 1, 1);
+				break;
+			case RED:
+				if(isActive())
+					g.rect(x, y, 1, 1);
+				break;
+			case BLUE:
+				if(isActive())
+					g.rect(x, y, 1, 1);
 				break;
 			default:
 				break;

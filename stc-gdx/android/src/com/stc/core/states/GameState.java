@@ -11,6 +11,7 @@ public class GameState extends State implements InputProcessor
 	private UIButton rightButton;
 	private UIButton selectButton;
 	private UIButton backButton;
+	private UIButton toggleButton;
 	
 	private Interpolator selectButtonLerp = new Interpolator(1.0f, 1.0f, 0.0f);
 	private Interpolator backButtonLerp = new Interpolator(0.0f, 0.0f, 0.0f);
@@ -46,8 +47,9 @@ public class GameState extends State implements InputProcessor
 		float buttonSize = Gdx.graphics.getWidth()/5;
 		leftButton = new UIButton(buttonSize/2 + 30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_left.png");
 		rightButton = new UIButton(Gdx.graphics.getWidth() - buttonSize/2 -30, buttonSize/2 + 30, buttonSize, buttonSize, "rotate_right.png");
-		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize, buttonSize, "select.png");
+		selectButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize*1.5f + 30, buttonSize, buttonSize, "select.png");
 		backButton = new UIButton(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight() - buttonSize/2 - 30, buttonSize, buttonSize, "select.png", 180);
+		toggleButton = new UIButton(Gdx.graphics.getWidth()/2, buttonSize/2 + 30, buttonSize * 2, buttonSize, "toggle.png");
 		
 		// Initial state
 		this.state = MenuState.MAIN_MENU;
@@ -91,6 +93,7 @@ public class GameState extends State implements InputProcessor
 		
 		leftButton.render(world.getScale());
 		rightButton.render(world.getScale());
+		toggleButton.render(world.getScale());
 		
 		selectButton.render(selectButtonLerp.lerp());
 		backButton.render(backButtonLerp.lerp());
@@ -200,6 +203,10 @@ public class GameState extends State implements InputProcessor
 					transitioning = true;
 					break;
 			}
+		}
+		else if(toggleButton.contains(screenX, screenY)) {
+			level.toggleRedBlue();
+			level.triggerUpdate((int)world.getRotation());
 		}
 			
 		return true;

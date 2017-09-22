@@ -26,10 +26,25 @@ public class Globals {
 	public static final Color COLOR_WALL = new Color(0.9f, 0.9f, 0.9f, 1.0f);
 	
 	public static final Color COLOR_BALL = new Color(Color.CYAN);
+	public static final Color COLOR_START_PAD_INNER = new Color(Color.GREEN);
+	public static final Color COLOR_START_PAD_OUTER = new Color(Color.RED);
+	public static final Color COLOR_FINISH_INNER = new Color(Color.BLACK);
+	public static final Color COLOR_FINISH_OUTER = new Color(0.85f, 0.85f, 0.95f, 1.0f);
+	public static final Color COLOR_RED_ACTIVE = new Color(1.0f, 0.2f, 0.2f, 1.0f);
+	public static final Color COLOR_RED_INACTIVE = new Color(1.0f, 0.2f, 0.2f, 0.5f);
+	public static final Color COLOR_BLUE_ACTIVE = new Color(0.2f, 0.2f, 1.0f, 1.0f);
+	public static final Color COLOR_BLUE_INACTIVE = new Color(0.2f, 0.2f, 1.0f, 0.5f);
 
 	public static final float G = 5.0f;
 	
 	public static final float SPEED_ROTATION = 0.2f;
 	public static final float SHADOW_OFFSET = 0.07f;
+	
+	// Functions
+	public static final Color getColor(Color c, float opacity) {
+		Color nc = new Color(c);
+		nc.a *= opacity;
+		return c;
+	}
 	
 }

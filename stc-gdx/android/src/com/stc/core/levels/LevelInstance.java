@@ -25,6 +25,7 @@ public class LevelInstance
 	public void addMoveable(Moveable m) {
 		moveables.add(m);
 		objects.add(m);
+		m.setLevel(this);
 	}
 	
 	public void removeMoveable(Moveable m) {
@@ -35,6 +36,7 @@ public class LevelInstance
 	public void addStatic(LevelObject s) {
 		statics.add(s);
 		objects.add(s);
+		s.setLevel(this);
 	}
 
 	public void removeStatic(LevelObject s) {
@@ -45,6 +47,7 @@ public class LevelInstance
 	private void addTile(Tile t) {
 		tiles.add(t);
 		objects.add(t);
+		t.setLevel(this);
 	}
 	
 	public void setTiles(Tile[] tiles, int size) {
@@ -60,6 +63,8 @@ public class LevelInstance
 			addTile(t);
 		}
 		this.size = size;
+		
+		resetRedBlue();
 	}
 	
 	public void render(World world) {
@@ -114,6 +119,7 @@ public class LevelInstance
 				if(m.isMoving())
 					moveablesUpdating = true;
 			}
+			updateActiveStates();
 		}
 		
 	}
@@ -143,6 +149,71 @@ public class LevelInstance
 	
 	public int getSize() {
 		return size;
+	}
+	
+	private void updateActiveStates() {
+		for(LevelObject o : objects) {
+			if(o.isActivator()) {
+				for(LevelObject u : objects) {
+					if(u == o)
+						continue;
+					else if(o.isOver(u.x, u.y)) {
+						u.setActive(true);
+					}
+				}
+			}
+		}
+	}
+	
+	public LevelObject getStaticAt(int x, int y) {
+		for(LevelObject s : statics) {
+			if(s.isOver(x, y))
+				return s;
+		}
+		return null;
+	}
+	
+	public Moveable getMoveableAt(int x, int y) {
+		for(Moveable m : moveables) {
+			if(m.isOver(x, y))
+				return m;
+		}
+		return null;
+	}
+	
+	public Tile getTileAt(int x, int y) {
+		for(Tile t : tiles) {
+			if(t.isOver(x, y))
+				return t;
+		}
+		return null;
+	}
+	
+	private void resetRedBlue() {
+		TileType type;
+		for(Tile t : tiles) {
+			type = t.getType();
+			if(type == TileType.BLUE || type == TileType.RED) {
+				t.setActive(type == TileType.BLUE ? true : false);
+			}
+		}
+	}
+	
+	public void toggleRedBlue() {
+		TileType active = TileType.EMPTY;
+		TileType type;
+		for(Tile t : tiles) {
+			type = t.getType();
+			if(type == TileType.RED && active == TileType.EMPTY) {
+				active = t.isActive() ? TileType.BLUE : TileType.RED;
+			}
+			if(type == TileType.BLUE && active == TileType.EMPTY) {
+				active = t.isActive() ? TileType.RED : TileType.BLUE;
+			}
+			if(type == TileType.BLUE || type == TileType.RED) {
+				t.setActive(type == active ? true : false);
+			}
+		}
 	}
 	
 	public ArrayList<LevelObject> getLevelObjects() {

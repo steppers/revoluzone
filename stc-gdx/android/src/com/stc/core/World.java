@@ -97,6 +97,10 @@ public class World
 		renderer.translate(-t.x, -t.y, 0.0f);
 		
 		for(LevelObject o : objects) {
+			o.renderFloor(renderer, opacity);
+		}
+		
+		for(LevelObject o : objects) {
 			o.renderObject(renderer, opacity);
 		}
 		

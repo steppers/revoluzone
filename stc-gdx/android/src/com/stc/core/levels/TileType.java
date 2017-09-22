@@ -3,7 +3,9 @@ package com.stc.core.levels;
 public enum TileType
 {
 	EMPTY("Empty", false),
-	WALL("Wall", true);
+	WALL("Wall", true),
+	RED("Red", false),
+	BLUE("Blue", false);
 	
 	String id;
 	boolean solid;
