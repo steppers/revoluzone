@@ -208,6 +208,9 @@ public class LevelInstance
 	public void toggleRedBlue() {
 		TileType active = TileType.EMPTY;
 		TileType type;
+		
+		ArrayList<Tile> activate = new ArrayList<Tile>();
+		ArrayList<Tile> deactivate = new ArrayList<Tile>();
 		for(Tile t : tiles) {
 			type = t.getType();
 			if(type == TileType.RED && active == TileType.EMPTY) {
@@ -217,8 +220,22 @@ public class LevelInstance
 				active = t.isActive() ? TileType.RED : TileType.BLUE;
 			}
 			if(type == TileType.BLUE || type == TileType.RED) {
-				t.setActive(type == active ? true : false, null);
+				for(Moveable m : moveables) {
+					if(m.isOver(t.x, t.y))
+						return;
+				}
+				
+				if(type == active)
+					activate.add(t);
+				else
+					deactivate.add(t);
 			}
+		}
+		for(Tile t : activate) {
+			t.setActive(true, null);
+		}
+		for(Tile t : deactivate) {
+			t.setActive(false, null);
 		}
 	}
 	

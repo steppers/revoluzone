@@ -227,8 +227,11 @@ public class GameState extends State implements InputProcessor
 					stateTo = MenuState.PLAY;
 					world.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
 					world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+					worldTo.setOpacity(1.0f);
+					worldTo.setRotation(0);
 					worldTo.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+					selectButtonLerp.begin(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 					transitioning = true;
 					break;
 			}
@@ -264,6 +267,7 @@ public class GameState extends State implements InputProcessor
 					worldTo.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 					worldTo.setOpacity(1.0f);
+					selectButtonLerp.begin(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 					transitioning = true;
 					break;
 			}

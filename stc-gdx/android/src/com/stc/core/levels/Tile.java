@@ -2,6 +2,7 @@ package com.stc.core.levels;
 import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.graphics.*;
 import com.stc.core.*;
+import com.stc.core.levels.moveables.*;
 
 public class Tile extends LevelObject
 {
@@ -103,7 +104,8 @@ public class Tile extends LevelObject
 	}
 	
 	protected void onActivate(LevelObject activator) {
-		
+		if(activator instanceof Ball)
+			setActive(false, null);
 	}
 	
 	protected void onDeactivate(LevelObject activator) {
