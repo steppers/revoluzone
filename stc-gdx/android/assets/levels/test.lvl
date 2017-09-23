@@ -1,8 +1,8 @@
 {
     "info": {
         "levelName": "Test",
-        "nextLevelFileName": "user_test",
-        "prevLevelFileName": "user_test",
+        "nextLevelName": "User Test",
+        "prevLevelName": "User Test",
         "size": 6
     },
     "data": [

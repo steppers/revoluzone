@@ -53,7 +53,8 @@ public class LevelManager {
      * Creates a Level entry in the current level map.
      */
     private void loadFile(FileHandle file) {
-        levels.put(file.nameWithoutExtension(), new Level(file));
+		Level l = new Level(file);
+        levels.put(l.getLevelName(), l);
     }
 
     /*
@@ -66,13 +67,13 @@ public class LevelManager {
         ArrayList<Level> correctPrev = new ArrayList<Level>();
         HashSet<String> references = new HashSet<String>();
         for (Level l: levels.values()) {
-            if(!levels.containsKey(l.getNextFileName()))
+            if(!levels.containsKey(l.getNextLevelName()))
                 correctNext.add(l);
-            if(!levels.containsKey(l.getPrevFileName()))
+            if(!levels.containsKey(l.getPrevLevelName()))
                 correctPrev.add(l);
 
-            references.add(l.getNextFileName());
-            references.add(l.getPrevFileName());
+            references.add(l.getNextLevelName());
+            references.add(l.getPrevLevelName());
         }
 
         // Scan for unreferenced files and delete them

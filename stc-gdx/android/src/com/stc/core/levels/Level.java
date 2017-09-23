@@ -22,8 +22,8 @@ public class Level {
     // Level info
     private String fileName;
     private String levelName;
-    private String prevLevelFileName;
-    private String nextLevelFileName;
+    private String prevLevelName;
+    private String nextLevelName;
 	private int[] levelData;
     private int size;
 
@@ -49,8 +49,8 @@ public class Level {
 		
         JSONObject info = obj.getJSONObject("info");
         this.levelName = info.getString("levelName");
-        this.nextLevelFileName = info.getString("nextLevelFileName");
-        this.prevLevelFileName = info.getString("prevLevelFileName");
+        this.nextLevelName = info.getString("nextLevelName");
+        this.prevLevelName = info.getString("prevLevelName");
         this.size = info.getInt("size");
 		
 		levelData = new int[this.size*this.size];
@@ -68,7 +68,7 @@ public class Level {
     }
 	
 	public LevelInstance getInstance() {
-		LevelInstance instance = new LevelInstance();
+		LevelInstance instance = new LevelInstance(levelName, nextLevelName, prevLevelName);
 		
 		Tile[] tiles = new Tile[size*size];
 		int x, y;
@@ -103,12 +103,12 @@ public class Level {
 		return instance;
 	}
 
-    public String getNextFileName() {
-        return nextLevelFileName;
+    public String getNextLevelName() {
+        return nextLevelName;
     }
 
-    public String getPrevFileName() {
-        return prevLevelFileName;
+    public String getPrevLevelName() {
+        return prevLevelName;
     }
 
 	public String getLevelName() {

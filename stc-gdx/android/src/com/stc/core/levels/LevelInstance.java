@@ -6,6 +6,7 @@ import com.stc.core.levels.moveables.*;
 public class LevelInstance
 {
 	private int size;
+	private String next, prev, name;
 	
 	private boolean moveablesUpdating = false;
 	
@@ -15,11 +16,15 @@ public class LevelInstance
 	private ArrayList<LevelObject> statics;
 	private ArrayList<Tile> tiles;
 	
-	public LevelInstance() {
+	public LevelInstance(String name, String next, String prev) {
 		objects = new ArrayList<LevelObject>();
 		moveables = new ArrayList<Moveable>();
 		statics = new ArrayList<LevelObject>();
 		tiles = new ArrayList<Tile>();
+		
+		this.name = name;
+		this.next = next;
+		this.prev = prev;
 	}
 	
 	public void addMoveable(Moveable m) {
@@ -220,4 +225,23 @@ public class LevelInstance
 		return objects;
 	}
 	
+	public LevelInstance getNextLevel() {
+		return LevelManager.instance().getLevelInstance(next);
+	}
+	
+	public LevelInstance getPrevLevel() {
+		return LevelManager.instance().getLevelInstance(prev);
+	}
+	
+	public String getLevelName() {
+		return name;
+	}
+	
+	public String getNextLevelName() {
+		return next;
+	}
+	
+	public String getPrevLevelName() {
+		return prev;
+	}
 }
