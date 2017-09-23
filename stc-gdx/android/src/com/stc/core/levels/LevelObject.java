@@ -42,7 +42,10 @@ public abstract class LevelObject
 	}
 	
 	public boolean isOver(float x, float y) {
-		return this.x == x && this.y == y;
+		return x > this.x - 0.5f
+			&& x < this.x + 0.5f
+			&& y > this.y - 0.5f
+			&& y < this.y + 0.5f;
 	}
 	
 	public boolean isActivator() {

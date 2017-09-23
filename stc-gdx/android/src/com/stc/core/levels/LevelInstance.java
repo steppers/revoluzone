@@ -158,9 +158,11 @@ public class LevelInstance
 	}
 	
 	private void updateActiveStates() {
-		for(LevelObject o : objects) {
+		ArrayList<LevelObject> l = new ArrayList<LevelObject>();
+		l.addAll(objects);
+		for(LevelObject o : l) {
 			if(o.isActivator()) {
-				for(LevelObject u : objects) {
+				for(LevelObject u : l) {
 					if(u == o)
 						continue;
 					else if(o.isOver(u.x, u.y)) {

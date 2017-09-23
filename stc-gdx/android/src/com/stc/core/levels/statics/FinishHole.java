@@ -33,7 +33,7 @@ public class FinishHole extends LevelObject
 	@Override
 	protected void onActivate(LevelObject activator){
 		if(activator instanceof Ball) {
-			//level.removeMoveable((Moveable)activator);
+			level.removeMoveable((Moveable)activator);
 			level.triggerNextLevel();
 		}
 	}
