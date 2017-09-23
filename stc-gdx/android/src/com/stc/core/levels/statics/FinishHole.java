@@ -2,6 +2,7 @@ package com.stc.core.levels.statics;
 import com.stc.core.levels.*;
 import com.badlogic.gdx.graphics.glutils.*;
 import com.stc.core.*;
+import com.stc.core.levels.moveables.*;
 
 public class FinishHole extends LevelObject
 {
@@ -19,11 +20,7 @@ public class FinishHole extends LevelObject
 	@Override
 	public void renderFloor(ShapeRenderer g, float opacity)
 	{
-		if(isActive()) {
-			g.setColor(Globals.getColor(Globals.COLOR_START_PAD_INNER, opacity));
-		} else {
-			g.setColor(Globals.getColor(Globals.COLOR_FINISH_OUTER, opacity));
-		}
+		g.setColor(Globals.getColor(Globals.COLOR_FINISH_OUTER, opacity));
 		g.ellipse(x + 0.05f, y + 0.05f, 0.9f, 0.9f, 32);
 
 		g.setColor(Globals.getColor(Globals.COLOR_FINISH_INNER, opacity));
@@ -34,9 +31,14 @@ public class FinishHole extends LevelObject
 	public void renderShadow(ShapeRenderer g, float opacity){}
 
 	@Override
-	protected void onActivate(){}
+	protected void onActivate(LevelObject activator){
+		if(activator instanceof Ball) {
+			//level.removeMoveable((Moveable)activator);
+			level.triggerNextLevel();
+		}
+	}
 
 	@Override
-	protected void onDeactivate(){}
+	protected void onDeactivate(LevelObject activator){}
 
 }

@@ -9,6 +9,7 @@ public class LevelInstance
 	private String next, prev, name;
 	
 	private boolean moveablesUpdating = false;
+	private boolean complete = false;
 	
 	// Objects
 	private ArrayList<LevelObject> objects;
@@ -163,7 +164,7 @@ public class LevelInstance
 					if(u == o)
 						continue;
 					else if(o.isOver(u.x, u.y)) {
-						u.setActive(true);
+						u.setActive(true, o);
 					}
 				}
 			}
@@ -199,7 +200,7 @@ public class LevelInstance
 		for(Tile t : tiles) {
 			type = t.getType();
 			if(type == TileType.BLUE || type == TileType.RED) {
-				t.setActive(type == TileType.BLUE ? true : false);
+				t.setActive(type == TileType.BLUE ? true : false, null);
 			}
 		}
 	}
@@ -216,9 +217,17 @@ public class LevelInstance
 				active = t.isActive() ? TileType.RED : TileType.BLUE;
 			}
 			if(type == TileType.BLUE || type == TileType.RED) {
-				t.setActive(type == active ? true : false);
+				t.setActive(type == active ? true : false, null);
 			}
 		}
+	}
+	
+	public void triggerNextLevel() {
+		complete = true;
+	}
+	
+	public boolean isComplete() {
+		return complete;
 	}
 	
 	public ArrayList<LevelObject> getLevelObjects() {

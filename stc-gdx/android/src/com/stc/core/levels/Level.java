@@ -71,16 +71,17 @@ public class Level {
 		LevelInstance instance = new LevelInstance(levelName, nextLevelName, prevLevelName);
 		
 		Tile[] tiles = new Tile[size*size];
-		int x, y;
+		int x, y, index;
 		for(int i = 0; i < size*size; i++) {
 			int id = levelData[i];
 			x = i % size;
-			y = i / size;
+			y = size - 1 - (i / size);
+			index = y*size + x;
 			
-			tiles[i] = new Tile(x, y, TileType.EMPTY); // Default
+			tiles[index] = new Tile(x, y, TileType.EMPTY); // Default
 			switch(id) {
 				case 1:
-					tiles[i] = new Tile(x, y, TileType.WALL);
+					tiles[index] = new Tile(x, y, TileType.WALL);
 					break;
 				case 2:
 					instance.addMoveable(new Ball(x, y));
@@ -90,10 +91,10 @@ public class Level {
 					instance.addStatic(new FinishHole(x, y));
 					break;
 				case 4:
-					tiles[i] = new Tile(x, y, TileType.RED);
+					tiles[index] = new Tile(x, y, TileType.RED);
 					break;
 				case 5:
-					tiles[i] = new Tile(x, y, TileType.BLUE);
+					tiles[index] = new Tile(x, y, TileType.BLUE);
 					break;
 				default: break;
 			}

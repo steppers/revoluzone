@@ -79,6 +79,19 @@ public class GameState extends State implements InputProcessor
 		
 		selectButtonLerp.update(delta);
 		backButtonLerp.update(delta);
+		
+		if(state == MenuState.PLAY && level.isComplete() && !transitioning) {
+			levelTo = level.getNextLevel();
+			stateTo = MenuState.PLAY;
+			world.rotate(-90, Globals.SPEED_TRANSITION);
+			world.setupOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+			world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+			worldTo.setupRotationLerp(90, 0, Globals.SPEED_TRANSITION);
+			worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+			worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+			transitioning = true;
+			rotating = true;
+		}
     }
 
     @Override
@@ -186,10 +199,9 @@ public class GameState extends State implements InputProcessor
 							levelTo = LevelManager.instance().getLevelInstance("Level 1");
 							stateTo = MenuState.LEVEL_SELECT;
 							worldTo.setRotation(rotation);
-							worldTo.setOpacity(1.0f);
+							worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 							worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
-							worldTo.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
-							world.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
+							worldTo.setScale(Globals.SCALE_MENU);
 							backButtonLerp.begin(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 							world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 							transitioning = true;
@@ -210,6 +222,15 @@ public class GameState extends State implements InputProcessor
 							break;
 					}
 					break;
+				case LEVEL_SELECT:
+					levelTo = level;
+					stateTo = MenuState.PLAY;
+					world.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
+					world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+					worldTo.setupScaleLerp(Globals.SCALE_MENU, 1.0f, Globals.SPEED_TRANSITION);
+					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+					transitioning = true;
+					break;
 			}
 		}
 		else if(backButton.contains(screenX, screenY)) {
@@ -228,12 +249,21 @@ public class GameState extends State implements InputProcessor
 					stateTo = MenuState.MAIN_MENU;
 					worldTo.setRotation(0);
 					worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
-					worldTo.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
+					worldTo.setScale(Globals.SCALE_MENU);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 					backButtonLerp.begin(1.0f, 0.0f, Globals.SPEED_TRANSITION);
-					world.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
 					world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 					world.setupOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+					transitioning = true;
+					break;
+				case PLAY:
+					levelTo = level;
+					stateTo = MenuState.LEVEL_SELECT;
+					world.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
+					world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
+					worldTo.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
+					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+					worldTo.setOpacity(1.0f);
 					transitioning = true;
 					break;
 			}

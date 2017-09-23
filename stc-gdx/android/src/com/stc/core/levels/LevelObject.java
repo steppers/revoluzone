@@ -22,16 +22,16 @@ public abstract class LevelObject
 	public void renderFloor(ShapeRenderer g, float opacity) {}
 	public abstract void renderShadow(ShapeRenderer g, float opacity);
 	
-	public void setActive(boolean active) {
+	public void setActive(boolean active, LevelObject activator) {
 		this.active = active;
 		if(active)
-			onActivate();
+			onActivate(activator);
 		else
-			onDeactivate();
+			onDeactivate(activator);
 	}
 
-	protected abstract void onActivate();
-	protected abstract void onDeactivate();
+	protected abstract void onActivate(LevelObject activator);
+	protected abstract void onDeactivate(LevelObject activator);
 	
 	public boolean isSolid() {
 		return solid;

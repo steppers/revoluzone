@@ -31,9 +31,9 @@ public class StartPad extends LevelObject
 	public void renderShadow(ShapeRenderer g, float opacity){}
 
 	@Override
-	protected void onActivate(){}
+	protected void onActivate(LevelObject activator){}
 
 	@Override
-	protected void onDeactivate(){}
+	protected void onDeactivate(LevelObject activator){}
 	
 }

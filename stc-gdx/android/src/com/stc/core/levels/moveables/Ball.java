@@ -28,9 +28,9 @@ public class Ball extends Moveable
 	}
 
 	@Override
-	protected void onActivate(){}
+	protected void onActivate(LevelObject activator){}
 
 	@Override
-	protected void onDeactivate(){}
+	protected void onDeactivate(LevelObject activator){}
 	
 }

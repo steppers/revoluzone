@@ -102,11 +102,11 @@ public class Tile extends LevelObject
 		}
 	}
 	
-	protected void onActivate() {
+	protected void onActivate(LevelObject activator) {
 		
 	}
 	
-	protected void onDeactivate() {
+	protected void onDeactivate(LevelObject activator) {
 		
 	}
 	
