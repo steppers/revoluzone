@@ -266,7 +266,8 @@ public class GameState extends State implements InputProcessor
 					world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 					worldTo.setupScaleLerp(1.0f, Globals.SCALE_MENU, Globals.SPEED_TRANSITION);
 					worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
-					worldTo.setOpacity(1.0f);
+					worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
+					worldTo.setRotation(0);
 					selectButtonLerp.begin(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 					transitioning = true;
 					break;
