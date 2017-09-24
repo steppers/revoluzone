@@ -7,6 +7,8 @@ public class LevelInstance
 {
 	private int size;
 	private String next, prev, name;
+	private int turnCount;
+	private int lastRotation = 0;
 	
 	private boolean moveablesUpdating = false;
 	private boolean complete = false;
@@ -26,6 +28,7 @@ public class LevelInstance
 		this.name = name;
 		this.next = next;
 		this.prev = prev;
+		turnCount = -1;
 	}
 	
 	public void addMoveable(Moveable m) {
@@ -77,8 +80,15 @@ public class LevelInstance
 		world.render(this);
 	}
 	
+	public void refreshUpdate() {
+		triggerUpdate(lastRotation);
+		turnCount--;
+	}
+	
 	public void triggerUpdate(int rotation) {
 		moveablesUpdating = true;
+		turnCount++;
+		lastRotation = rotation;
 		
 		// Movement direction
 		int dx = 0, dy = 0;
@@ -125,8 +135,7 @@ public class LevelInstance
 				if(m.isMoving())
 					moveablesUpdating = true;
 			}
-			if(!moveablesUpdating)
-				updateActiveStates();
+			updateActiveStates();
 		}
 		
 	}
@@ -272,5 +281,23 @@ public class LevelInstance
 	
 	public String getPrevLevelName() {
 		return prev;
+	}
+	
+	public int getTurnCount() {
+		return turnCount;
+	}
+	
+	public void resetTurnCount() {
+		turnCount = 0;
+	}
+	
+	public int getBallCount() {
+		int c = 0;
+		for(Moveable m : moveables) {
+			// I know this isn't very nice...
+			if(m instanceof Ball)
+				c++;
+		}
+		return c;
 	}
 }

@@ -131,6 +131,7 @@ public class Level {
 		}
 		
 		instance.setTiles(tiles, size);
+		instance.triggerUpdate(0);
 		return instance;
 	}
 	

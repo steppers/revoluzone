@@ -90,7 +90,6 @@ public class GameState extends State implements InputProcessor
 			worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 			worldTo.setupTextOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);
 			transitioning = true;
-			rotating = true;
 		}
     }
 
@@ -131,6 +130,9 @@ public class GameState extends State implements InputProcessor
 				inWorld.drawString(0, Globals.TEXT_OFFSET, inLevel.getLevelName(), 0);
 				inWorld.drawString(0, Globals.TEXT_OFFSET, inLevel.getNextLevelName(), -90);
 				break;
+			case PLAY:
+				inWorld.drawString(0, Globals.TEXT_OFFSET, "Turns: " + inLevel.getTurnCount(), 0);
+				break;
 		}
 	}
 	
@@ -168,7 +170,6 @@ public class GameState extends State implements InputProcessor
 				world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 				world.setupRotationLerp(0, 90, Globals.SPEED_TRANSITION);
 				transitioning = true;
-				rotating = true;
 			} else {
 				world.rotate(90, Globals.SPEED_ROTATION);
 				rotating = true;
@@ -185,7 +186,6 @@ public class GameState extends State implements InputProcessor
 				world.setupTextOpacityLerp(1.0f, 0.0f, Globals.SPEED_TRANSITION);
 				world.setupRotationLerp(0, -90, Globals.SPEED_TRANSITION);
 				transitioning = true;
-				rotating = true;
 			} else {
 				world.rotate(-90, Globals.SPEED_ROTATION);
 				rotating = true;

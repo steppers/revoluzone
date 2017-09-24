@@ -34,7 +34,9 @@ public class FinishHole extends LevelObject
 	protected void onActivate(LevelObject activator){
 		if(activator instanceof Ball) {
 			level.removeMoveable((Moveable)activator);
-			level.triggerNextLevel();
+			level.refreshUpdate();
+			if(level.getBallCount() == 0)
+				level.triggerNextLevel();
 		}
 	}
 
