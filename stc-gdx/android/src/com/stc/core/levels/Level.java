@@ -103,6 +103,14 @@ public class Level {
 		instance.setTiles(tiles, size);
 		return instance;
 	}
+	
+	public void setNextLevelName(String name) {
+		nextLevelName = name;
+	}
+	
+	public void setPrevLevelName(String name) {
+		prevLevelName = name;
+	}
 
     public String getNextLevelName() {
         return nextLevelName;

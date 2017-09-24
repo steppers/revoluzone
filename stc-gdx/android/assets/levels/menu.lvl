@@ -1,8 +1,8 @@
 {
     "info": {
-        "levelName": "Test",
-        "nextLevelName": "User Test",
-        "prevLevelName": "User Test",
+        "levelName": "Menu",
+        "nextLevelName": "Menu",
+        "prevLevelName": "Menu",
         "size": 6
     },
     "data": [

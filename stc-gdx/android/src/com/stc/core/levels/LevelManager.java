@@ -7,6 +7,7 @@ import com.stc.core.Globals;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import com.stc.core.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -29,22 +30,48 @@ public class LevelManager {
 
         // Load all level files in root directory
         FileHandle root = Gdx.files.internal(Globals.LEVEL_DIR);
-        loadDirectory(root);
+        loadDirectory(root, levels);
+		
+		HashMap<String, Level> userLevels = new HashMap<String, Level>();
+		if(Permissions.hasExternalStoragePermission()) {
+			FileHandle user_tmp = Gdx.files.internal(Globals.DIR_LEVEL_TMP);
+			FileHandle ext_root = Gdx.files.external(Globals.DIR_EXT_ROOT + Globals.DIR_LEVEL_TMP);
+			if(!ext_root.exists() && user_tmp.exists()) {
+				user_tmp.copyTo(ext_root);
+			}
+			loadDirectory(ext_root, userLevels);
+		}
+		
+		int numUserLevels = userLevels.size();
+		if(userLevels.size() > 0) {
+			Level[] uls = new Level[numUserLevels];
+			userLevels.values().toArray(uls);
+			for(int i = 0; i < numUserLevels; i++) {
+				uls[i].setNextLevelName(uls[(i-1) % numUserLevels].getLevelName());
+				uls[i].setPrevLevelName(uls[(i+1) % numUserLevels].getLevelName());
+			}
+			uls[0].setNextLevelName("Level 1");
+			uls[numUserLevels-1].setPrevLevelName("Level 1");
+			levels.get("Level 1").setPrevLevelName(uls[0].getLevelName());
+			
+			levels.putAll(userLevels);
+		}
+		
         validate();
     }
 
     /*
      * Scans a directory and loads all .lvl files
      */
-    private void loadDirectory(FileHandle directory) {
+    private void loadDirectory(FileHandle directory, HashMap<String, Level> levels) {
         FileHandle[] files = directory.list();
         for (FileHandle f : files) {
             if(f.isDirectory()) {
-                loadDirectory(f); // Recurse
+                loadDirectory(f, levels); // Recurse
             } else {
                 if(!f.extension().equals("lvl"))
                     continue;
-                loadFile(f);
+                loadFile(f, levels);
             }
         }
     }
@@ -52,7 +79,7 @@ public class LevelManager {
     /*
      * Creates a Level entry in the current level map.
      */
-    private void loadFile(FileHandle file) {
+    private void loadFile(FileHandle file, HashMap<String, Level> levels) {
 		Level l = new Level(file);
         levels.put(l.getLevelName(), l);
     }

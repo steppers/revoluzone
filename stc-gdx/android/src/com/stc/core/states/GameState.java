@@ -33,7 +33,7 @@ public class GameState extends State implements InputProcessor
 	public GameState() {
 		world = new World();
 		worldTo = new World();
-        level = LevelManager.instance().getLevelInstance("Test");
+        level = LevelManager.instance().getLevelInstance("Menu");
 		Gdx.input.setInputProcessor(this);
 		
 		// Scale world in
@@ -248,7 +248,7 @@ public class GameState extends State implements InputProcessor
 					transitioning = true;
 					break;
 				case LEVEL_SELECT:
-					levelTo = LevelManager.instance().getLevelInstance("Test");
+					levelTo = LevelManager.instance().getLevelInstance("Menu");
 					stateTo = MenuState.MAIN_MENU;
 					worldTo.setRotation(0);
 					worldTo.setupOpacityLerp(0.0f, 1.0f, Globals.SPEED_TRANSITION);

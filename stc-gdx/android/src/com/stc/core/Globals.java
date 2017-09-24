@@ -12,7 +12,9 @@ public class Globals {
     public static float display_width, display_height;
 	public static String orientation = "landscape";
 
+	public static final String DIR_LEVEL_TMP = "user_levels/";
     public static final String LEVEL_DIR = "levels/";
+	public static final String DIR_EXT_ROOT = "squaringthecircle/";
 	
 	public static final float SCALE_MENU = 0.8f;
 	public static final float TEXT_OFFSET = 1.25f;
