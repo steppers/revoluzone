@@ -1,5 +1,6 @@
 package com.stc.core.levels;
 import com.badlogic.gdx.graphics.glutils.*;
+import java.util.*;
 
 public abstract class LevelObject
 {
@@ -9,12 +10,15 @@ public abstract class LevelObject
 	protected boolean solid = false;
 	protected boolean activator = false;
 	
-	private boolean active = false;
+	protected boolean active = false;
+	
+	protected ArrayList<LevelObject> links;
 	
 	public LevelObject(float x, float y) {
 		this.x = x;
 		this.y = y;
 		level = null;
+		links = new ArrayList<LevelObject>();
 	}
 	
 	public abstract void update(float delta);
@@ -24,6 +28,7 @@ public abstract class LevelObject
 	
 	public void setActive(boolean active, LevelObject activator) {
 		this.active = active;
+		
 		if(active)
 			onActivate(activator);
 		else
@@ -54,6 +59,10 @@ public abstract class LevelObject
 	
 	public void setLevel(LevelInstance level) {
 		this.level = level;
+	}
+	
+	public void addLink(LevelObject linkTarget) {
+		links.add(linkTarget);
 	}
 	
 }

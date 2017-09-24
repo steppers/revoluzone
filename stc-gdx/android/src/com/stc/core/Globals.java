@@ -36,6 +36,9 @@ public class Globals {
 	public static final Color COLOR_RED_INACTIVE = new Color(1.0f, 0.2f, 0.2f, 0.5f);
 	public static final Color COLOR_BLUE_ACTIVE = new Color(0.2f, 0.2f, 1.0f, 1.0f);
 	public static final Color COLOR_BLUE_INACTIVE = new Color(0.2f, 0.2f, 1.0f, 0.5f);
+	public static final Color COLOR_SWITCH_INNER_INACTIVE = new Color(Color.RED);
+	public static final Color COLOR_SWITCH_INNER_ACTIVE = new Color(Color.GREEN);
+	public static final Color COLOR_SWITCH_OUTER = new Color(0.8f, 0.8f, 0.8f, 1.0f);
 
 	public static final float G = 5.0f;
 	

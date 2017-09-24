@@ -86,6 +86,10 @@ public class World
 		
 		ArrayList<LevelObject> objects = level.getLevelObjects();
 		
+		for(LevelObject o : objects) {
+			o.renderFloor(renderer, opacity);
+		}
+		
 		Vector2 t = new Vector2(Globals.SHADOW_OFFSET, Globals.SHADOW_OFFSET);
 		t.rotate(-rotation);
 		renderer.translate(t.x, t.y, 0.0f);
@@ -95,10 +99,6 @@ public class World
 		}
 		
 		renderer.translate(-t.x, -t.y, 0.0f);
-		
-		for(LevelObject o : objects) {
-			o.renderFloor(renderer, opacity);
-		}
 		
 		for(LevelObject o : objects) {
 			o.renderObject(renderer, opacity);

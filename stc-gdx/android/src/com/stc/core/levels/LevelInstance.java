@@ -125,7 +125,8 @@ public class LevelInstance
 				if(m.isMoving())
 					moveablesUpdating = true;
 			}
-			updateActiveStates();
+			if(!moveablesUpdating)
+				updateActiveStates();
 		}
 		
 	}
