@@ -122,6 +122,9 @@ public class Level {
 				case 9:
 					instance.addStatic(new LockedFinishHole(x, y));
 					break;
+				case 4:
+					instance.addStatic(new KillZone(x, y));
+					break;
 				default: break;
 			}
 		}

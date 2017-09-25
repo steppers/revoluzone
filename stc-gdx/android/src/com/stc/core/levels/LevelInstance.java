@@ -255,6 +255,11 @@ public class LevelInstance
 		complete = true;
 	}
 	
+	public void reset() {
+		next = name;
+		complete = true;
+	}
+	
 	public boolean isComplete() {
 		return complete;
 	}
