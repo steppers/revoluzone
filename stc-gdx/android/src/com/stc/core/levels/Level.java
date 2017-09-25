@@ -103,23 +103,23 @@ public class Level {
 				case 1:
 					tiles[index] = new Tile(x, y, TileType.WALL);
 					break;
-				case 2:
+				case 5:
 					instance.addMoveable(new Ball(x, y));
 					instance.addStatic(new StartPad(x, y));
 					break;
-				case 3:
+				case 6:
 					instance.addStatic(new FinishHole(x, y));
 					break;
-				case 4:
+				case 2:
 					tiles[index] = new Tile(x, y, TileType.RED);
 					break;
-				case 5:
+				case 3:
 					tiles[index] = new Tile(x, y, TileType.BLUE);
 					break;
-				case 6:
+				case 7:
 					instance.addStatic(new Switch(x, y));
 					break;
-				case 7:
+				case 9:
 					instance.addStatic(new LockedFinishHole(x, y));
 					break;
 				default: break;
