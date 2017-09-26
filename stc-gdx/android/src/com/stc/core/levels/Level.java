@@ -10,6 +10,7 @@ import org.json.*;
 import com.stc.core.levels.moveables.*;
 import com.stc.core.levels.statics.*;
 import java.util.*;
+import com.badlogic.gdx.math.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -31,6 +32,7 @@ public class Level {
     private String nextLevelName;
 	private int[] levelData;
 	private ArrayList<Link> links;
+	private Rail[][] rails;
     private int size;
 
     /*
@@ -67,7 +69,7 @@ public class Level {
 		}
 		
 		if(obj.has("links")) {
-		JSONArray linkData = obj.getJSONArray("links");
+			JSONArray linkData = obj.getJSONArray("links");
 			for(int i = 0; i < linkData.length(); i++) {
 				JSONObject link = linkData.getJSONObject(i);
 				Link l = new Link();
@@ -76,6 +78,34 @@ public class Level {
 				l.tx = link.getInt("tx");
 				l.ty = link.getInt("ty");
 				links.add(l);
+			}
+		}
+		
+		if(obj.has("rails")) {
+			rails = new Rail[this.size][this.size];
+			JSONArray railData = obj.getJSONArray("rails");
+			Link l = new Link();
+			for(int i = 0; i < railData.length(); i++) {
+				JSONObject rail = railData.getJSONObject(i);
+				l.sx = rail.getInt("sx");
+				l.sy = rail.getInt("sy");
+				l.tx = rail.getInt("tx");
+				l.ty = rail.getInt("ty");
+				int dx = l.tx - l.sx;
+				int dy = l.ty - l.sy;
+				if(dx != 0) {
+					dx = dx / Math.abs(dx);
+					for(int x = l.sx; x != l.tx+dx; x += dx) {
+						if(rails[x][l.sy] == null)
+							rails[x][l.sy] = new Rail(x, l.sy);
+					}
+				} else if(dy != 0) {
+					dy = dy / Math.abs(dy);
+					for(int y = l.sy; y != l.ty+dy; y += dy) {
+						if(rails[l.sx][y] == null)
+							rails[l.sx][y] = new Rail(l.sx, y);
+					}
+				}
 			}
 		}
     }
@@ -131,6 +161,34 @@ public class Level {
 		
 		for(Link l : links) {
 			instance.getStaticAt(l.sx, l.sy).addLink(instance.getStaticAt(l.tx, l.ty));
+		}
+		
+		if(rails != null) {
+			for(x = 0; x < this.size; x++) {
+				for(y = 0; y < this.size; y++) {
+					if(rails[x][y] != null) {
+						Rail r = rails[x][y];
+					
+						if(x > 0)
+							if(rails[x-1][y] != null)
+								r.addLink(rails[x-1][y]);
+							
+						if(x < this.size-1)
+							if(rails[x+1][y] != null)
+								r.addLink(rails[x+1][y]);
+							
+						if(y > 0)
+							if(rails[x][y-1] != null)
+								r.addLink(rails[x][y-1]);
+							
+						if(y < this.size-1)
+							if(rails[x][y+1] != null)
+								r.addLink(rails[x][y+1]);
+							
+						instance.addStatic(r);
+					}
+				}
+			}
 		}
 		
 		instance.setTiles(tiles, size);
