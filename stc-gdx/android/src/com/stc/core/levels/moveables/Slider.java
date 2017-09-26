@@ -3,24 +3,25 @@ import com.stc.core.*;
 import com.badlogic.gdx.graphics.glutils.*;
 import com.badlogic.gdx.graphics.*;
 import com.stc.core.levels.*;
+import com.stc.core.levels.statics.*;
 
-public class Ball extends Moveable
+public class Slider extends Moveable
 {
-	
-	public Ball(int x, int y) {
+
+	public Slider(int x, int y) {
 		super(x, y);
 	}
-	
+
 	@Override
 	public void renderObject(ShapeRenderer g, float opacity) {
-		g.setColor(Globals.getColor(Globals.COLOR_BALL, opacity));
-		g.ellipse(x + 0.1f, y + 0.1f, 0.8f, 0.8f, 32);
+		g.setColor(Globals.getColor(Globals.COLOR_SLIDER, opacity));
+		g.rect(x, y, 1, 1);
 	}
-	
+
 	@Override
 	public void renderShadow(ShapeRenderer g, float opacity) {
 		g.setColor(Globals.getColor(Globals.COLOR_SHADOW, opacity));
-		g.ellipse(x + 0.1f, y + 0.1f, 0.8f, 0.8f, 32);
+		g.rect(x, y, 1, 1);
 	}
 
 	@Override
@@ -29,4 +30,9 @@ public class Ball extends Moveable
 	@Override
 	protected void onDeactivate(LevelObject activator){}
 	
+	@Override
+	public boolean canMoveTo(int x, int y, LevelInstance level) {
+		return (level.getStaticAt(x, y) instanceof Rail);
+	}
+
 }

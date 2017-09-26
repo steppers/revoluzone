@@ -155,6 +155,9 @@ public class Level {
 				case 4:
 					instance.addStatic(new KillZone(x, y));
 					break;
+				case 10:
+					instance.addMoveable(new Slider(x, y));
+					break;
 				default: break;
 			}
 		}
