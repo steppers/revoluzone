@@ -24,7 +24,16 @@ public class Rail extends LevelObject
 	public void renderFloor(ShapeRenderer g, float opacity)
 	{
 		g.setColor(Globals.getColor(Color.BLACK, opacity));
-		g.rect(x + 0.25f, y, 0.5f, 1);
+		for(LevelObject r : links) {
+			if(r.x < x)
+				g.rect(x, y + 0.4f, 0.6f, 0.2f);
+			else if(r.x > x)
+				g.rect(x + 0.4f, y + 0.4f, 0.6f, 0.2f);
+			else if(r.y > y)
+				g.rect(x + 0.4f, y + 0.4f, 0.2f, 0.6f);
+			else if(r.y < y)
+				g.rect(x + 0.4f, y, 0.2f, 0.6f);
+		}
 	}
 
 	@Override

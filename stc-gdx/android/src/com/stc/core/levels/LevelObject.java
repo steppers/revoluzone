@@ -6,7 +6,7 @@ public abstract class LevelObject
 {
 	protected LevelInstance level;
 	
-	protected float x, y;
+	public float x, y;
 	protected boolean solid = false;
 	protected boolean activator = false;
 	
