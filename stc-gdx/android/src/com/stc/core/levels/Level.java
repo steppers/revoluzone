@@ -148,6 +148,7 @@ public class Level {
 			levelData[idc] = Integer.parseInt(tmp.get(index));
 		}
 		
+		rails = new Rail[this.size][this.size];
 		while(i < lines.length) {
 			String line = lines[i];
 			if(line.startsWith("name")) {
@@ -158,6 +159,35 @@ public class Level {
 			}
 			else if(line.startsWith("prev")) {
 				this.prevLevelName = line.split("=")[1].split(".txt")[0].trim();
+			}
+			else if(line.startsWith("rail")) {
+				Link l = new Link();
+				l.sx = Integer.parseInt(line.split("=")[1].split("->")[0].split(",")[0]);
+				l.sy = this.size - 1 - Integer.parseInt(line.split("=")[1].split("->")[0].split(",")[1]);
+				l.tx = Integer.parseInt(line.split("=")[1].split("->")[1].split(",")[0]);
+				l.ty = this.size - 1 - Integer.parseInt(line.split("=")[1].split("->")[1].split(",")[1]);
+				int dx = l.tx - l.sx;
+				int dy = l.ty - l.sy;
+				if(dx != 0) {
+					dx = dx / Math.abs(dx);
+					for(x = l.sx; x != l.tx+dx; x += dx) {
+						if(rails[x][l.sy] == null)
+							rails[x][l.sy] = new Rail(x, l.sy);
+					}
+				} else if(dy != 0) {
+					dy = dy / Math.abs(dy);
+					for(y = l.sy; y != l.ty+dy; y += dy) {
+						if(rails[l.sx][y] == null)
+							rails[l.sx][y] = new Rail(l.sx, y);
+					}
+				} else {
+					rails[l.sx][l.sy] = new Rail(l.sx, l.sy);
+				}
+			}
+			else if(line.startsWith("slider")) {
+				x = Integer.parseInt(line.split("=")[1].split(",")[0]);
+				y = Integer.parseInt(line.split("=")[1].split(",")[1]);
+				levelData[y * this.size + x] = 10;
 			}
 			i++;
 		}
