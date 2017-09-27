@@ -47,8 +47,10 @@ public class LevelManager {
 			Level[] uls = new Level[numUserLevels];
 			userLevels.values().toArray(uls);
 			for(int i = 0; i < numUserLevels; i++) {
-				uls[i].setNextLevelName(uls[(i-1) % numUserLevels].getLevelName());
-				uls[i].setPrevLevelName(uls[(i+1) % numUserLevels].getLevelName());
+				if(i != 0)
+					uls[i].setNextLevelName(uls[(i-1) % numUserLevels].getLevelName());
+				if(i != numUserLevels-1)
+					uls[i].setPrevLevelName(uls[(i+1) % numUserLevels].getLevelName());
 			}
 			uls[0].setNextLevelName("Level 1");
 			uls[numUserLevels-1].setPrevLevelName("Level 1");
@@ -69,9 +71,10 @@ public class LevelManager {
             if(f.isDirectory()) {
                 loadDirectory(f, levels); // Recurse
             } else {
-                if(!f.extension().equals("lvl"))
-                    continue;
-                loadFile(f, levels);
+				if(f.extension().equals("txt"))
+					loadFile(f, levels, true);
+                else if(f.extension().equals("lvl"))
+                	loadFile(f, levels, false);
             }
         }
     }
@@ -79,9 +82,10 @@ public class LevelManager {
     /*
      * Creates a Level entry in the current level map.
      */
-    private void loadFile(FileHandle file, HashMap<String, Level> levels) {
-		Level l = new Level(file);
-        levels.put(l.getLevelName(), l);
+    private void loadFile(FileHandle file, HashMap<String, Level> levels, boolean oldFormat) {
+		Level l = new Level(file, oldFormat);
+		if(l.isValid())
+        	levels.put(l.getLevelName(), l);
     }
 
     /*

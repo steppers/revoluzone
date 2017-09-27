@@ -34,20 +34,26 @@ public class Level {
 	private ArrayList<Link> links;
 	private Rail[][] rails;
     private int size;
+	
+	// Status
+	private boolean valid = false;
 
     /*
      * Construct a level object from the file provided.
      * This will not lead to a usable object yet. Use load()
      * before the level is required.
      */
-    public Level(FileHandle file) {
+    public Level(FileHandle file, boolean oldFormat) {
         this.loaded = false;
         this.fileName = file.name();
 		links = new ArrayList<Link>();
 
         raw = file.readString();
 
-        parseData();
+		if(oldFormat)
+			parseOld();
+		else
+        	parseData();
     }
 
 	/*
@@ -108,7 +114,55 @@ public class Level {
 				}
 			}
 		}
+		
+		valid = true;
     }
+	
+	private void parseOld() {
+		String[] lines = raw.split("\n");
+		ArrayList<String> tmp = new ArrayList<>();
+		
+		int i = 0;
+		while(lines[i].startsWith("{")) {
+			lines[i] = lines[i].substring(1, lines[i].length()-1);
+			String[] ids = lines[i].split(",");
+			this.size = ids.length + 2;
+			for(String s : ids)
+				tmp.add(s);
+				
+			i++;
+		}
+		
+		// Create and clear to walls
+		levelData = new int[this.size*this.size];
+		for(int j = 0; j < levelData.length; j++) {
+			levelData[j] = 1;
+		}
+		
+		// Load the data to the correct place
+		int x, y, idc;
+		for(int index = 0; index < tmp.size(); index++) {
+			x = (index % (this.size-2))+1;
+			y = (index / (this.size-2))+1;
+			idc = (y*this.size) + x; // adjusted index;
+			levelData[idc] = Integer.parseInt(tmp.get(index));
+		}
+		
+		while(i < lines.length) {
+			String line = lines[i];
+			if(line.startsWith("name")) {
+				this.levelName = line.split("=")[1].trim();
+			}
+			else if(line.startsWith("next")) {
+				this.nextLevelName = line.split("=")[1].split(".txt")[0].trim();
+			}
+			else if(line.startsWith("prev")) {
+				this.prevLevelName = line.split("=")[1].split(".txt")[0].trim();
+			}
+			i++;
+		}
+		valid = true;
+	}
 
     /*
      * Scans the data for errors
@@ -217,6 +271,10 @@ public class Level {
 
 	public String getLevelName() {
 		return levelName;
+	}
+	
+	public boolean isValid() {
+		return valid;
 	}
 	
 }
