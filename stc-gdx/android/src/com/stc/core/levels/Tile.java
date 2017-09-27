@@ -104,7 +104,7 @@ public class Tile extends LevelObject
 	}
 	
 	protected void onActivate(LevelObject activator) {
-		if(activator instanceof Ball)
+		if(activator != null)
 			setActive(false, null);
 	}
 	
