@@ -1,0 +1,20 @@
+{0,0,0,0,0,0}
+{0,0,0,2,0,0}
+{3,0,0,0,6,0}
+{2,0,0,3,0,0}
+{0,0,0,0,0,0}
+{0,0,0,0,0,5}
+name=Level 14
+next=Level 15.txt
+prev=Level 13.txt
+score=9
+message_left=
+message_right=
+rail=4,2->4,2
+rail=3,3->3,3
+rail=4,3->4,3
+rail=4,4->4,4
+rail=4,5->4,5
+slider=4,5
+slider=4,4
+locked=false

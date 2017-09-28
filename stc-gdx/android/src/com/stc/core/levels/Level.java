@@ -33,6 +33,7 @@ public class Level {
 	private int[] levelData;
 	private ArrayList<Link> links;
 	private Rail[][] rails;
+	private ArrayList<Vector2> sliders;
     private int size;
 	
 	// Status
@@ -47,6 +48,7 @@ public class Level {
         this.loaded = false;
         this.fileName = file.name();
 		links = new ArrayList<Link>();
+		sliders = new ArrayList<>();
 
         raw = file.readString();
 
@@ -187,7 +189,15 @@ public class Level {
 			else if(line.startsWith("slider")) {
 				x = Integer.parseInt(line.split("=")[1].split(",")[0]);
 				y = Integer.parseInt(line.split("=")[1].split(",")[1]);
-				levelData[y * this.size + x] = 10;
+				sliders.add(new Vector2(x, y));
+			}
+			else if(line.startsWith("link")) {
+				Link l = new Link();
+				l.sx = Integer.parseInt(line.split("=")[1].split("->")[0].split(",")[0]);
+				l.sy = this.size - 1 - Integer.parseInt(line.split("=")[1].split("->")[0].split(",")[1]);
+				l.tx = Integer.parseInt(line.split("=")[1].split("->")[1].split(",")[0]);
+				l.ty = this.size - 1 - Integer.parseInt(line.split("=")[1].split("->")[1].split(",")[1]);
+				links.add(l);
 			}
 			i++;
 		}
@@ -276,6 +286,10 @@ public class Level {
 					}
 				}
 			}
+		}
+		
+		for(Vector2 s : sliders) {
+			instance.addMoveable(new Slider((int)s.x, (int)s.y));
 		}
 		
 		instance.setTiles(tiles, size);

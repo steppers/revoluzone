@@ -38,7 +38,7 @@ public class LockedFinishHole extends LevelObject
 
 	@Override
 	protected void onActivate(LevelObject activator){
-		if(activator instanceof Ball && !((Moveable)activator).isMoving()) {
+		if(activator instanceof Ball) {
 			level.removeMoveable((Moveable)activator);
 			level.refreshUpdate();
 			if(level.getBallCount() == 0)
