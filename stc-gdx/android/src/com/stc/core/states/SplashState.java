@@ -10,6 +10,7 @@ import com.badlogic.gdx.utils.Align;
 import com.stc.core.Renderer;
 import com.stc.core.State;
 import com.stc.core.*;
+import com.badlogic.gdx.math.*;
 
 /**
  * Created by steppers on 8/4/17.
@@ -17,9 +18,9 @@ import com.stc.core.*;
 
 public class SplashState extends State {
 
-    final float fadeInDuration = 1f;
-    final float logoDuration = 2f;
-    final float fadeOutDuration = 0.5f;
+    final float fadeInDuration = 0.4f;
+    final float logoDuration = 1f;
+    final float fadeOutDuration = 0.3f;
 
     float elapsed = 0f;
     float alpha = 0f;
@@ -56,7 +57,11 @@ public class SplashState extends State {
     @Override
     public void render() {
         sb.begin();
-        font.draw(sb, "Squaring\nthe\nCircle", 0, (Gdx.graphics.getHeight()+layout.height)/2.0f, Gdx.graphics.getWidth(), Align.center, false);
+		Matrix4 t = new Matrix4().idt();
+		t.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0.0f);
+		t.scale(1.2f, 1.2f, 1.0f);
+		sb.setTransformMatrix(t);
+        font.draw(sb, "Squaring\nthe\nCircle", -layout.width/2.0f, layout.height/2.0f, layout.width, Align.center, false);
         sb.end();
 
         // Fix the blend state back (sb.end() resets it)

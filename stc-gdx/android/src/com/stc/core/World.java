@@ -7,6 +7,9 @@ import com.badlogic.gdx.*;
 import com.badlogic.gdx.math.*;
 import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.utils.*;
+import com.stc.core.levels.*;
+import java.util.*;
+import com.stc.core.levels.moveables.*;
 
 public class World
 {
@@ -14,6 +17,7 @@ public class World
 	private float scale = 1.0f;
 	private float rotation = 0.0f;
 	private float opacity = 1.0f;
+	private float textOpacity = 1.0f;
 	
 	private ShapeRenderer renderer;
 	private SpriteBatch sb;
@@ -23,6 +27,7 @@ public class World
 	private Interpolator scaleLerp = new Interpolator(1.0f, 1.0f, 0.0f);
 	private Interpolator rotationLerp = new Interpolator(0.0f, 0.0f, 0.0f);
 	private Interpolator opacityLerp = new Interpolator(1.0f, 1.0f, 0.0f);
+	private Interpolator textOpacityLerp = new Interpolator(1.0f, 1.0f, 0.0f);
 	
 	public World() {
 		renderer = Renderer.shapeRenderer();
@@ -47,69 +52,59 @@ public class World
 	public World(float scale, float rotation, float opacity) {
 		this(scale, rotation);
 		this.opacity = opacity;
+		this.textOpacity = opacity;
 	}
 	
 	public void update(float delta) {
 		scaleLerp.update(delta);
 		rotationLerp.update(delta);
 		opacityLerp.update(delta);
+		textOpacityLerp.update(delta);
 		
 		scale = scaleLerp.lerp();
 		rotation = rotationLerp.lerp();
+		rotation = rotation < 0 ? rotation + 360 : rotation;
+		rotation = rotation % 360;
 		opacity = opacityLerp.lerp();
+		textOpacity = textOpacityLerp.lerp();
 	}
 	
-	public void render(Tile[] tiles, int size) {
+	public void render(LevelInstance level) {
 		renderer.begin(ShapeRenderer.ShapeType.Filled);
 		renderer.identity();
-		
-		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * size);
+
+		float scaleFactor = Gdx.graphics.getHeight() / (1.414f * level.getSize());
 		if(Globals.orientation.equals("portrait"))
-			scaleFactor = Gdx.graphics.getWidth() / (1.414f * size);
-		
+			scaleFactor = Gdx.graphics.getWidth() / (1.414f * level.getSize());
+
 		renderer.translate(Gdx.graphics.getWidth()/2, Gdx.graphics.getHeight()/2, 0);
 		renderer.rotate(0,0,1,rotation);
 		renderer.scale(scale*scaleFactor, scale*scaleFactor, 1);
-		renderer.translate(-(float)size/2.0f, -(float)size/2.0f, 0);
+		renderer.translate(-(float)level.getSize()/2.0f, -(float)level.getSize()/2.0f, 0);
 		
-		renderFloor(size);
-		renderShadows(tiles, size);
-		renderTiles(tiles, size);
+		renderFloor(level.getSize());
+		
+		ArrayList<LevelObject> objects = level.getLevelObjects();
+		
+		for(LevelObject o : objects) {
+			o.renderFloor(renderer, opacity);
+		}
+		
+		Vector2 t = new Vector2(Globals.SHADOW_OFFSET, Globals.SHADOW_OFFSET);
+		t.rotate(-rotation);
+		renderer.translate(t.x, t.y, 0.0f);
+		
+		for(LevelObject o : objects) {
+			o.renderShadow(renderer, opacity);
+		}
+		
+		renderer.translate(-t.x, -t.y, 0.0f);
+		
+		for(LevelObject o : objects) {
+			o.renderObject(renderer, opacity);
+		}
 		
 		renderer.end();
-	}
-	
-	public void renderTiles(Tile[] tiles, int size) {
-		Color c;
-		float x = 0, y = 0;
-		for(int i = 0; i < size*size; i++) {
-			x = i % size;
-			y = i / size;
-			switch(tiles[i].getType()) {
-				case EMPTY:
-					break;
-				case WALL:
-					c = new Color(Globals.COLOR_WALL);
-					c.a *= opacity;
-					renderer.setColor(c);
-					renderer.rect(x, y, 1, 1);
-					break;
-				default:
-					break;
-			}
-		}
-	}
-	
-	/*
-	 * Renders moving objects such as sliders and the ball.
-	 * TODO: Make Moveable class to pass in here.
-	 */
-	public void renderMovables() {
-		
-	}
-	
-	public void renderStatic(float x, float y, Tile tile) {
-		
 	}
 	
 	private void renderFloor(int size) {
@@ -123,33 +118,6 @@ public class World
 			y = i / size;
 			renderer.rect(x, y, 1, 1);
 		}
-	}
-	
-	public void renderShadows(Tile[] tiles, int size) {
-		Color shadowColor = new Color(Globals.COLOR_SHADOW);
-		shadowColor.a *= opacity;
-		renderer.setColor(shadowColor);
-		
-		Vector2 t = new Vector2(0.1f, 0.1f);
-		t.rotate(-rotation);
-		renderer.translate(t.x, t.y, 0.0f);
-		
-		float x = 0, y = 0;
-		for(int i = 0; i < size*size; i++) {
-			x = i % size;
-			y = i / size;
-			switch(tiles[i].getType()) {
-				case EMPTY:
-					break;
-				case WALL:
-					renderer.rect(x, y, 1, 1);
-					break;
-				default:
-					break;
-			}
-		}
-		
-		renderer.translate(-t.x, -t.y, 0.0f);
 	}
 	
 	public void drawString(float x, float y, String text, float inRotation) {
@@ -169,8 +137,8 @@ public class World
 		m.translate(x, y * scaleFactor, 0);
 		
 		sb.setTransformMatrix(m);
-		Color c = Globals.COLOR_TEXT.cpy();
-		c.a *= opacity;
+		Color c = new Color(Globals.COLOR_TEXT);
+		c.a *= textOpacity;
 		font.setColor(c);
         font.draw(sb, text, -layout.width/2, layout.height/2.0f, layout.width, Align.center, false);
         sb.end();
@@ -197,20 +165,33 @@ public class World
 		opacityLerp.begin(opacity, target, duration);
 	}
 	
+	public void fadeText(float target, float duration) {
+		textOpacityLerp.begin(textOpacity, target, duration);
+	}
+	
 	public void setupScaleLerp(float from, float to, float duration) {
+		scale = from;
 		scaleLerp.begin(from, to, duration);
 	}
 	
 	public void setupRotationLerp(float from, float to, float duration) {
+		rotation = from;
 		rotationLerp.begin(from, to, duration);
 	}
 	
 	public void setupOpacityLerp(float from, float to, float duration) {
+		opacity = from;
 		opacityLerp.begin(from, to, duration);
+	}
+	
+	public void setupTextOpacityLerp(float from, float to, float duration) {
+		textOpacity = from;
+		textOpacityLerp.begin(from, to, duration);
 	}
 	
 	public void setRotation(float rotation) {
 		this.rotation = rotation;
+		rotationLerp.begin(rotation, rotation, 0);
 	}
 	
 	public float getRotation() {
@@ -219,6 +200,7 @@ public class World
 	
 	public void setScale(float scale) {
 		this.scale = scale;
+		scaleLerp.begin(scale, scale, 0);
 	}
 
 	public float getScale() {
@@ -227,14 +209,24 @@ public class World
 	
 	public void setOpacity(float opacity) {
 		this.opacity = opacity;
+		opacityLerp.begin(opacity, opacity, 0);
 	}
 	
 	public float getOpacity() {
 		return opacity;
 	}
 	
+	public void setTextOpacity(float opacity) {
+		textOpacity = opacity;
+		textOpacityLerp.begin(opacity, opacity, 0);
+	}
+	
+	public float getTextOpacity() {
+		return textOpacity;
+	}
+	
 	public boolean changing() {
-		return scaleLerp.active() || rotationLerp.active() || opacityLerp.active();
+		return scaleLerp.active() || rotationLerp.active() || opacityLerp.active() || textOpacityLerp.active();
 	}
 	
 }

@@ -7,6 +7,7 @@ import com.stc.core.Globals;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.HashSet;
+import com.stc.core.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -29,22 +30,51 @@ public class LevelManager {
 
         // Load all level files in root directory
         FileHandle root = Gdx.files.internal(Globals.LEVEL_DIR);
-        loadDirectory(root);
+        loadDirectory(root, levels);
+		
+		HashMap<String, Level> userLevels = new HashMap<String, Level>();
+		if(Permissions.hasExternalStoragePermission()) {
+			FileHandle user_tmp = Gdx.files.internal(Globals.DIR_LEVEL_TMP);
+			FileHandle ext_root = Gdx.files.external(Globals.DIR_EXT_ROOT + Globals.DIR_LEVEL_TMP);
+			if(!ext_root.exists() && user_tmp.exists()) {
+				user_tmp.copyTo(ext_root);
+			}
+			loadDirectory(ext_root, userLevels);
+		}
+		
+		int numUserLevels = userLevels.size();
+		if(userLevels.size() > 0) {
+			Level[] uls = new Level[numUserLevels];
+			userLevels.values().toArray(uls);
+			for(int i = 0; i < numUserLevels; i++) {
+				if(i != 0)
+					uls[i].setNextLevelName(uls[(i-1) % numUserLevels].getLevelName());
+				if(i != numUserLevels-1)
+					uls[i].setPrevLevelName(uls[(i+1) % numUserLevels].getLevelName());
+			}
+			uls[0].setNextLevelName("Level 1");
+			uls[numUserLevels-1].setPrevLevelName("Level 1");
+			levels.get("Level 1").setPrevLevelName(uls[0].getLevelName());
+			
+			levels.putAll(userLevels);
+		}
+		
         validate();
     }
 
     /*
      * Scans a directory and loads all .lvl files
      */
-    private void loadDirectory(FileHandle directory) {
+    private void loadDirectory(FileHandle directory, HashMap<String, Level> levels) {
         FileHandle[] files = directory.list();
         for (FileHandle f : files) {
             if(f.isDirectory()) {
-                loadDirectory(f); // Recurse
+                loadDirectory(f, levels); // Recurse
             } else {
-                if(!f.extension().equals("lvl"))
-                    continue;
-                loadFile(f);
+				if(f.extension().equals("txt"))
+					loadFile(f, levels, true);
+                else if(f.extension().equals("lvl"))
+                	loadFile(f, levels, false);
             }
         }
     }
@@ -52,8 +82,10 @@ public class LevelManager {
     /*
      * Creates a Level entry in the current level map.
      */
-    private void loadFile(FileHandle file) {
-        levels.put(file.nameWithoutExtension(), new Level(file));
+    private void loadFile(FileHandle file, HashMap<String, Level> levels, boolean oldFormat) {
+		Level l = new Level(file, oldFormat);
+		if(l.isValid())
+        	levels.put(l.getLevelName(), l);
     }
 
     /*
@@ -66,13 +98,13 @@ public class LevelManager {
         ArrayList<Level> correctPrev = new ArrayList<Level>();
         HashSet<String> references = new HashSet<String>();
         for (Level l: levels.values()) {
-            if(!levels.containsKey(l.getNextFileName()))
+            if(!levels.containsKey(l.getNextLevelName()))
                 correctNext.add(l);
-            if(!levels.containsKey(l.getPrevFileName()))
+            if(!levels.containsKey(l.getPrevLevelName()))
                 correctPrev.add(l);
 
-            references.add(l.getNextFileName());
-            references.add(l.getPrevFileName());
+            references.add(l.getNextLevelName());
+            references.add(l.getPrevLevelName());
         }
 
         // Scan for unreferenced files and delete them
