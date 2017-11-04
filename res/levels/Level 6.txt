@@ -7,7 +7,7 @@
 name=Level 6
 next=Level 7.txt
 prev=Level 5.txt
-score=18
+score=14
 message_left=
 message_right=
 locked=false

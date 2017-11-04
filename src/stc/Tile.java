@@ -82,13 +82,16 @@ public class Tile {
                     break;
                 case LOCKED_FINISH:
                     if(m.getTileUnderBall() != this) {
-                        type = Tile.Type.FINISH;
-                        try {
-                            String File = "res/sounds/Open_Lock.wav";
-                            InputStream in = new FileInputStream(File);
-                            AudioStream audioStream = new AudioStream(in);
-                            AudioPlayer.player.start(audioStream);
-                        } catch (Exception e) {
+                        for(Slider s : m.sliders){
+                            if(m.getTileUnderSlider(s) != this){
+                                type = Tile.Type.FINISH;
+                                try {
+                                    String File = "res/sounds/Open_Lock.wav";
+                                    InputStream in = new FileInputStream(File);
+                                    AudioStream audioStream = new AudioStream(in);
+                                    AudioPlayer.player.start(audioStream);
+                                } catch (Exception e){}
+                            }
                         }
                     }
                     m.recalcAll();
@@ -127,7 +130,7 @@ public class Tile {
                     return hasSlider(m) != null;
                 }
             case LOCKED_FINISH:
-                return false;
+                return hasSlider(m) != null;
             default:
                 return hasSlider(m) != null;
         }
@@ -158,7 +161,7 @@ public class Tile {
         cross2 = stripe.transform(Transform.createTranslateTransform(-(x+size*0.1f), -(y+size*0.35f))).transform(Transform.createRotateTransform(-(float)Math.PI/4)).transform(Transform.createTranslateTransform(x+size*0.5f, y+size*0.5f));
 
         Shape railStripe = rect.transform(Transform.createScaleTransform(0.2f, 1f));
-        railStripe = railStripe.transform(Transform.createTranslateTransform(((float)size*0.6f)+1, 0));
+        railStripe = railStripe.transform(Transform.createTranslateTransform(((float)size*0.55f), 0));
 
         //Switch rect
         Rectangle swrect = new Rectangle(x+(size*0.2f), y+(size*0.2f), size*0.6f, size*0.6f);
