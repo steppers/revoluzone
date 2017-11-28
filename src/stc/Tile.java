@@ -9,6 +9,8 @@ import org.newdawn.slick.geom.Transform;
 
 import java.util.ArrayList;
 import java.io.*;
+
+import org.newdawn.slick.util.Log;
 import sun.audio.*;
 /**
  * Created by steppers on 2/12/17.
@@ -82,15 +84,27 @@ public class Tile {
                     break;
                 case LOCKED_FINISH:
                     if(m.getTileUnderBall() != this) {
-                        for(Slider s : m.sliders){
-                            if(m.getTileUnderSlider(s) != this){
-                                type = Tile.Type.FINISH;
-                                try {
-                                    String File = "res/sounds/Open_Lock.wav";
-                                    InputStream in = new FileInputStream(File);
-                                    AudioStream audioStream = new AudioStream(in);
-                                    AudioPlayer.player.start(audioStream);
-                                } catch (Exception e){}
+                        if(m.sliders.size() != 0) {
+                            for (Slider s : m.sliders) {
+                                if (m.getTileUnderSlider(s) != this) {
+                                    type = Tile.Type.FINISH;
+                                    try {
+                                        String File = "res/sounds/Open_Lock.wav";
+                                        InputStream in = new FileInputStream(File);
+                                        AudioStream audioStream = new AudioStream(in);
+                                        AudioPlayer.player.start(audioStream);
+                                    } catch (Exception e) {
+                                    }
+                                }
+                            }
+                        }else{
+                            type = Tile.Type.FINISH;
+                            try {
+                                String File = "res/sounds/Open_Lock.wav";
+                                InputStream in = new FileInputStream(File);
+                                AudioStream audioStream = new AudioStream(in);
+                                AudioPlayer.player.start(audioStream);
+                            } catch (Exception e) {
                             }
                         }
                     }

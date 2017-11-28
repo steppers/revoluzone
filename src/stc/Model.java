@@ -168,6 +168,7 @@ public class Model extends Renderable {
         }
         rotation = 0;
         score = 0;
+        recalcAll();
     }
 
     public void toggleRedBlue() {
@@ -943,6 +944,7 @@ public class Model extends Renderable {
 
     public void resize(int newSize) {
         Tile[][] newTiles = new Tile[newSize+2][newSize+2];
+        editableTiles = new Tile[newSize+2][newSize+2];
         int newGridSize = newSize+2;
 
         for(int x = 0; x < newSize+2; x++) {

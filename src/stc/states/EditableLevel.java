@@ -94,7 +94,11 @@ public class EditableLevel {
 
         for (int i = 0; i < toolbarOrder.size(); i++) {
             tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[toolbarOrder.get(i)]);
-            tmpLabel.anchor.set(0.17f, 0.155f + 0.062f * i);
+            if(m.remainingTileNumber[toolbarOrder.get(i)] != 0) {
+                tmpLabel.anchor.set(0.17f + 0.009f * (int) (Math.log10(m.remainingTileNumber[toolbarOrder.get(i)])), 0.155f + 0.062f * i);
+            }else{
+                tmpLabel.anchor.set(0.17f + 0.009f, 0.155f + 0.062f * i);
+            }
             staticUI.add(tmpLabel.clone());
         }
 
@@ -131,6 +135,11 @@ public class EditableLevel {
             if(toolbarOrder.contains(i)){
                 UILabel tmpLabel = (UILabel)staticUI.get(3 + toolbarOrder.indexOf(i));
                 tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[i]);
+                if(m.remainingTileNumber[i] != 0) {
+                    tmpLabel.anchor.set(0.17f + 0.009f * (int) (Math.log10(m.remainingTileNumber[i])), 0.155f + 0.062f * toolbarOrder.indexOf(i));
+                }else{
+                    tmpLabel.anchor.set(0.17f, 0.155f + 0.062f * toolbarOrder.indexOf(i));
+                }
                 staticUI.set(3 + toolbarOrder.indexOf(i), tmpLabel);
             }
         }
@@ -176,7 +185,7 @@ public class EditableLevel {
                         && m.tileCount(m.tiles)[drawTileType.ordinal()] < m.allowedTileNumber[drawTileType.ordinal()]
                         && m.editableTiles[t.x][t.y] != null) {
 
-                    if (drawTileType == Tile.Type.RAIL && m.tileCount(m.tiles)[Tile.Type.RAIL.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.RAIL.ordinal()]) {
+                    if (drawTileType == Tile.Type.RAIL && m.tileCount(m.tiles)[Tile.Type.RAIL.ordinal()] < m.allowedTileNumber[Tile.Type.RAIL.ordinal()]) {
                             t.isRail = true;
                         } else {
                             if (drawTileType != Tile.Type.SLIDER) {
@@ -187,7 +196,7 @@ public class EditableLevel {
                                     t.reset(m.redEnabled);
                                 }
 
-                            } else if(m.tileCount(m.tiles)[Tile.Type.SLIDER.ordinal()] < m.allowedPlacedTileNumber[Tile.Type.SLIDER.ordinal()]){
+                            } else if(m.tileCount(m.tiles)[Tile.Type.SLIDER.ordinal()] < m.allowedTileNumber[Tile.Type.SLIDER.ordinal()]){
                                 boolean add = true;
                                 for(Slider s : m.sliders) {
                                     if(s.resetX == t.x && s.resetY == t.y)
