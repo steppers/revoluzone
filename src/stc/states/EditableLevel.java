@@ -181,7 +181,7 @@ public class EditableLevel {
                         /*&& (t.type == Tile.Type.EMPTY || drawTileType == Tile.Type.EMPTY)*/
                         && t.x != 0 && t.x != m.gridSize-1 && t.y != 0 && t.y != m.gridSize-1
                         && t != m.getTileUnderBall()
-                        && t.hasSlider(m) == null
+                        && (t.hasSlider(m) == null || (m.editableTiles[(int)t.hasSlider(m).resetX][(int)t.hasSlider(m).resetY] != null))
                         && m.tileCount(m.tiles)[drawTileType.ordinal()] < m.allowedTileNumber[drawTileType.ordinal()]
                         && m.editableTiles[t.x][t.y] != null) {
 
@@ -190,6 +190,10 @@ public class EditableLevel {
                         } else {
                             if (drawTileType != Tile.Type.SLIDER) {
                                 t.isRail = false;
+                                Slider s;
+                                if((s = t.hasSlider(m)) != null) {
+                                    m.sliders.remove(s);
+                                }
                                 t.type = drawTileType;
                                 t.resetType = drawTileType;
                                 if(drawTileType == Tile.Type.RED || drawTileType == Tile.Type.BLUE) {
