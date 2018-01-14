@@ -1,9 +1,9 @@
 {0,0,0,0,0,0}
-{1,0,1,1,1,0}
+{0,0,1,1,1,0}
 {0,0,1,6,1,0}
 {0,0,1,1,1,0}
 {0,0,0,0,0,0}
-{5,0,0,0,0,0}
+{0,0,0,0,0,5}
 name=Level 28
 next=Level 29.txt
 prev=Level 27.txt
@@ -19,4 +19,5 @@ editable tiles=5,3->5,3
 editable tiles=3,4->3,4
 editable tiles=4,4->4,4
 editable tiles=5,4->5,4
+editable tiles=1,1->1,6
 locked=false

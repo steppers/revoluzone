@@ -57,7 +57,6 @@ public class Credits {
         rotatingUI.add(tmpLabel.clone());
         tmpLabel.text = names[3];
         tmpLabel.rotation = 90f;
-        tmpLabel.offset.set(0f, -0.5f);
         rotatingUI.add(tmpLabel.clone());
     }
 
