@@ -39,6 +39,7 @@ public class Model extends Renderable {
     public boolean redEnabled = true;
     public boolean renderStart = false;
     public boolean editable = false;
+    public boolean linkable = false;
     public boolean locked = false;
     public int[] allowedTileNumber = new int[Tile.Type.values().length];
     public int[] initTileCount = new int[Tile.Type.values().length];

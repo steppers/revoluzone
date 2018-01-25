@@ -74,7 +74,7 @@ public class PlayLevel {
 
     public void update(GameContainer gc) {
         m = gs.m;
-        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE) || escaping) {
+        if(gc.getInput().isKeyDown(Input.KEY_ESCAPE)|| escaping) {
             escaping = true;
             if(!loadedNew && m.score != 0) {
                 loadedNew = true;
@@ -106,7 +106,7 @@ public class PlayLevel {
             m.reset();
             m.recalcAll();
         }
-        if(m.hasCompleted()) {
+        if(m.hasCompleted() && !escaping) {
             if(m.score < Integer.parseInt(m.getProperty("score"))) {
                 m.setProperty("score", String.valueOf(m.score)); //Could be saved to file too
             }

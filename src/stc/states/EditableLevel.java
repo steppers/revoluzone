@@ -77,20 +77,6 @@ public class EditableLevel {
         //Static UI
         staticUI = new ArrayList<>();
         UILabel tmpLabel = new UILabel(gc);
-        tmpLabel.text = "Left click:\nSelect Tile / \nPlace Tile";
-        tmpLabel.scale = m.getScale() / 0.6f;
-        tmpLabel.color = new Color(Color.green).darker(0.4f);
-        tmpLabel.anchor.set(1.0f, 0.0833333f);
-        tmpLabel.offset.set(-0.1f, 0.0f);
-        staticUI.add(tmpLabel.clone());
-
-        tmpLabel.text = "Right click:\nStart Link";
-        tmpLabel.anchor.set(1.0f, 0.25f);
-        staticUI.add(tmpLabel.clone());
-
-        tmpLabel.text = "Middle click:\nRemove links";
-        tmpLabel.anchor.set(1.0f, 0.4166666f);
-        staticUI.add(tmpLabel.clone());
 
         for (int i = 0; i < toolbarOrder.size(); i++) {
             tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[toolbarOrder.get(i)]);
@@ -99,6 +85,23 @@ public class EditableLevel {
             }else{
                 tmpLabel.anchor.set(0.17f + 0.009f, 0.155f + 0.062f * i);
             }
+            staticUI.add(tmpLabel.clone());
+        }
+
+        if(m.linkable) {
+            tmpLabel.text = "Left click:\nSelect Tile / \nPlace Tile";
+            tmpLabel.scale = m.getScale() / 0.6f;
+            tmpLabel.color = new Color(Color.green).darker(0.4f);
+            tmpLabel.anchor.set(1.0f, 0.0833333f);
+            tmpLabel.offset.set(-0.1f, 0.0f);
+            staticUI.add(tmpLabel.clone());
+
+            tmpLabel.text = "Right click:\nStart Link";
+            tmpLabel.anchor.set(1.0f, 0.25f);
+            staticUI.add(tmpLabel.clone());
+
+            tmpLabel.text = "Middle click:\nRemove links";
+            tmpLabel.anchor.set(1.0f, 0.4166666f);
             staticUI.add(tmpLabel.clone());
         }
 
@@ -133,14 +136,14 @@ public class EditableLevel {
         for(int i = 0; i < Tile.Type.values().length; i++) {
             m.remainingTileNumber[i] = m.allowedTileNumber[i] - m.tileCount(m.tiles)[i];
             if(toolbarOrder.contains(i)){
-                UILabel tmpLabel = (UILabel)staticUI.get(3 + toolbarOrder.indexOf(i));
+                UILabel tmpLabel = (UILabel) staticUI.get(toolbarOrder.indexOf(i));
                 tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[i]);
                 if(m.remainingTileNumber[i] != 0) {
                     tmpLabel.anchor.set(0.17f + 0.009f * (int) (Math.log10(m.remainingTileNumber[i])), 0.155f + 0.062f * toolbarOrder.indexOf(i));
                 }else{
                     tmpLabel.anchor.set(0.17f, 0.155f + 0.062f * toolbarOrder.indexOf(i));
                 }
-                staticUI.set(3 + toolbarOrder.indexOf(i), tmpLabel);
+                staticUI.set(toolbarOrder.indexOf(i), tmpLabel);
             }
         }
         m = gs.m;
@@ -229,7 +232,7 @@ public class EditableLevel {
             }
 
             //Detect link start
-            if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON)) {
+            if(gc.getInput().isMousePressed(Input.MOUSE_RIGHT_BUTTON) && m.linkable) {
                 Vector2f p = gs.getMouseTilePos(gc);
                 if(p != null) {
                     if (p.x < m.gridSize - 1 && p.y < m.gridSize - 1 && p.x > 0 && p.y > 0) {
