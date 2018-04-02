@@ -16,7 +16,8 @@ public class TransitionManager {
         GROW_FADE,
         SHRINK,
         ROTATE_CW,
-        ROTATE_CCW
+        ROTATE_CCW,
+        INTRO
     }
 
     private Model from;
@@ -113,6 +114,19 @@ public class TransitionManager {
         transitionSpeed = 90f / duration;
     }
 
+    public void transitionIntro(){
+        toState = GameState.State.MENU;
+        this.to = slickState.m;
+        this.from = slickState.m;
+        to.setOpacity(0);
+
+        this.type = Type.INTRO;
+        transitioning = true;
+        slickState.previousState = slickState.currentState;
+        slickState.currentState = GameState.State.TRANSITION;
+        transitionSpeed = 1f;
+    }
+
     public void update(float delta) {
         if(transitioning) {
             switch(type) {
@@ -180,6 +194,14 @@ public class TransitionManager {
                         to.recalcAll();
                     }
                     break;
+                case INTRO:
+                    slickState.splashScreen.setOpacity(slickState.splashScreen.getOpacity() - transitionSpeed*delta);
+                    to.setOpacity(to.getOpacity() + transitionSpeed*delta);
+                    if(to.getOpacity() > 1) {
+                        transitioning = false;
+                        to.setOpacity(1);
+                    }
+                    break;
                 default:
                     break;
             }
@@ -190,6 +212,9 @@ public class TransitionManager {
         if(type == Type.FADE_ROTATE_CCW || type == Type.FADE_ROTATE_CW) {
             to.render(gc, g);
             from.render(gc, g);
+        } else if(type == Type.INTRO){
+            to.render(gc, g);
+            slickState.splashScreen.render(gc, g);
         } else {
             from.render(gc, g);
             if (to != from) {

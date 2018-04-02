@@ -25,14 +25,16 @@ public class GameState extends BasicGameState {
         TRANSITION,
         EDITOR,
         QUIT,
-        EDITABLE_LEVEL
+        EDITABLE_LEVEL,
+        SPLASH_SCREEN
     }
 
     public Model m;
     public TransitionManager tm;
+    public SplashScreen splashScreen;
     private GameContainer gc;
-    public State currentState = State.MENU;
-    public State previousState = State.MENU;
+    public State currentState = State.SPLASH_SCREEN;
+    public State previousState = State.SPLASH_SCREEN;
     private Background background;
 
     //State stuff
@@ -59,6 +61,7 @@ public class GameState extends BasicGameState {
         background = new Background(gc);
         this.gc = gc;
 
+        splashScreen = new SplashScreen(tm);
         editor = new Editor(this, tm, gc);
         menu = new Menu(this, tm, gc);
         credits = new Credits(this, tm, gc);
@@ -107,6 +110,9 @@ public class GameState extends BasicGameState {
                 break;
             case CREDITS:
                 credits.render(gc, g);
+                break;
+            case SPLASH_SCREEN:
+                splashScreen.render(gc, g);
                 break;
             case QUIT:
                 gc.exit();
@@ -187,6 +193,9 @@ public class GameState extends BasicGameState {
                         break;
                     case CREDITS:
                         credits.update(gc);
+                        break;
+                    case SPLASH_SCREEN:
+                        splashScreen.update(delta);
                         break;
                     case QUIT:
                         System.exit(0);
