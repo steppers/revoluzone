@@ -7,7 +7,7 @@
 {4,0,0,0,0,0,0,4}
 {4,4,4,4,4,4,4,4}
 name=Level 33
-next=Level 1.txt
+next=namehere.txt
 prev=Level 32.txt
 score=8
 message_left=
