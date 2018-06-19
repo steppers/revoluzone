@@ -1,23 +1,29 @@
-{0,0,0,0,0,0}
-{0,0,1,1,1,0}
-{0,0,1,6,1,0}
-{0,0,1,1,1,0}
-{0,0,0,0,0,0}
-{0,0,0,0,0,5}
+{0,0,0,0,0,0,0}
+{0,0,2,0,0,0,0}
+{1,0,0,0,0,3,0}
+{0,0,0,0,0,0,0}
+{0,0,0,0,6,0,0}
+{0,0,0,0,0,0,0}
+{5,2,0,0,0,0,0}
 name=Level 28
 next=Level 29.txt
 prev=Level 27.txt
-score=3
+score=8
 message_left=
 message_right=
-placeable tiles=0,1;1,1
-editable tiles=3,2->3,2
+placeable tiles=0,1;3,1
+editable tiles=2,2->2,2
 editable tiles=4,2->4,2
 editable tiles=5,2->5,2
+editable tiles=2,3->2,3
 editable tiles=3,3->3,3
+editable tiles=4,3->4,3
 editable tiles=5,3->5,3
+editable tiles=2,4->2,4
 editable tiles=3,4->3,4
 editable tiles=4,4->4,4
 editable tiles=5,4->5,4
-editable tiles=1,1->1,6
+editable tiles=2,5->2,5
+editable tiles=3,5->3,5
+editable tiles=4,5->4,5
 locked=false

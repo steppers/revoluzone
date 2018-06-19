@@ -231,9 +231,9 @@ public class Tile {
                 g.fill(cicleSwitch);
                 break;
             case TELEPORT:
-                g.setColor(Color.orange.darker());
+                g.setColor(Color.orange.darker().multiply(new Color(1,1,1,opacity)));
                 g.fill(circleLarge);
-                g.setColor(Color.orange);
+                g.setColor(Color.orange.multiply(new Color(1,1,1,opacity)));
                 g.fill(circleSmall);
                 break;
             case LOCKED_FINISH:
@@ -249,7 +249,7 @@ public class Tile {
                 g.fill(railStripe);
                 break;
             case SLIDER:
-                g.setColor(Color.magenta.multiply(new Color(0.9f,0.9f,0.9f,1.0f)));
+                g.setColor(Color.magenta.multiply(new Color(0.9f,0.9f,0.9f,opacity)));
                 g.fill(rect);
                 break;
             default:

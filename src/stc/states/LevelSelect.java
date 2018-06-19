@@ -31,12 +31,12 @@ public class LevelSelect {
 
         //Static UI
         staticUI = new ArrayList<>();
-        UILabel tmpLabel = new UILabel(gc);
+        /*UILabel tmpLabel = new UILabel(gc);
         tmpLabel.text = "Arrow keys to choose level\nEnter to play, Esc to go back";
         tmpLabel.anchor.set(0.5f, 0.5f);
         tmpLabel.offset.set(0f, 0.7f);
         tmpLabel.color = Color.green.darker(0.4f);
-        staticUI.add(tmpLabel.clone());
+        staticUI.add(tmpLabel.clone());*/
 
         //Rotating UI
         rotatingUI = new ArrayList<>();
