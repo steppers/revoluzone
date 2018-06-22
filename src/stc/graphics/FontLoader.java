@@ -52,7 +52,7 @@ public class FontLoader {
 
     public static void loadFont(GameContainer gc) {
 
-            fontSize = 24f;
+            fontSize = 48f;
 
         try {
 
