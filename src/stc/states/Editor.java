@@ -160,7 +160,7 @@ public class Editor {
             for(UIRenderable r : rotatingUI) {
                 r.update();
             }
-            if(gc.getInput().isKeyPressed(Input.KEY_R) && !((UITextInput)staticUI.get(4)).acceptingInput()) {
+            if(gc.getInput().isKeyPressed(Input.KEY_R)/* && !((UITextInput)staticUI.get(4)).acceptingInput()*/) {
                 m.reset();
                 m.recalcAll();
             }

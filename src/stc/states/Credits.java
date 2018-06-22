@@ -24,7 +24,7 @@ public class Credits {
     private ArrayList<UIRenderable> rotatingUI;
     private ArrayList<UIRenderable> staticUI;
 
-    private String[] names = {"Oliver Steptoe", "Alistair Brewin", "Anton Nikitin", "Daniel Bradley", "Many thanks to Southampton Game Jam 2017"};
+    private String[] names = {"Oliver Steptoe", "Alistair Brewin", "Anton Nikitin", "Vivienne Bradley", "Many thanks to Southampton Game Jam 2017"};
 
     public Credits(GameState gameState, TransitionManager tm, GameContainer gc) {
         gs = gameState;

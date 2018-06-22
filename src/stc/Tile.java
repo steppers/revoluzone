@@ -83,7 +83,22 @@ public class Tile {
                     active = true;
                     break;
                 case LOCKED_FINISH:
-                    if(m.getTileUnderBall() != this) {
+                    for(int x = 0; x < m.gridSize; x++){
+                        for(int y = 0; y < m.gridSize; y++){
+                            if(m.tiles[x][y].type == Type.SWITCH && m.tiles[x][y].active && m.tiles[x][y].links.contains(this)){
+                                type = Tile.Type.FINISH;
+                                try {
+                                    String File = "res/sounds/Open_Lock.wav";
+                                    InputStream in = new FileInputStream(File);
+                                    AudioStream audioStream = new AudioStream(in);
+                                    AudioPlayer.player.start(audioStream);
+                                } catch (Exception e) {
+                                }
+                                break;
+                            }
+                        }
+                    }
+                    /*if(m.getTileUnderBall() != this) {
                         if(m.sliders.size() != 0) {
                             for (Slider s : m.sliders) {
                                 if (m.getTileUnderSlider(s) != this) {
@@ -107,7 +122,7 @@ public class Tile {
                             } catch (Exception e) {
                             }
                         }
-                    }
+                    }*/
                     m.recalcAll();
                     break;
                 case TELEPORT:
