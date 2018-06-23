@@ -225,7 +225,8 @@ public class Model extends Renderable {
             case 0:
                 for(y = y+1; y < gridSize; y++) {
                     if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)ball.y + 1)) {
-                        ball.move(x, y-1);
+                        ball.destX = x;
+                        ball.destY = y - 1;
                         return;
                     }
                 }
@@ -233,7 +234,8 @@ public class Model extends Renderable {
             case 90:
                 for(x = x+1; x < gridSize; x++) {
                     if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)ball.x + 1)) {
-                        ball.move(x-1, y);
+                        ball.destX = x - 1;
+                        ball.destY = y;
                         return;
                     }
                 }
@@ -241,7 +243,8 @@ public class Model extends Renderable {
             case 180:
                 for(y = y-1; y >= 0; y--) {
                     if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)ball.y - 1)) {
-                        ball.move(x, y+1);
+                        ball.destX = x;
+                        ball.destY = y + 1;
                         return;
                     }
                 }
@@ -249,7 +252,8 @@ public class Model extends Renderable {
             case 270:
                 for(x = x-1; x >= 0; x--) {
                     if(tiles[x][y].isSolid(this) || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)ball.x - 1)) {
-                        ball.move(x+1, y);
+                        ball.destX = x + 1;
+                        ball.destY = y;
                         return;
                     }
                 }
@@ -258,15 +262,19 @@ public class Model extends Renderable {
     }
 
     public void recalcAll() {
-        recalcBall();
-        for (int i = 0; i < sliders.size(); i++) {
-            recalcSlider(sliders.get(i));
+
+        for(int j = 0; j < sliders.size() + 1; j++) {
+            recalcBall();
+            for (int i = 0; i < sliders.size(); i++) {
+                recalcSlider(sliders.get(i));
+            }
         }
-        //Calculate in reverse as well in case we miss one that can move
-        for (int i = sliders.size()-1; i >= 0; i--) {
-            recalcSlider(sliders.get(i));
+
+        ball.move((int)ball.destX, (int)ball.destY);
+        for(Slider s:sliders) {
+            s.move((int) s.destX, (int) s.destY);
         }
-        recalcBall();
+
     }
 
     public void recalcSlider(Slider s) {
@@ -285,7 +293,8 @@ public class Model extends Renderable {
                             || !tiles[x][y].isRail
                             || (ball.destX == x && ball.destY == y)
                             || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)s.y + 1 && tiles[x][y].isRail)) {
-                        s.move(x, y - 1);
+                        s.destX = x;
+                        s.destY = y - 1;
                         break;
                     }
                 }
@@ -296,7 +305,8 @@ public class Model extends Renderable {
                             || !tiles[x][y].isRail
                             || (ball.destX == x && ball.destY == y)
                             || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)s.x + 1 && tiles[x][y].isRail)) {
-                        s.move(x - 1, y);
+                        s.destX = x - 1;
+                        s.destY = y;
                         break;
                     }
                 }
@@ -307,7 +317,8 @@ public class Model extends Renderable {
                             || !tiles[x][y].isRail
                             || (ball.destX == x && ball.destY == y)
                             || (tiles[x][y].type == Tile.Type.TELEPORT && y != (int)s.y - 1 && tiles[x][y].isRail)) {
-                        s.move(x, y + 1);
+                        s.destX = x;
+                        s.destY = y + 1;
                         break;
                     }
                 }
@@ -318,7 +329,8 @@ public class Model extends Renderable {
                             || !tiles[x][y].isRail
                             || (ball.destX == x && ball.destY == y)
                             || (tiles[x][y].type == Tile.Type.TELEPORT && x != (int)s.x - 1 && tiles[x][y].isRail)) {
-                        s.move(x + 1, y);
+                        s.destX = x + 1;
+                        s.destY = y;
                         break;
                     }
                 }
