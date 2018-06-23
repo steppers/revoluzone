@@ -24,7 +24,6 @@ editable tiles=6,1->6,1
 editable tiles=7,1->7,1
 editable tiles=8,1->8,1
 rail=9,1->9,1
-editable tiles=9,1->9,1
 editable tiles=1,2->1,2
 editable tiles=2,2->2,2
 editable tiles=3,2->3,2
