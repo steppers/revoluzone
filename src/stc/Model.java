@@ -263,7 +263,7 @@ public class Model extends Renderable {
 
     public void recalcAll() {
 
-        for(int j = 0; j < sliders.size() + 1; j++) {
+        for(int j = 0; j < gridSize; j++) {
             recalcBall();
             for (int i = 0; i < sliders.size(); i++) {
                 recalcSlider(sliders.get(i));

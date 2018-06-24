@@ -81,9 +81,9 @@ public class EditableLevel {
         for (int i = 0; i < toolbarOrder.size(); i++) {
             tmpLabel.text = "x " + Integer.toString(m.remainingTileNumber[toolbarOrder.get(i)]);
             if(m.remainingTileNumber[toolbarOrder.get(i)] != 0) {
-                tmpLabel.anchor.set(0.17f + 0.009f * (int) (Math.log10(m.remainingTileNumber[toolbarOrder.get(i)])), 0.155f + 0.063f * i);
+                tmpLabel.anchor.set(0.09f + 0.009f * (int) (Math.log10(m.remainingTileNumber[toolbarOrder.get(i)])), 0.155f + 0.063f * i);
             }else{
-                tmpLabel.anchor.set(0.17f + 0.009f, 0.155f + 0.063f * i);
+                tmpLabel.anchor.set(0.09f + 0.009f, 0.155f + 0.063f * i);
             }
             staticUI.add(tmpLabel.clone());
         }
