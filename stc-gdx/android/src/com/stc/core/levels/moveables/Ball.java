@@ -8,7 +8,7 @@ public class Ball extends Moveable
 {
 	
 	public Ball(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.BALL);
 	}
 	
 	@Override

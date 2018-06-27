@@ -6,6 +6,8 @@ public abstract class LevelObject
 {
 	protected LevelInstance level;
 	
+	protected LO_TYPE type;
+	
 	public float x, y;
 	protected boolean solid = false;
 	protected boolean activator = false;
@@ -14,11 +16,13 @@ public abstract class LevelObject
 	
 	protected ArrayList<LevelObject> links;
 	
-	public LevelObject(float x, float y) {
+	public LevelObject(float x, float y, LO_TYPE type) {
 		this.x = x;
 		this.y = y;
 		level = null;
 		links = new ArrayList<LevelObject>();
+		this.type = type;
+		solid = type.isSolid();
 	}
 	
 	public abstract void update(float delta);
@@ -63,6 +67,10 @@ public abstract class LevelObject
 	
 	public void addLink(LevelObject linkTarget) {
 		links.add(linkTarget);
+	}
+	
+	public LO_TYPE getType() {
+		return type;
 	}
 	
 }

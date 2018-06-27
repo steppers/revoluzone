@@ -11,7 +11,7 @@ public class Rail extends LevelObject
 {
 
 	public Rail(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.RAIL);
 	}
 
 	@Override

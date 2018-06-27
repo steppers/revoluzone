@@ -8,7 +8,7 @@ public class StartPad extends LevelObject
 {
 	
 	public StartPad(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.START);
 	}
 	
 	@Override

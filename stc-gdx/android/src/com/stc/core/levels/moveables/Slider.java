@@ -9,7 +9,7 @@ public class Slider extends Moveable
 {
 
 	public Slider(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.SLIDER);
 	}
 
 	@Override
@@ -32,7 +32,7 @@ public class Slider extends Moveable
 	
 	@Override
 	public boolean canMoveTo(int x, int y, LevelInstance level) {
-		return (level.getStaticAt(x, y) instanceof Rail);
+		return level.getStaticOfTypeAt(x, y, LO_TYPE.RAIL) != null;
 	}
 
 }

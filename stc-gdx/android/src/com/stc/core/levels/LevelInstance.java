@@ -183,20 +183,38 @@ public class LevelInstance
 		}
 	}
 	
-	public LevelObject getStaticAt(int x, int y) {
+	public LevelObject getStaticOfTypeAt(int x, int y, LO_TYPE type) {
 		for(LevelObject s : statics) {
-			if(s.isOver(x, y))
+			if(s.isOver(x, y) && s.getType() == type)
 				return s;
 		}
 		return null;
 	}
 	
-	public Moveable getMoveableAt(int x, int y) {
+	public ArrayList<LevelObject> getStaticsAt(int x, int y) {
+		ArrayList<LevelObject> objs = new ArrayList<>();
+		for(LevelObject s : statics) {
+			if(s.isOver(x, y))
+				objs.add(s);
+		}
+		return objs;
+	}
+	
+	public Moveable getMoveableOfTypeAt(int x, int y, LO_TYPE type) {
 		for(Moveable m : moveables) {
-			if(m.isOver(x, y))
+			if(m.isOver(x, y) && m.getType() == type)
 				return m;
 		}
 		return null;
+	}
+	
+	public ArrayList<Moveable> getMoveablesAt(int x, int y) {
+		ArrayList<Moveable> objs = new ArrayList<>();
+		for(Moveable m : moveables) {
+			if(m.isOver(x, y))
+				objs.add(m);
+		}
+		return objs;
 	}
 	
 	public Tile getTileAt(int x, int y) {
@@ -208,30 +226,30 @@ public class LevelInstance
 	}
 	
 	private void resetRedBlue() {
-		TileType type;
+		LO_TYPE type;
 		for(Tile t : tiles) {
 			type = t.getType();
-			if(type == TileType.BLUE || type == TileType.RED) {
-				t.setActive(type == TileType.BLUE ? true : false, null);
+			if(type == LO_TYPE.BLUE || type == LO_TYPE.RED) {
+				t.setActive(type == LO_TYPE.BLUE ? true : false, null);
 			}
 		}
 	}
 	
 	public void toggleRedBlue() {
-		TileType active = TileType.EMPTY;
-		TileType type;
+		LO_TYPE active = LO_TYPE.EMPTY;
+		LO_TYPE type;
 		
 		ArrayList<Tile> activate = new ArrayList<Tile>();
 		ArrayList<Tile> deactivate = new ArrayList<Tile>();
 		for(Tile t : tiles) {
 			type = t.getType();
-			if(type == TileType.RED && active == TileType.EMPTY) {
-				active = t.isActive() ? TileType.BLUE : TileType.RED;
+			if(type == LO_TYPE.RED && active == LO_TYPE.EMPTY) {
+				active = t.isActive() ? LO_TYPE.BLUE : LO_TYPE.RED;
 			}
-			if(type == TileType.BLUE && active == TileType.EMPTY) {
-				active = t.isActive() ? TileType.RED : TileType.BLUE;
+			if(type == LO_TYPE.BLUE && active == LO_TYPE.EMPTY) {
+				active = t.isActive() ? LO_TYPE.RED : LO_TYPE.BLUE;
 			}
-			if(type == TileType.BLUE || type == TileType.RED) {
+			if(type == LO_TYPE.BLUE || type == LO_TYPE.RED) {
 				for(Moveable m : moveables) {
 					if(m.isOver(t.x, t.y))
 						return;
@@ -299,8 +317,7 @@ public class LevelInstance
 	public int getBallCount() {
 		int c = 0;
 		for(Moveable m : moveables) {
-			// I know this isn't very nice...
-			if(m instanceof Ball)
+			if(m.getType() == LO_TYPE.BALL)
 				c++;
 		}
 		return c;

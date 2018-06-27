@@ -188,7 +188,7 @@ public class Level {
 			}
 			else if(line.startsWith("slider")) {
 				x = Integer.parseInt(line.split("=")[1].split(",")[0]);
-				y = Integer.parseInt(line.split("=")[1].split(",")[1]);
+				y = this.size - 1 - Integer.parseInt(line.split("=")[1].split(",")[1]);
 				sliders.add(new Vector2(x, y));
 			}
 			else if(line.startsWith("link")) {
@@ -222,10 +222,10 @@ public class Level {
 			y = size - 1 - (i / size);
 			index = y*size + x;
 			
-			tiles[index] = new Tile(x, y, TileType.EMPTY); // Default
+			tiles[index] = new Tile(x, y, LO_TYPE.EMPTY); // Default
 			switch(id) {
 				case 1:
-					tiles[index] = new Tile(x, y, TileType.WALL);
+					tiles[index] = new Tile(x, y, LO_TYPE.WALL);
 					break;
 				case 5:
 					instance.addMoveable(new Ball(x, y));
@@ -235,10 +235,10 @@ public class Level {
 					instance.addStatic(new FinishHole(x, y));
 					break;
 				case 2:
-					tiles[index] = new Tile(x, y, TileType.RED);
+					tiles[index] = new Tile(x, y, LO_TYPE.RED);
 					break;
 				case 3:
-					tiles[index] = new Tile(x, y, TileType.BLUE);
+					tiles[index] = new Tile(x, y, LO_TYPE.BLUE);
 					break;
 				case 7:
 					instance.addStatic(new Switch(x, y));
@@ -257,7 +257,9 @@ public class Level {
 		}
 		
 		for(Link l : links) {
-			instance.getStaticAt(l.sx, l.sy).addLink(instance.getStaticAt(l.tx, l.ty));
+			for(LevelObject lo : instance.getStaticsAt(l.sx, l.sy))
+				for(LevelObject lo2 : instance.getStaticsAt(l.tx, l.ty))
+					lo.addLink(lo2);
 		}
 		
 		if(rails != null) {

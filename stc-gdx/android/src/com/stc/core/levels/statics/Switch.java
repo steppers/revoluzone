@@ -12,7 +12,7 @@ public class Switch extends LevelObject
 	LevelObject trigger;
 
 	public Switch(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.SWITCH);
 	}
 
 	@Override

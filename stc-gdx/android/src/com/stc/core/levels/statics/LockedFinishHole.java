@@ -9,7 +9,7 @@ public class LockedFinishHole extends LevelObject
 {
 
 	public LockedFinishHole(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.LOCKED_FINISH);
 		active = false;
 		solid = true;
 	}
@@ -38,7 +38,7 @@ public class LockedFinishHole extends LevelObject
 
 	@Override
 	protected void onActivate(LevelObject activator){
-		if(activator instanceof Ball) {
+		if(activator.getType() == LO_TYPE.BALL) {
 			level.removeMoveable((Moveable)activator);
 			level.refreshUpdate();
 			if(level.getBallCount() == 0)

@@ -11,7 +11,7 @@ public class KillZone extends LevelObject
 {
 
 	public KillZone(int x, int y) {
-		super(x, y);
+		super(x, y, LO_TYPE.KILLZONE);
 	}
 
 	@Override

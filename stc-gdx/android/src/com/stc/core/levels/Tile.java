@@ -6,21 +6,14 @@ import com.stc.core.levels.moveables.*;
 
 public class Tile extends LevelObject
 {
-	private TileType type;
-	
-	public Tile(int x, int y, TileType type) {
-		super(x, y);
-		this.type = type;
-	}
-	
-	public TileType getType() {
-		return type;
+	public Tile(int x, int y, LO_TYPE type) {
+		super(x, y, type);
 	}
 	
 	public boolean isSolid() {
-		if(type == TileType.RED)
+		if(type == LO_TYPE.RED)
 			return isActive();
-		if(type == TileType.BLUE)
+		if(type == LO_TYPE.BLUE)
 			return isActive();
 		return type.isSolid();
 	}
