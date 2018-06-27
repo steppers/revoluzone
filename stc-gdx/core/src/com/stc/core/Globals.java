@@ -1,5 +1,6 @@
 package com.stc.core;
-import com.badlogic.gdx.graphics.*;
+
+import com.badlogic.gdx.graphics.Color;
 
 /**
  * Created by steppers on 6/29/17.

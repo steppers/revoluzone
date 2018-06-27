@@ -6,7 +6,8 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 
 import java.util.ArrayList;
 
-import static com.stc.core.Globals.*;
+import static com.stc.core.Globals.display_height;
+import static com.stc.core.Globals.display_width;
 
 /**
 /**
