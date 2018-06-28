@@ -4,9 +4,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.stc.core.Globals;
-import com.stc.core.RevGame;
-import com.stc.core.*;
 import android.*;
 import android.content.pm.*;
 
