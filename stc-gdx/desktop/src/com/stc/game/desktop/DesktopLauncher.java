@@ -2,8 +2,8 @@ package com.stc.game.desktop;
 
 import com.badlogic.gdx.backends.lwjgl.LwjglApplication;
 import com.badlogic.gdx.backends.lwjgl.LwjglApplicationConfiguration;
-import com.stc.core.Globals;
-import com.stc.core.RevGame;
+import com.stc.game.Globals;
+import com.stc.game.RevGame;
 
 public class DesktopLauncher {
 	public static void main (String[] arg) {
