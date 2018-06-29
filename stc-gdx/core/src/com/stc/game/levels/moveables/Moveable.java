@@ -25,6 +25,11 @@ public abstract class Moveable extends LevelObject
 			ax += Globals.G * delta * (float)dx;
 			ay += Globals.G * delta * (float)dy;
 			
+			if(ax > 1) ax = 1;
+			if(ax < -1) ax = -1;
+			if(ay > 1) ay = 1;
+			if(ay < -1) ay = -1;
+			
 			x += ax;
 			y += ay;
 			
