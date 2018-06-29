@@ -29,6 +29,7 @@ public class AndroidLauncher extends AndroidApplication {
 		AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
 		config.hideStatusBar = true;
 		config.useImmersiveMode = true;
+		config.numSamples = 4;
 		Globals.orientation = "portrait";
 		initialize(new RevGame(), config);
 	}

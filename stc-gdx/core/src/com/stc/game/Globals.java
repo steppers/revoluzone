@@ -32,7 +32,7 @@ public class Globals {
 	public static final Color COLOR_START_PAD_INNER = new Color(Color.GREEN);
 	public static final Color COLOR_START_PAD_OUTER = new Color(Color.RED);
 	public static final Color COLOR_FINISH_INNER = new Color(Color.BLACK);
-	public static final Color COLOR_FINISH_OUTER = new Color(0.85f, 0.85f, 0.95f, 1.0f);
+	public static final Color COLOR_FINISH_OUTER = new Color(0.4f, 0.4f, 0.4f, 1.0f);
 	public static final Color COLOR_RED_ACTIVE = new Color(1.0f, 0.2f, 0.2f, 1.0f);
 	public static final Color COLOR_RED_INACTIVE = new Color(1.0f, 0.2f, 0.2f, 0.5f);
 	public static final Color COLOR_BLUE_ACTIVE = new Color(0.2f, 0.2f, 1.0f, 1.0f);

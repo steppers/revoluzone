@@ -23,15 +23,22 @@ public class KillZone extends LevelObject
 	@Override
 	public void renderFloor(ShapeRenderer g, float opacity)
 	{
-		boolean yellow = true;
-		for(float s = 0.05f; s < 0.5f; s += 0.1f) {
-			if(yellow)
-				g.setColor(Globals.getColor(Color.YELLOW, opacity));
-			else
-				g.setColor(Globals.getColor(Color.BLACK, opacity));
-			g.ellipse(x + s, y + s, 1 - 2*s, 1 - 2*s, 32);
-			yellow = !yellow;
-		}
+		g.setColor(Globals.getColor(Globals.COLOR_FINISH_OUTER, opacity));
+		g.rect(x,y,1,1);
+		g.setColor(Globals.getColor(Globals.COLOR_FINISH_INNER, opacity));
+		g.rect(x + 0.08f, y + 0.08f, 0.84f, 0.84f);
+		
+		g.setColor(Globals.getColor(Color.YELLOW, opacity));
+		g.translate(x + 0.5f, y + 0.5f, 0);
+		g.rotate(0,0,1,45);
+		g.translate(-x - 0.5f, -y - 0.5f, 0);
+		
+		g.rect(x + 0.2f, y + 0.4f, 0.6f, 0.2f);
+		g.rect(x + 0.4f, y + 0.2f, 0.2f, 0.6f);
+		
+		g.translate(x + 0.5f, y + 0.5f, 0);
+		g.rotate(0,0,1,-45);
+		g.translate(-x - 0.5f, -y - 0.5f, 0);
 	}
 
 	@Override
