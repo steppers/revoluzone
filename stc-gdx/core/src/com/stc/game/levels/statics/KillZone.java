@@ -31,12 +31,10 @@ public class KillZone extends LevelObject
 		g.setColor(Globals.getColor(Color.YELLOW, opacity));
 		g.translate(x + 0.5f, y + 0.5f, 0);
 		g.rotate(0,0,1,45);
-		g.translate(-x - 0.5f, -y - 0.5f, 0);
 		
-		g.rect(x + 0.2f, y + 0.4f, 0.6f, 0.2f);
-		g.rect(x + 0.4f, y + 0.2f, 0.2f, 0.6f);
+		g.rect(-0.3f, -0.1f, 0.6f, 0.2f);
+		g.rect(-0.1f, -0.3f, 0.2f, 0.6f);
 		
-		g.translate(x + 0.5f, y + 0.5f, 0);
 		g.rotate(0,0,1,-45);
 		g.translate(-x - 0.5f, -y - 0.5f, 0);
 	}
