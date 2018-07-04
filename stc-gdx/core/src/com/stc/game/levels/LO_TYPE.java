@@ -15,6 +15,7 @@ public enum LO_TYPE
 	KILLZONE("Killzone", false),
 	BALL("Ball", true),
 	SLIDER("Slider", true),
+	TELEPORT("Teleporter", false),
 	UNDEFINED("Undefined", false);
 
 	String id;

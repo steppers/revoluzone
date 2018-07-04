@@ -15,6 +15,7 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
+import com.stc.game.levels.statics.*;
 
 /**
  * Created by steppers on 8/2/17.
@@ -231,6 +232,15 @@ public class Level {
 				case 1:
 					tiles[index] = new Tile(x, y, LO_TYPE.WALL);
 					break;
+				case 2:
+					tiles[index] = new Tile(x, y, LO_TYPE.RED);
+					break;
+				case 3:
+					tiles[index] = new Tile(x, y, LO_TYPE.BLUE);
+					break;
+				case 4:
+					instance.addStatic(new KillZone(x, y));
+					break;
 				case 5:
 					instance.addMoveable(new Ball(x, y));
 					instance.addStatic(new StartPad(x, y));
@@ -238,23 +248,20 @@ public class Level {
 				case 6:
 					instance.addStatic(new FinishHole(x, y));
 					break;
-				case 2:
-					tiles[index] = new Tile(x, y, LO_TYPE.RED);
-					break;
-				case 3:
-					tiles[index] = new Tile(x, y, LO_TYPE.BLUE);
-					break;
 				case 7:
 					instance.addStatic(new Switch(x, y));
+					break;
+				case 8:
+					instance.addStatic(new Teleporter(x, y));
 					break;
 				case 9:
 					instance.addStatic(new LockedFinishHole(x, y));
 					break;
-				case 4:
-					instance.addStatic(new KillZone(x, y));
-					break;
 				case 10:
 					instance.addMoveable(new Slider(x, y));
+					break;
+				case 11:
+					rails[x][y] = new Rail(x, y);
 					break;
 				default: break;
 			}

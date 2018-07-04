@@ -41,6 +41,7 @@ public class Globals {
 	public static final Color COLOR_SWITCH_INNER_ACTIVE = new Color(Color.GREEN);
 	public static final Color COLOR_SWITCH_OUTER = new Color(0.8f, 0.8f, 0.8f, 1.0f);
 	public static final Color COLOR_SLIDER = new Color(COLOR_FINISH_OUTER);
+	public static final Color COLOR_TELEPORTER_INNER = new Color(Color.ORANGE);
 
 	public static final float G = 5.0f;
 	
