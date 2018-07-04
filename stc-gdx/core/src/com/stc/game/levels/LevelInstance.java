@@ -18,13 +18,13 @@ public class LevelInstance
 	
 	// Objects
 	private ArrayList<LevelObject> objects;
-	private ArrayList<Moveable> moveables;
+	private ArrayList<LevelObject> moveables;
 	private ArrayList<LevelObject> statics;
 	private ArrayList<Tile> tiles;
 	
 	public LevelInstance(String name, String next, String prev) {
 		objects = new ArrayList<LevelObject>();
-		moveables = new ArrayList<Moveable>();
+		moveables = new ArrayList<LevelObject>();
 		statics = new ArrayList<LevelObject>();
 		tiles = new ArrayList<Tile>();
 		
@@ -34,13 +34,13 @@ public class LevelInstance
 		turnCount = -1;
 	}
 	
-	public void addMoveable(Moveable m) {
+	public void addMoveable(LevelObject m) {
 		moveables.add(m);
 		objects.add(m);
 		m.setLevel(this);
 	}
 	
-	public void removeMoveable(Moveable m) {
+	public void removeMoveable(LevelObject m) {
 		moveables.remove(m);
 		objects.remove(m);
 	}
@@ -108,9 +108,9 @@ public class LevelInstance
 		boolean moved = true;
 		while(moved) {
 			moved = false;
-			for(Moveable m : moveables) {
-				int mx = m.tx;
-				int my = m.ty;
+			for(LevelObject m : moveables) {
+				int mx = m.getTx();
+				int my = m.getTy();
 				mx += dx;
 				my += dy;
 				if(mx >= size || mx < 0 || my >= size || my < 0)
@@ -134,7 +134,7 @@ public class LevelInstance
 		// Refresh updating flag
 		if(moveablesUpdating) {
 			moveablesUpdating = false;
-			for(Moveable m : moveables) {
+			for(LevelObject m : moveables) {
 				if(m.isMoving())
 					moveablesUpdating = true;
 			}
@@ -148,7 +148,7 @@ public class LevelInstance
 	}
 	
 	private boolean isSpaceSolid(int x, int y) {
-		for (Moveable m : moveables) {
+		for (LevelObject m : moveables) {
 			if(m.isMovingTo(x, y) && m.isSolid())
 				return true;
 		}
@@ -203,17 +203,17 @@ public class LevelInstance
 		return objs;
 	}
 	
-	public Moveable getMoveableOfTypeAt(int x, int y, LO_TYPE type) {
-		for(Moveable m : moveables) {
+	public LevelObject getMoveableOfTypeAt(int x, int y, LO_TYPE type) {
+		for(LevelObject m : moveables) {
 			if(m.isOver(x, y) && m.getType() == type)
 				return m;
 		}
 		return null;
 	}
 	
-	public ArrayList<Moveable> getMoveablesAt(int x, int y) {
-		ArrayList<Moveable> objs = new ArrayList<>();
-		for(Moveable m : moveables) {
+	public ArrayList<LevelObject> getMoveablesAt(int x, int y) {
+		ArrayList<LevelObject> objs = new ArrayList<>();
+		for(LevelObject m : moveables) {
 			if(m.isOver(x, y))
 				objs.add(m);
 		}
@@ -253,7 +253,7 @@ public class LevelInstance
 				active = t.isActive() ? LO_TYPE.RED : LO_TYPE.BLUE;
 			}
 			if(type == LO_TYPE.BLUE || type == LO_TYPE.RED) {
-				for(Moveable m : moveables) {
+				for(LevelObject m : moveables) {
 					if(m.isOver(t.x, t.y))
 						return;
 				}
@@ -319,7 +319,7 @@ public class LevelInstance
 	
 	public int getBallCount() {
 		int c = 0;
-		for(Moveable m : moveables) {
+		for(LevelObject m : moveables) {
 			if(m.getType() == LO_TYPE.BALL)
 				c++;
 		}

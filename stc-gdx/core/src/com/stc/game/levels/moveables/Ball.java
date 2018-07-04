@@ -5,7 +5,7 @@ import com.stc.game.Globals;
 import com.stc.game.levels.LO_TYPE;
 import com.stc.game.levels.LevelObject;
 
-public class Ball extends Moveable
+public class Ball extends LevelObject
 {
 	
 	public Ball(int x, int y) {

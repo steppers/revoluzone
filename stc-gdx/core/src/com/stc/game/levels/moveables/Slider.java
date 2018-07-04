@@ -6,7 +6,7 @@ import com.stc.game.levels.LO_TYPE;
 import com.stc.game.levels.LevelInstance;
 import com.stc.game.levels.LevelObject;
 
-public class Slider extends Moveable
+public class Slider extends LevelObject
 {
 
 	public Slider(int x, int y) {
