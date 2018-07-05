@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.stc.game.Globals;
 import com.stc.game.levels.LO_TYPE;
 import com.stc.game.levels.LevelObject;
-import com.stc.game.levels.moveables.Moveable;
 
 public class LockedFinishHole extends LevelObject
 {
@@ -40,7 +39,7 @@ public class LockedFinishHole extends LevelObject
 	@Override
 	protected void onActivate(LevelObject activator){
 		if(activator.getType() == LO_TYPE.BALL) {
-			level.removeMoveable((Moveable)activator);
+			level.removeMoveable(activator);
 			level.refreshUpdate();
 			if(level.getBallCount() == 0)
 				level.triggerNextLevel();

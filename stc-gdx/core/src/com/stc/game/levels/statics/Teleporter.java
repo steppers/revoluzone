@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.stc.game.Globals;
 import com.stc.game.levels.LO_TYPE;
 import com.stc.game.levels.LevelObject;
-import com.stc.game.levels.moveables.Moveable;
 
 public class Teleporter extends LevelObject
 {
@@ -38,7 +37,6 @@ public class Teleporter extends LevelObject
 			return;
 		
 		if(activator.getType() == LO_TYPE.BALL || activator.getType() == LO_TYPE.SLIDER) {
-			Moveable m = (Moveable)activator;
 			//m.moveTo((int)links.get(0).x, (int)links.get(0).y);
 		}
 	}

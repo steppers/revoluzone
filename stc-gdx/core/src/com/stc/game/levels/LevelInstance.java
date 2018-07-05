@@ -1,7 +1,6 @@
 package com.stc.game.levels;
 
 import com.stc.game.World;
-import com.stc.game.levels.moveables.Moveable;
 
 import java.util.ArrayList;
 import java.util.Iterator;

@@ -4,7 +4,6 @@ import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.stc.game.Globals;
 import com.stc.game.levels.LO_TYPE;
 import com.stc.game.levels.LevelObject;
-import com.stc.game.levels.moveables.Moveable;
 
 public class Switch extends LevelObject
 {
@@ -39,7 +38,7 @@ public class Switch extends LevelObject
 
 	@Override
 	protected void onActivate(LevelObject activator){
-		if(!((Moveable)activator).isMoving()) {
+		if(!activator.isMoving()) {
 			for(LevelObject trigger : links) {
 				trigger.setActive(true, this);
 			}
