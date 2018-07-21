@@ -4,7 +4,7 @@
 {1,0,0,0,0,1}
 {0,0,2,0,0,0}
 {0,0,0,1,0,0}
-name=Level 3
+name=Morsel
 next=Level 4.txt
 prev=Level 2.txt
 score=11

@@ -49,14 +49,14 @@ public class PlayLevel {
 
         //Rotating UI
         rotatingUI = new ArrayList<>();
-        tmpLabel = new UILabel("Best move count: " + m.getProperty("score"), gc);
+        tmpLabel = new UILabel(m.getProperty("name"), gc);
         tmpLabel.anchor.set(0.5f, 0.5f);
         tmpLabel.offset.set(0f, -0.4f);
         tmpLabel.scale = m.getScale()/0.6f;
         rotatingUI.add(tmpLabel.clone());
-        tmpLabel.text = "Your move count: " + m.score;
+        /*tmpLabel.text = "Your move count: " + m.score;
         tmpLabel.rotation = 180f;
-        rotatingUI.add(tmpLabel.clone());
+        rotatingUI.add(tmpLabel.clone());*/
 
         UIButton tmpButton = new UIButton("Editor Mode", gc);
         tmpButton.anchor.set(0.9f, 0.8f);
@@ -132,17 +132,19 @@ public class PlayLevel {
     }
 
     public void renderText(Graphics g, Model m) {
-        ((UILabel)rotatingUI.get(0)).text = "Best move count: " + m.getProperty("score");
-        ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
+        ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
+        //((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
         ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
         ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
         if(gs.currentState == GameState.State.TRANSITION) {
-            for(UIRenderable r : rotatingUI) {
-                r.color.a = (m.getScale()-0.6f)*2.5f;
-                r.scale = m.getScale();
-                r.offsetRotation(m.getRotation());
-                r.scaleOffset(m.getScale());
-                r.render(g);
+            if(tm.getNewState() != GameState.State.LEVEL_SELECT && gs.previousState != GameState.State.LEVEL_SELECT) {
+                for (UIRenderable r : rotatingUI) {
+                    r.color.a = (m.getScale() - 0.6f) * 2.5f;
+                    r.scale = m.getScale();
+                    r.offsetRotation(m.getRotation());
+                    r.scaleOffset(m.getScale());
+                    r.render(g);
+                }
             }
             if(tm.getNewState() == GameState.State.LEVEL) {
                 for(UIRenderable r : staticUI) {

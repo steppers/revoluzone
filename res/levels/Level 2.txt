@@ -4,7 +4,7 @@
 {3,0,0,0,2,3}
 {0,0,0,0,0,2}
 {1,1,0,0,0,0}
-name=Level 2
+name=Company
 next=Level 3.txt
 prev=Level 1.txt
 score=11

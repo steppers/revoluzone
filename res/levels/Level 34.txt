@@ -6,7 +6,7 @@
 {4,0,0,3,0,0,0,4}
 {4,0,0,0,0,0,0,4}
 {4,4,4,4,4,4,4,4}
-name=Level 34
+name=Short Changed
 next=Level 1.txt
 prev=Level 33.txt
 score=8

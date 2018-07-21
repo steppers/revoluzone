@@ -104,13 +104,20 @@ public class LevelSelect {
         ((UIButton)rotatingUI.get(1)).setText(m.getProperty("prev").split("\\.")[0]);
         ((UIButton)rotatingUI.get(2)).setText(m.getProperty("next").split("\\.")[0]);
         if(gs.currentState == GameState.State.TRANSITION) {
-            if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL) {
+            if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL || gs.previousState == GameState.State.EDITABLE_LEVEL) {
                 for(UIRenderable r : rotatingUI) {
-                    r.color.a = 1f-(m.getScale()-0.6f)*2.5f;
-                    r.scale = m.getScale()/0.6f;
-                    r.offsetRotation(m.getRotation());
-                    r.scaleOffset(m.getScale());
-                    r.render(g);
+                    if(r.rotation == 0 && gs.previousState != GameState.State.EDITABLE_LEVEL){
+                        r.scale = 1f;
+                        r.offsetRotation(m.getRotation());
+                        r.scaleOffset(0.325f*0.6f + 0.675f*m.getScale());
+                        r.render(g);
+                    }else {
+                        r.color.a = 1f - (m.getScale() - 0.6f) * 2.5f;
+                        r.scale = m.getScale() / 0.6f;
+                        r.offsetRotation(m.getRotation());
+                        r.scaleOffset(m.getScale());
+                        r.render(g);
+                    }
                 }
             } else {
                 for(UIRenderable r : rotatingUI) {

@@ -6,7 +6,7 @@
 {0,1,0,0,0,0,0,0}
 {5,9,1,0,0,0,0,0}
 {4,1,0,0,0,0,0,0}
-name=Level 32
+name=There and Back
 next=Level 33.txt
 prev=Level 31.txt
 score=39
