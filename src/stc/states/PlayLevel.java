@@ -133,7 +133,7 @@ public class PlayLevel {
 
     public void renderText(Graphics g, Model m) {
         ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
-        //((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
+        ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
         ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
         ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
         if(gs.currentState == GameState.State.TRANSITION) {
