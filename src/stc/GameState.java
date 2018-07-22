@@ -160,7 +160,7 @@ public class GameState extends BasicGameState {
                 tempM.saveToFile(m.getProperty("filename"), m.getProperty("name"));
             }
             String q = m.getProperty("next");
-            if(q.equals("Level 1.txt")){
+            if(q.equals("1 Pleasantries.txt")){
                 tm.transitionFade(m, new Model("menu.txt", 0.6f, 0.3f), GameState.State.CREDITS, 0.3f);
             } else {
                 tm.transitionFadeRotate(m, new Model(m.getProperty("next"), 1.0f, 0f), State.LEVEL, 90, 0.3f);
