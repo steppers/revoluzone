@@ -54,9 +54,9 @@ public class PlayLevel {
         tmpLabel.offset.set(0f, -0.4f);
         tmpLabel.scale = m.getScale()/0.6f;
         rotatingUI.add(tmpLabel.clone());
-        /*tmpLabel.text = "Your move count: " + m.score;
+        tmpLabel.text = "Your move count: " + m.score;
         tmpLabel.rotation = 180f;
-        rotatingUI.add(tmpLabel.clone());*/
+        rotatingUI.add(tmpLabel.clone());
 
         UIButton tmpButton = new UIButton("Editor Mode", gc);
         tmpButton.anchor.set(0.9f, 0.8f);
