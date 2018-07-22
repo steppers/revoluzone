@@ -100,9 +100,11 @@ public class LevelSelect {
     }
 
     public void renderText(Graphics g, Model m) {
+        Model tempPrev = new Model(m.getProperty("prev"), 1f, 1f);
+        Model tempNext = new Model(m.getProperty("next"), 1f, 1f);
         ((UIButton)rotatingUI.get(0)).setText(m.getProperty("name"));
-        ((UIButton)rotatingUI.get(1)).setText(m.getProperty("prev").split("\\.")[0]);
-        ((UIButton)rotatingUI.get(2)).setText(m.getProperty("next").split("\\.")[0]);
+        ((UIButton)rotatingUI.get(1)).setText(tempPrev.getProperty("name"));
+        ((UIButton)rotatingUI.get(2)).setText(tempNext.getProperty("name"));
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL || gs.previousState == GameState.State.EDITABLE_LEVEL) {
                 for(UIRenderable r : rotatingUI) {
