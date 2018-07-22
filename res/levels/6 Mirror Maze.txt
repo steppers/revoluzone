@@ -6,7 +6,7 @@
 {0,2,3,3,2,5}
 name=Mirror Maze
 next=7 Not So Fast.txt
-prev=7 Switching It Up.txt
+prev=5 Switching It Up.txt
 score=18
 message_left=
 message_right=
