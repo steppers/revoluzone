@@ -9,7 +9,7 @@
 {0,0,0,0,0,0,0,1,0,0}
 {0,0,0,0,0,0,0,0,0,5}
 name=Four Corners
-next=10 An Introduction.txt
+next=10 Introduction.txt
 prev=8 Out on a Limb.txt
 score=18
 goal=18
