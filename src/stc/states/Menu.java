@@ -50,7 +50,7 @@ public class Menu {
         tmpButton.setTransparentBox(true);
         tmpButton.setOnClickCallback(() -> {
             if(!tm.isTransitioning()) {
-                tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
+                tm.transitionFade(m, new Model("1 Pleasantries.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
             }
         });
         rotatingUI.add(tmpButton.clone());
@@ -88,7 +88,7 @@ public class Menu {
                 r += 360;
             switch(r % 360) {
                 case 0:
-                    tm.transitionFade(m, new Model("Level 1.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
+                    tm.transitionFade(m, new Model("1 Pleasantries.txt", 0.6f, 0f), GameState.State.LEVEL_SELECT, 0.3f);
                     break;
                 case 90:
                     try {
