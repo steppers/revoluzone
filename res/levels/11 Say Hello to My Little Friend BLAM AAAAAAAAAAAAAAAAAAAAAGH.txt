@@ -4,9 +4,9 @@
 {0,0,1,0,0,0}
 {0,0,0,0,0,0}
 {5,0,0,0,0,0}
-name=Level 11
-next=Level 12.txt
-prev=Level 10.txt
+name=Say Hello to My Little Friend *BLAM* AAAAAAAAAAAAAAAAAAAAAGH
+next=12 The Right Angle.txt
+prev=10 An Introduction.txt
 score=9
 message_left=
 message_right=

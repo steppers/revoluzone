@@ -6,7 +6,7 @@
 {0,0,0,0,0,4}
 name=Level 17
 next=Level 18.txt
-prev=Level 16.txt
+prev=16 Three-legged Race.txt
 score=24
 message_left=
 message_right=

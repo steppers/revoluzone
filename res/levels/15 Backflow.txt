@@ -5,9 +5,9 @@
 {2,0,0,0,0,0,0}
 {2,0,0,1,1,1,1}
 {0,0,0,1,9,5,3}
-name=Level 15
-next=Level 16.txt
-prev=Level 14.txt
+name=Backflow
+next=16 Three-legged Race.txt
+prev=14 Loop.txt
 score=13
 message_left=
 message_right=

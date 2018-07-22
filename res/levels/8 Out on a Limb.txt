@@ -8,7 +8,7 @@
 {0,0,0,0,1,0,0,0,0,0}
 {0,0,0,0,0,0,0,0,0,0}
 {0,0,0,0,0,0,0,0,0,5}
-name=Level 8
+name=Out on a Limb
 next=9 Four Corners.txt
 prev=7 Not So Fast.txt
 score=21

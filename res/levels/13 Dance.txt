@@ -4,9 +4,9 @@
 {1,0,0,0,0,0}
 {0,0,0,0,0,0}
 {5,0,0,0,0,0}
-name=Level 13
-next=Level 14.txt
-prev=Level 12.txt
+name=Dance
+next=14 Loop.txt
+prev=12 The Right Angle.txt
 score=10
 message_left=
 message_right=

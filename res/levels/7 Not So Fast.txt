@@ -5,7 +5,7 @@
 {0,2,0,0,1,0}
 {5,0,0,3,0,9}
 name=Not So Fast
-next=Level 8.txt
+next=8 Out on a Limb.txt
 prev=6 Mirror Maze.txt
 score=10
 message_left=
