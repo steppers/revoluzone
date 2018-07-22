@@ -5,7 +5,7 @@
 {3,0,0,3,3,0}
 {0,2,3,3,2,5}
 name=Mirror Maze
-next=Level 7.txt
+next=7 Not So Fast.txt
 prev=Switching It Up.txt
 score=18
 message_left=

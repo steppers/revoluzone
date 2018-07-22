@@ -9,8 +9,8 @@
 {0,0,0,0,0,0,3,0,0,0}
 {0,0,3,0,0,0,5,0,0,0}
 name=Mouthful
-next=Level 5.txt
-prev=Level 3.txt
+next=5 Switching It Up.txt
+prev=3 Morsel.txt
 score=14
 message_left=
 message_right=
