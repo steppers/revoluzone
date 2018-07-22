@@ -5,6 +5,7 @@ name=Level 19
 next=Level 20.txt
 prev=Level 18.txt
 score=10
+goal=10
 message_left=
 message_right=
 rail=1,2->1,2

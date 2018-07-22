@@ -1,5 +1,6 @@
 package stc.states;
 
+import com.sun.org.apache.xerces.internal.parsers.IntegratedParserConfiguration;
 import org.newdawn.slick.Color;
 import org.newdawn.slick.GameContainer;
 import org.newdawn.slick.Graphics;
@@ -53,9 +54,13 @@ public class PlayLevel {
         tmpLabel.anchor.set(0.5f, 0.5f);
         tmpLabel.offset.set(0f, -0.4f);
         tmpLabel.scale = m.getScale()/0.6f;
+        if(Integer.parseInt(m.getProperty("score")) <= Integer.parseInt(m.getProperty("goal"))) {
+            tmpLabel.color = Color.green;
+        }
         rotatingUI.add(tmpLabel.clone());
         tmpLabel.text = "Your move count: " + m.score;
         tmpLabel.rotation = 180f;
+        tmpLabel.color = Color.green;
         rotatingUI.add(tmpLabel.clone());
 
         UIButton tmpButton = new UIButton("Editor Mode", gc);
@@ -134,6 +139,9 @@ public class PlayLevel {
     public void renderText(Graphics g, Model m) {
         ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
         ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
+        if(m.score > Integer.parseInt(m.getProperty("goal"))){
+            ((UILabel)rotatingUI.get(1)).color = Color.white;
+        }
         ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
         ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");
         if(gs.currentState == GameState.State.TRANSITION) {

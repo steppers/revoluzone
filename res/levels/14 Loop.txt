@@ -8,6 +8,7 @@ name=Loop
 next=15 Backflow.txt
 prev=13 Dance.txt
 score=9
+goal=9
 message_left=
 message_right=
 rail=4,2->4,2

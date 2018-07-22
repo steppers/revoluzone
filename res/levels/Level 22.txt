@@ -8,6 +8,7 @@ name=Level 22
 next=Level 23.txt
 prev=Level 21.txt
 score=5
+goal=5
 message_left=
 message_right=
 link=3,4->4,6

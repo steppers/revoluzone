@@ -12,6 +12,7 @@ name=Three-legged Race
 next=Level 17.txt
 prev=15 Backflow.txt
 score=21
+goal=21
 message_left=
 message_right=
 link=2,1->1,10

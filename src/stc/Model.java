@@ -804,6 +804,9 @@ public class Model extends Renderable {
             case "score":
                 properties.put("score", data);
                 break;
+            case "goal":
+                properties.put("goal", data);
+                break;
             case "message_left":
                 for(int i = 0; i < lines.length; i++) {
                     s.append(lines[i]);

@@ -103,8 +103,17 @@ public class LevelSelect {
         Model tempPrev = new Model(m.getProperty("prev"), 1f, 1f);
         Model tempNext = new Model(m.getProperty("next"), 1f, 1f);
         ((UIButton)rotatingUI.get(0)).setText(m.getProperty("name"));
+        if(Integer.parseInt(m.getProperty("score")) <= Integer.parseInt(m.getProperty("goal"))) {
+            ((UIButton) rotatingUI.get(0)).setTextColor(Color.green);
+        }
         ((UIButton)rotatingUI.get(1)).setText(tempPrev.getProperty("name"));
+        if(Integer.parseInt(tempPrev.getProperty("score")) <= Integer.parseInt(tempPrev.getProperty("goal"))) {
+            ((UIButton) rotatingUI.get(1)).setTextColor(Color.green);
+        }
         ((UIButton)rotatingUI.get(2)).setText(tempNext.getProperty("name"));
+        if(Integer.parseInt(tempNext.getProperty("score")) <= Integer.parseInt(tempNext.getProperty("goal"))) {
+            ((UIButton) rotatingUI.get(2)).setTextColor(Color.green);
+        }
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL || gs.previousState == GameState.State.EDITABLE_LEVEL) {
                 for(UIRenderable r : rotatingUI) {

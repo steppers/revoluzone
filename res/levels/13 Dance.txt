@@ -8,6 +8,7 @@ name=Dance
 next=14 Loop.txt
 prev=12 The Right Angle.txt
 score=10
+goal=10
 message_left=
 message_right=
 rail=3,3->3,3

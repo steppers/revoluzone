@@ -8,3 +8,4 @@ name=test_save
 next=null.txt
 prev=null.txt
 score=999
+goal=1

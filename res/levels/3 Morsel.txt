@@ -8,6 +8,7 @@ name=Morsel
 next=4 Mouthful.txt
 prev=2 Company.txt
 score=11
+goal=11
 message_left=
 message_right=
 locked=false

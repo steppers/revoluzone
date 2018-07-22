@@ -12,6 +12,7 @@ name=Out on a Limb
 next=9 Four Corners.txt
 prev=7 Not So Fast.txt
 score=21
+goal=21
 message_left=
 message_right=
 link=7,1->9,2

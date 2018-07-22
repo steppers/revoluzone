@@ -8,6 +8,7 @@ name=An Introduction
 next=11 Say Hello to My Little Friend BLAM AAAAAAAAAAAAAAAAAAAAAGH.txt
 prev=9 Four Corners.txt
 score=10
+goal=10
 message_left=
 message_right=
 rail=1,3->1,3

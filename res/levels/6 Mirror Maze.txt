@@ -8,6 +8,7 @@ name=Mirror Maze
 next=7 Not So Fast.txt
 prev=5 Switching It Up.txt
 score=18
+goal=18
 message_left=
 message_right=
 locked=false

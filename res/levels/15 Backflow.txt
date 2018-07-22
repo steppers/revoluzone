@@ -9,6 +9,7 @@ name=Backflow
 next=16 Three-legged Race.txt
 prev=14 Loop.txt
 score=13
+goal=13
 message_left=
 message_right=
 link=6,2->5,7

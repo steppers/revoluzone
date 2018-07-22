@@ -11,6 +11,7 @@ name=Level 33
 next=34 Short Changed.txt
 prev=32 There and Back.txt
 score=15
+goal=15
 message_left=
 message_right=
 placeable tiles=0,1;11,17

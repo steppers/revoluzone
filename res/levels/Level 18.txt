@@ -10,6 +10,7 @@ name=Level 18
 next=Level 19.txt
 prev=Level 17.txt
 score=30
+goal=30
 message_left=
 message_right=
 link=7,6->7,2

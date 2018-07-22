@@ -8,6 +8,7 @@ name=Say Hello to My Little Friend *BLAM* AAAAAAAAAAAAAAAAAAAAAGH
 next=12 The Right Angle.txt
 prev=10 An Introduction.txt
 score=9
+goal=9
 message_left=
 message_right=
 rail=4,2->4,2

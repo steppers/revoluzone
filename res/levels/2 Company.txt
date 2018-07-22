@@ -8,6 +8,7 @@ name=Company
 next=3 Morsel.txt
 prev=1 Pleasantries.txt
 score=11
+goal=11
 message_left=
 message_right=
 locked=false

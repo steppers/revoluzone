@@ -8,6 +8,7 @@ name=Not So Fast
 next=8 Out on a Limb.txt
 prev=6 Mirror Maze.txt
 score=10
+goal=10
 message_left=
 message_right=
 link=4,4->6,6

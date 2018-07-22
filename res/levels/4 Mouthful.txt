@@ -12,6 +12,7 @@ name=Mouthful
 next=5 Switching It Up.txt
 prev=3 Morsel.txt
 score=14
+goal=14
 message_left=
 message_right=
 locked=false

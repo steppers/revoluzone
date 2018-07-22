@@ -12,6 +12,7 @@ name=Four Corners
 next=10 An Introduction.txt
 prev=8 Out on a Limb.txt
 score=18
+goal=18
 message_left=
 message_right=
 locked=false

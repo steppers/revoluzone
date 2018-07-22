@@ -8,5 +8,6 @@ name=Pleasantries
 next=2 Company.txt
 prev=34 Short Changed.txt
 score=8
+goal=8
 message_left=
 message_right=

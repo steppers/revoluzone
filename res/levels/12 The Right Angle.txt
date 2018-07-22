@@ -8,6 +8,7 @@ name=The Right Angle
 next=13 Dance.txt
 prev=11 Say Hello to My Little Friend BLAM AAAAAAAAAAAAAAAAAAAAAGH.txt
 score=12
+goal=12
 message_left=
 message_right=
 rail=2,2->2,2

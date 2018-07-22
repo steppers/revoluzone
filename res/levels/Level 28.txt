@@ -9,6 +9,7 @@ name=Level 28
 next=Level 29.txt
 prev=Level 27.txt
 score=8
+goal=8
 message_left=
 message_right=
 placeable tiles=0,1;3,1

@@ -10,6 +10,7 @@ name=There and Back
 next=Level 33.txt
 prev=Level 31.txt
 score=39
+goal=39
 message_left=
 message_right=
 placeable tiles=11,25;0,1
