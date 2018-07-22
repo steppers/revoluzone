@@ -5,7 +5,7 @@
 {0,0,0,6,1,5}
 {0,0,0,0,0,1}
 name=An Introduction
-next=11 Say Hello to My Little Friend BLAM AAAAAAAAAAAAAAAAAAAAAGH.txt
+next=11 Say Hello to my Little Friend BLAM AAAAAAAAAAAAAAAAAAAAAGH.txt
 prev=9 Four Corners.txt
 score=10
 goal=10

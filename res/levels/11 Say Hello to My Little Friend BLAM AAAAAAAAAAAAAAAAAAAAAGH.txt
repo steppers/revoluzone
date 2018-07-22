@@ -4,9 +4,9 @@
 {0,0,1,0,0,0}
 {0,0,0,0,0,0}
 {5,0,0,0,0,0}
-name=Say Hello to My Little Friend *BLAM* AAAAAAAAAAAAAAAAAAAAAGH
+name=Say Hello to my Little Friend *BLAM* AAAAAAAAAAAAAAAAAAAAAGH
 next=12 The Right Angle.txt
-prev=10 An Introduction.txt
+prev=10 Introduction.txt
 score=9
 goal=9
 message_left=
