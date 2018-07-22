@@ -6,7 +6,7 @@
 {5,0,0,0,2,2}
 name=Level 26
 next=Level 27.txt
-prev=Level 25.txt
+prev=25 Spin Cycle.txt
 score=14
 goal=14
 message_left=
