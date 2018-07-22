@@ -6,7 +6,7 @@
 {0,0,0,0,0,1}
 name=Level 10
 next=Level 11.txt
-prev=Level 9.txt
+prev=9 Four Corners.txt
 score=10
 message_left=
 message_right=

@@ -5,8 +5,8 @@
 {0,0,2,0,0,0}
 {0,0,0,1,0,0}
 name=Morsel
-next=Level 4.txt
-prev=Level 2.txt
+next=4 Mouthful.txt
+prev=2 Company.txt
 score=11
 message_left=
 message_right=

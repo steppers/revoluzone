@@ -10,7 +10,7 @@
 {0,0,0,0,0,0,0,0,0,5}
 name=Level 8
 next=Level 9.txt
-prev=Level 7.txt
+prev=7 Not So Fast.txt
 score=21
 message_left=
 message_right=

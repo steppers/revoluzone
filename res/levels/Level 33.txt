@@ -8,8 +8,8 @@
 {0,0,5,0,0,0,0,4,4}
 {1,1,1,1,1,4,0,0,9}
 name=Level 33
-next=Level 34.txt
-prev=Level 32.txt
+next=34 Short Changed.txt
+prev=32 There and Back.txt
 score=15
 message_left=
 message_right=

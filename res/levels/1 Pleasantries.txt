@@ -5,8 +5,8 @@
 {0,0,0,0,0,1}
 {5,1,6,0,1,1}
 name=Pleasantries
-next=Level 2.txt
-prev=Level 34.txt
+next=2 Company.txt
+prev=34 Short Changed.txt
 score=8
 message_left=
 message_right=

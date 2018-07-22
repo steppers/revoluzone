@@ -6,7 +6,7 @@
 {5,0,0,3,0,9}
 name=Not So Fast
 next=Level 8.txt
-prev=Level 6.txt
+prev=6 Mirror Maze.txt
 score=10
 message_left=
 message_right=

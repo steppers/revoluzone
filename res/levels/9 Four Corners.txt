@@ -8,7 +8,7 @@
 {0,0,0,0,3,0,0,0,0,0}
 {0,0,0,0,0,0,0,1,0,0}
 {0,0,0,0,0,0,0,0,0,5}
-name=End of an Era
+name=Four Corners
 next=Level 10.txt
 prev=Level 8.txt
 score=18

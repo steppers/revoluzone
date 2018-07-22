@@ -7,8 +7,8 @@
 {3,0,0,0,2,3,0,0}
 {0,0,0,0,3,0,0,0}
 name=Switch
-next=Level 6.txt
-prev=Level 4.txt
+next=6 Mirror Maze.txt
+prev=4 Mouthful.txt
 score=20
 message_left=
 message_right=
