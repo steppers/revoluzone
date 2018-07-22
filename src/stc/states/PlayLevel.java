@@ -138,9 +138,14 @@ public class PlayLevel {
 
     public void renderText(Graphics g, Model m) {
         ((UILabel)rotatingUI.get(0)).text = m.getProperty("name");
+        if(Integer.parseInt(m.getProperty("score")) <= Integer.parseInt(m.getProperty("goal"))) {
+            ((UILabel)rotatingUI.get(0)).color = Color.green;
+        }
         ((UILabel)rotatingUI.get(1)).text = "Your move count: " + m.score;
         if(m.score > Integer.parseInt(m.getProperty("goal"))){
             ((UILabel)rotatingUI.get(1)).color = Color.white;
+        }else{
+            ((UILabel)rotatingUI.get(1)).color = Color.green;
         }
         ((UILabel)staticUI.get(0)).text = m.getProperty("message_left");
         ((UILabel)staticUI.get(1)).text = m.getProperty("message_right");

@@ -108,11 +108,15 @@ public class LevelSelect {
         }
         ((UIButton)rotatingUI.get(1)).setText(tempPrev.getProperty("name"));
         if(Integer.parseInt(tempPrev.getProperty("score")) <= Integer.parseInt(tempPrev.getProperty("goal"))) {
-            ((UIButton) rotatingUI.get(1)).setTextColor(Color.green);
+            ((UIButton) rotatingUI.get(1)).setTextColor(Color.green.darker(0.4f));
+        }else{
+            ((UIButton) rotatingUI.get(1)).setTextColor(Color.white.darker(0.4f));
         }
         ((UIButton)rotatingUI.get(2)).setText(tempNext.getProperty("name"));
         if(Integer.parseInt(tempNext.getProperty("score")) <= Integer.parseInt(tempNext.getProperty("goal"))) {
-            ((UIButton) rotatingUI.get(2)).setTextColor(Color.green);
+            ((UIButton) rotatingUI.get(2)).setTextColor(Color.green.darker(0.4f));
+        }else{
+            ((UIButton) rotatingUI.get(2)).setTextColor(Color.white.darker(0.4f));
         }
         if(gs.currentState == GameState.State.TRANSITION) {
             if(tm.getNewState() == GameState.State.LEVEL || gs.previousState == GameState.State.LEVEL || gs.previousState == GameState.State.EDITABLE_LEVEL) {

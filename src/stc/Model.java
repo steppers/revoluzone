@@ -902,6 +902,7 @@ public class Model extends Renderable {
             data.append("next=" + (getProperty("next") == null ? "user_levels/null.txt" : getProperty("next")) + "\n");
             data.append("prev=" + (getProperty("prev") == null ? "user_levels/null.txt" : getProperty("prev")) + "\n");
             data.append("score=" + (getProperty("score") == null ? "999" : getProperty("score")) + "\n");
+            data.append("goal=" + (getProperty("goal") == null ? "999" : getProperty("goal")) + "\n");
             data.append("message_left=\n");
             data.append("message_right=\n");
             if(editable){

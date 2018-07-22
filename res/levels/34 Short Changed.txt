@@ -9,7 +9,7 @@
 name=Short Changed
 next=1 Pleasantries.txt
 prev=Level 33.txt
-score=8
+score=10
 goal=8
 message_left=
 message_right=

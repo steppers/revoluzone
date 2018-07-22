@@ -11,3 +11,4 @@ score=8
 goal=8
 message_left=
 message_right=
+locked=false
